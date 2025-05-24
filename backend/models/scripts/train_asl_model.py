@@ -49,3 +49,24 @@ class ASLCNN(nn.Module):
 
     def forward(self, x):
         return self.model(x)
+    
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = ASLCNN(num_classes=len(class_names)).to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+print("Training model...")
+for epoch in range(EPOCHS):
+    total_loss = 0
+    for images, labels in train_loader:
+        images, labels = images.to(device), labels.to(device)
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    print(f"Epoch {epoch+1}/{EPOCHS}, Loss: {total_loss:.4f}")
+
+torch.save(model.state_dict(), MODEL_SAVE_PATH)
+print(f"Model saved to {MODEL_SAVE_PATH}")
