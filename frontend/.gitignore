@@ -1,0 +1,9 @@
+node_modules/
+
+node_modules/
+
+# Ignore backend build output
+frontend/backend/dist/
+
+# Ignore frontend bundle
+frontend/frontend/public/bundle.js

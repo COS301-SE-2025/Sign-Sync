@@ -1,0 +1,5 @@
+//u23524121 Jamean Groenewald
+
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
