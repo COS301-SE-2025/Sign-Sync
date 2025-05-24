@@ -27,7 +27,7 @@ Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes
 
 ## Links
 
-- [Functional Requirements (SRS)]()
+- [Functional Requirements (SRS)](https://docs.google.com/document/d/1pcefn-Nhll3uHIxUDYLyK4dad5k8ZgvDUs-wr97H06Q/edit?tab=t.0#heading=h.tbpn49glggld)
 - [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)
 
 ## Team
@@ -53,8 +53,6 @@ This repository follows a structured branching strategy:
 - `develop/frontend/feature/*` - Short-lived branches for individual frontend features.
 - `develop/backend/` - Integration branch for backend-specific features.
 - `develop/backend/feature/*` - Short-lived branches for individual backend features.
-- `develop/ai/` - Integration branch for AI/ML-specific features.
-- `develop/ai/feature/*` - Short-lived branches for individual AI features.
 - `release/*` - Temporary branches for final testing before production.
 - `hotfix/*` - Emergency branches for critical production bug fixes.
 
