@@ -49,10 +49,14 @@ This project follows a **monorepo structure**, where all components are maintain
 This repository follows a structured branching strategy:
 - `main` - The stable production-ready branch
 - `develop` - Integration branch for ongoing development work
-- `feature/*` - Each new feature is developed in its own branch (e.g., `feature/HandTracking`)
-- `bugfix/*` - Dedicated branches for bugfixes (e.g., `bugfix/Tracking-errors`)
-- `release/*` - Used for versioned releases (e.g., `release/v1.0`)
-- `UI/*` - Dedicated branches for UI devolopment (e.g., `UI/LoginPage`)
+- `develop/frontend/` - Integration branch for frontend-specific features.
+- `develop/frontend/feature/*` - Short-lived branches for individual frontend features.
+- `develop/backend/` - Integration branch for backend-specific features.
+- `develop/backend/feature/*` - Short-lived branches for individual backend features.
+- `develop/ai/` - Integration branch for AI/ML-specific features.
+- `develop/ai/feature/*` - Short-lived branches for individual AI features.
+- `release/*` - Temporary branches for final testing before production.
+- `hotfix/*` - Emergency branches for critical production bug fixes.
 
 ### Git Organization and Management
 - Changes are introduced through **feature branches** and merged into `main` via pull requests
