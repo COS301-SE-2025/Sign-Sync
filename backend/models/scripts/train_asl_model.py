@@ -20,3 +20,12 @@ transform = transforms.Compose([
     transforms.Resize((64, 64)),
     transforms.ToTensor(),
 ])
+
+# Dataset and Loader
+dataset = torchvision.datasets.ImageFolder(root=DATA_DIR, transform=transform)
+train_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
+class_names = dataset.classes
+
+# Save label map
+with open(LABEL_MAP_PATH, "w") as f:
+    json.dump({i: cls for i, cls in enumerate(class_names)}, f)
