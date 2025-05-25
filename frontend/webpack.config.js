@@ -1,5 +1,3 @@
-//u23524121 Jamean Groenewald
-
 const path = require("path");
 
 module.exports = {
@@ -22,6 +20,20 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
+            },
+
+            {
+                test: /\.css$/i,
+                use: [
+                "style-loader",  // inject styles into DOM
+                "css-loader",    // turns css into commonjs
+                "postcss-loader" // runs Tailwind and autoprefixer
+                ],
+            },
+
+            { //for images
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                type: "asset/resource", // this tells Webpack to emit the file and give you a URL
             }
         ]
         
