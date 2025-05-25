@@ -7,6 +7,8 @@ from torch.utils.data import DataLoader
 import json
 import os
 
+# Based off: https://www.kaggle.com/datasets/grassknoted/asl-alphabet/data?select=asl_alphabet_train
+
 # Paths
 # DATA_DIR = "../datasets/asl_alphabet_train/asl_alphabet_train"
 DATA_DIR = "../datasets/asl_small_test"
