@@ -1,7 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-class RegistrationPage extends React.Component {
-    render() {
+class LoginPage extends React.Component 
+{
+    render() 
+    {
         return (
             <div className="flex relative justify-center items-center w-screen h-screen bg-blue-900">
                 <div className="absolute bg-sky-950 h-[906px] rounded-[55px] w-[1237px] z-[1] max-md:h-4/5 max-md:w-[90%] max-sm:h-3/4 max-sm:w-[95%]" />
@@ -50,9 +53,9 @@ class RegistrationPage extends React.Component {
                     <div className="w-full flex justify-center">
                         <div className="text-3xl font-bold tracking-normal leading-10 text-stone-900 text-center max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
                             Don't have an account?
-                            <button className="ml-2 text-2xl font-bold text-white bg-red-900 px-4 py-2 rounded max-sm:text-sm">
+                            <Link to="/register" className="ml-2 text-2xl font-bold text-white bg-red-900 px-4 py-2 rounded max-sm:text-sm">
                                 Sign Up
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -61,4 +64,4 @@ class RegistrationPage extends React.Component {
     }
 }
 
-export default RegistrationPage;
+export default LoginPage;

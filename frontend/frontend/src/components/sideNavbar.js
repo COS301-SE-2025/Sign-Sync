@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
 import topBtn from "../assets/sideNav-topButton.png";
 import translateBtn from '../assets/Translator-icon.png';
 import EducationBtn from '../assets/Education-icon.png';
 import SettingsBtn from '../assets/Settings-icon.png';
-export class SideNavbar extends Component 
+
+class SideNavbar extends React.Component 
 {
   render() 
   {
@@ -36,13 +38,19 @@ export class SideNavbar extends Component
           </div>
         </div>
 
-       <div className="flex w-full h-[78px] items-center justify-center gap-4 mt-auto px-2">
-          <button className="h-12 w-[129px] bg-white text-[#801d1f] font-semibold rounded">Sign in</button>
-          <button className="h-12 w-[129px] bg-[#801d1f] text-white font-semibold rounded">Register</button>
+        <div className="flex w-full h-[78px] items-center justify-center gap-4 mt-auto px-2">
+          <Link to="/login" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-white text-[#801d1f] font-semibold rounded">
+            Sign in
+          </Link>
+          <Link to="/register" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-[#801d1f] text-white font-semibold rounded">
+            Register
+          </Link>
         </div>
+
 
       </div>
     );
   }
 }
+
 export default SideNavbar;
