@@ -7,7 +7,7 @@ import numpy as np
 
 app = FastAPI()
 
-#Michael Stone
+#Michael Stone - another merge test
 
 # Load label map
 with open("label_map.json", "r") as f:
