@@ -1,0 +1,17 @@
+name: Super Linter
+on: [push, pull_request]
+
+jobs:
+  super-linter:
+    name: Lint React & Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/super-linter@v5
+        env:
+          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JAVASCRIPT_ES: true   # For React JS/TS
+          VALIDATE_PYTHON_FLAKE8: true   # For Python (flake8)
+          VALIDATE_PYTHON_PYLINT: true   # Optional: Also run pylint
+          VALIDATE_PYTHON_BLACK: false   # Optional: Enable if using Black formatter
