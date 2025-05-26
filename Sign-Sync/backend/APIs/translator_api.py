@@ -7,6 +7,8 @@ import numpy as np
 
 app = FastAPI()
 
+#Michael Stone
+
 # Load label map
 with open("label_map.json", "r") as f:
     label_map = json.load(f)
