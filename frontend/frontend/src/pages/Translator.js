@@ -3,7 +3,7 @@ import Camera from "../components/Camera";
 import TextBox from "../components/TextBox";
 import SideNavbar from "../components/sideNavbar";
 
-class LoginPage extends React.Component
+class TranslatorPage extends React.Component
 {
     render()
     {
@@ -13,9 +13,10 @@ class LoginPage extends React.Component
                 <div>
                     <TextBox />
                 </div>
+                <SideNavbar/>
             </div>
         )
     }
 }
 
-export default LoginPage;
+export default TranslatorPage;
