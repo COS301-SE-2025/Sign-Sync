@@ -34,6 +34,14 @@ module.exports = {
             { //for images
                 test: /\.(png|jpe?g|gif|svg)$/i,
                 type: "asset/resource", // this tells Webpack to emit the file and give you a URL
+            },
+
+            { //for models
+                test: /\.(task|bin|wasm)$/i,
+                type: "asset/resource", // this tells Webpack to emit the file and give you a URL
+                generator:{
+                    filename: 'assets/[name][ext]',
+                }
             }
         ]
         

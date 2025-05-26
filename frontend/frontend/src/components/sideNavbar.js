@@ -25,8 +25,10 @@ class SideNavbar extends React.Component
 
         <div className="w-full flex flex-col gap-4 pt-4 text-white ">
           <div className="p-2 text-4xl">
+              <Link to="/translator">
             <img src={translateBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
             Translator
+              </Link>
           </div>
            <div className="p-2 text-4xl">
             <img src={EducationBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
