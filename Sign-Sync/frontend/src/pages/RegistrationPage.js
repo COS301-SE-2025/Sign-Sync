@@ -34,7 +34,7 @@ class RegistrationPage extends React.Component
                 body: JSON.stringify({ username: username, email: email, password: password }),
             });
 
-            if (response.ok)
+            if(response.ok)
             {
                 await response.json();
                 
@@ -49,7 +49,7 @@ class RegistrationPage extends React.Component
                 console.error("Registration error:", errorData);
             }
         }
-        catch (error)
+        catch(error)
         {
             console.error("Error during registration:", error);
             alert("An error occurred during registration. Please try again.");

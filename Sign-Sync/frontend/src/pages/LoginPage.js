@@ -3,14 +3,63 @@ import { Link } from "react-router-dom";
 
 class LoginPage extends React.Component 
 {
-    handleSubmit = (e) => 
+    constructor(props)
+    {
+        super(props);
+        
+        this.state = {
+            username: '',
+            email: '',
+            password: ''
+        };
+    }
+
+    handleInputChange = (e) =>
+    {        
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    };
+
+    handleSubmit = async (e) => 
     {
         e.preventDefault();
-        console.log("Form submitted");
+
+        const { username, email, password } = this.state;
+
+        try
+        {
+            const response = await fetch('/userApi/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: username, email: email, password: password }),
+            });
+
+            if(response.ok)
+            {
+                await response.json();
+                
+                alert("Login successful!, redirecting to Translator page...");
+
+                window.location.href = '/translator';
+            }
+            else
+            {
+                const errorData = await response.json();
+                alert(`Login failed: ${errorData.message}`);
+                console.error("Registration error:", errorData);
+            }
+        }
+        catch(error)
+        {
+            console.error("Error during Login:", error);
+            alert("An error occurred during Login. Please try again.");
+        }
     };
 
     render() 
     {
+        const { username, email, password } = this.state;
+
         return (
             <div className="flex relative justify-center items-center w-screen h-screen bg-blue-900">
                 <div className="absolute bg-sky-950 h-[906px] rounded-[55px] w-[1237px] z-[1] max-md:h-4/5 max-md:w-[90%] max-sm:h-3/4 max-sm:w-[95%]" />
@@ -26,9 +75,11 @@ class LoginPage extends React.Component
                         <input
                             type="text"
                             placeholder="Enter username"
-                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                             name="username"
+                            value={username}
+                            onChange={this.handleInputChange}
                             required
+                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
                     </div>
 
@@ -39,9 +90,11 @@ class LoginPage extends React.Component
                         <input
                             type="email"
                             placeholder="Enter email"
-                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                             name="email"
+                            value={email}
+                            onChange={this.handleInputChange}
                             required
+                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
                     </div>
 
@@ -52,9 +105,11 @@ class LoginPage extends React.Component
                         <input
                             type="password"
                             placeholder="Enter password"
-                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                             name="password"
+                            value={password}
+                            onChange={this.handleInputChange}
                             required
+                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"     
                         />
                     </div>
 
