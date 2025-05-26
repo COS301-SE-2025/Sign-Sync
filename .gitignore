@@ -18,5 +18,3 @@ venv/
 #OS-specific,
 .DS_Store
 Thumbs.db
-
-requirements.txt
