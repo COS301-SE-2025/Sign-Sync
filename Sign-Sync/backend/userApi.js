@@ -59,4 +59,36 @@ router.post('/register', async (req, res) =>
     
 }); 
 
+router.post('/login', async (req, res) => 
+{
+    const { username, email, password } = req.body;
+
+    try 
+    {
+        const user = await req.app.locals.userCollection.findOne({ username, email});
+
+        if(!user) 
+        {
+            return res.status(400).json({ message: 'Invalid username or email' });
+        }
+
+        if(user.password !== password) 
+        {
+            return res.status(401).json({ message: 'Incorrect password' });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Login successful',
+            user,
+        });
+
+    } 
+    catch(error) 
+    {
+        return res.status(500).json({ message: 'Error logging in', error: error.message });
+    }
+});
+
+
 export default router;
