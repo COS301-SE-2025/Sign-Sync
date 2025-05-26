@@ -4,7 +4,7 @@
   "description": "SignSync project",
   "main": "frontend/src/index.js",
   "scripts": {
-    "build": "webpack && babel backend/server.js -d backend/dist",
+    "build": "webpack && babel backend/server.js backend/userApi.js --out-dir backend/dist",
     "start": "npm run build && node backend/dist/server.js",
     "watch": "webpack -w"
   },
@@ -14,6 +14,7 @@
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
     "css-loader": "^7.1.2",
     "express": "^4.20.0",
+    "mongodb": "^6.9.0",
     "path": "^0.12.7",
     "postcss-loader": "^8.1.1",
     "react": "^18.3.1",

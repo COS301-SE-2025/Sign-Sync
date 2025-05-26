@@ -6,8 +6,6 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import Translator from "./pages/Translator";
 
-//testing merge
-
 class app extends React.Component 
 {
   render() 
