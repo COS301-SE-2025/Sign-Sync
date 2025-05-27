@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from vosk import Model, KaldiRecognizer
 import json
 import asyncio
+import os
 
 app = FastAPI()
 
@@ -14,12 +15,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = Model("models/vosk-model-small-en-us-0.15")
 SAMPLE_RATE = 16000
+
+def get_model():
+    return Model("models/vosk-model-small-en-us-0.15")
+
 
 @app.websocket("/api/speech-to-text")
 async def speech_to_text(websocket: WebSocket):
     await websocket.accept()
+    model = get_model()
     recognizer = KaldiRecognizer(model, SAMPLE_RATE)
     recognizer.SetWords(True)
 
