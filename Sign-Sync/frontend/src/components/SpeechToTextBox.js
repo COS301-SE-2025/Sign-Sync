@@ -130,19 +130,17 @@ const SpeechToTextBox = () => {
   };
 
   return (
-    <div className="mt-4">
-      <div className="flex items-center gap-2">
+    <div className=" items-center mx-auto">
+      <div className="flex items-stretch">
         <input
           type="text"
           value={text}
           readOnly
-          className="p-2 border rounded w-2/3"
+          className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 flex-grow min-h-[60px]"
           placeholder="Speech will appear here..."
         />
         <button
-          onClick={toggleRecording}
-          className={`p-2 rounded ${recording ? 'bg-red-500' : 'bg-green-500'} text-white`}
-        >
+          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 text-white border-2 border-black ${recording ? 'bg-[#FFFFFD]' : 'bg-[#801E20]'}`}>
           {recording ? 'Stop' : 'Speak 🎙️'}
         </button>
       </div>

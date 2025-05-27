@@ -2,7 +2,7 @@ import React from "react";
 import conversationIcon from "../assets/conversation.png";
 import MicOn from "../assets/MicOn.png";
 import MicOff from "../assets/MuteOff.png";
-import SpeechToTextBox from "../components/speechToTextBox";
+import SpeechToTextBox from "../components/SpeechToTextBox";
 
 class TextToSign extends React.Component
 {
@@ -98,7 +98,7 @@ class TextToSign extends React.Component
         if(mic){
             inputType = <SpeechToTextBox />;
         }else{
-            inputType = <input className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] "type={"text"} onChange={this.processSentence}/>
+            inputType = <input className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] " type={"text"} onChange={this.processSentence}/>;
         }
         return (
             <div>
@@ -106,9 +106,9 @@ class TextToSign extends React.Component
                     <img className="w-[300px] h-[400px] object-contain mx-auto" src={this.state.signIndex === -1 ? null : this.signs[this.state.signIndex]} alt={"No sign available"}/>
                 </div>
                 <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
-                    <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] rounded p-2 min-h-[60px]" onClick={this.cycleLeft}> Previous Character</button>
+                    <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] p-2 min-h-[60px]" onClick={this.cycleLeft}> Previous Character</button>
                     <h1 className="w-1/3 text-center text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px]">{this.state.signIndex === -1 ? " " : this.letters[this.state.signIndex]}</h1>
-                    <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] rounded p-2 min-h-[60px]" onClick={this.cycleRight}> Next Character </button>
+                    <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] p-2 min-h-[60px]" onClick={this.cycleRight}> Next Character </button>
                 </div>
                 <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
                     <button className="bg-gray-300 p-3.5 border-2 border-black"><img src={conversationIcon} className="w-8 h-8" alt={"Conversation"}/></button>
