@@ -23,7 +23,7 @@ class SettingsPage extends React.Component
         return (
             <section className="flex h-screen overflow-hidden bg-white">
                 {/* Left: Sidebar */}
-                <div className="w-64 border-r">
+                <div>
                     <SideNavbar />
                 </div>
 

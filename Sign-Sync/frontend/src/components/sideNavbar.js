@@ -8,10 +8,10 @@ import SettingsBtn from '../assets/Settings-icon.png';
 
 class SideNavbar extends React.Component 
 {
-  render() 
+  render()  
   {
     return (
-      <div className="flex flex-col min-w-[220px] max-w-[360px] h-screen items-start pl-0 pr-0 pt-0 pb-5 relative bg-[#102a46]">
+      <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]"> 
         <div className="relative w-full h-[66px] bg-[#1c4a7c]">
           <div className="flex w-[61px] h-[60px] items-center justify-center relative top-[3px] left-[13px]">
             <div className="flex flex-col w-24 items-center justify-center relative mt-[-18.00px] mb-[-18.00px] ml-[-17.50px] mr-[-17.50px] rounded-[28px] overflow-hidden">
