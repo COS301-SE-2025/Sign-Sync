@@ -5,7 +5,12 @@ import torch.nn as nn
 import json
 import numpy as np
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"])
 
 # Load label map
 with open("./live-model/label_map.json", "r") as f:
