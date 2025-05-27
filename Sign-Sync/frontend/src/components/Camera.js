@@ -2,10 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import hand_landmarker_task from "../assets/hand_landmarker.task";
 
+import SoundOnIcon from "../assets/SoundOn.png";
+import SoundOffIcon from "../assets/SoundOff.png";
+import conversationIcon from "../assets/conversation.png";
+
 const Camera = () => {
     const videoRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [prediction, setPrediction] = useState(null);
+    const [soundOn, setSoundOn] = useState(null);
 
     useEffect(() => {
         let handLandmarker;
@@ -64,8 +69,6 @@ const Camera = () => {
             }
         };
 
-
-
         const startWebcam = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -89,11 +92,19 @@ const Camera = () => {
         };
     }, []);
 
+    const changeSound = () => {
+        setSoundOn(sound => !sound);
+    }
+
     return (
-        <div className={"flex flex-col items-center justify-center min-h-screen"}>
-            <video ref={videoRef} autoPlay playsInline width="640" height="480" />
-            <div>
-                <h1 className="text-4xl font-bold">{prediction}</h1>
+        <div>
+            <div className="bg-gray-200 p-2 rounded-lg mb-2">
+                <video ref={videoRef} autoPlay playsInline width="640" height="400" />
+            </div>
+            <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
+                <button className="bg-gray-300 p-3.5 border-2 border-black"><img src={conversationIcon} className="w-8 h-8" alt={"Conversation"}/></button>
+                <h1 className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] ">{prediction}</h1>
+                <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
             </div>
         </div>
     );

@@ -1,4 +1,8 @@
 import React from "react";
+import conversationIcon from "../assets/conversation.png";
+import MicOn from "../assets/MicOn.png";
+import MicOff from "../assets/MuteOff.png";
+import SpeechToTextBox from "../components/SpeechToTextBox";
 
 class TextToSign extends React.Component
 {
@@ -36,8 +40,10 @@ class TextToSign extends React.Component
         this.state = {
             index:0,
             signIndex:0,
-            sentence:""
+            sentence:"",
+            mic : false
         };
+        this.letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
     }
 
 
@@ -70,24 +76,45 @@ class TextToSign extends React.Component
         let sentence = this.state.sentence;
         if(sentence !== ""){
             let index = sentence.charCodeAt(this.state.index) - 65;
-            console.log(index + " : " + this.state.sentence.at(index));
-            this.setState({signIndex: index});
+            if(index < 26 && index >= 0){
+                this.setState({signIndex: index});
+            }else{
+                this.setState({signIndex: -1});
+            }
+            this.setState({sentence: sentence});
         }
         const endTime = new Date().getTime();
 
-        console.log("Elapsed time:", endTime - startTime, "milliseconds");
+    }
+
+    changeMic = () => {
+        this.setState({mic: !this.state.mic});
     }
 
     render()
     {
+        var mic = this.state.mic;
+        let inputType;
+        if(mic){
+            inputType = <SpeechToTextBox />;
+        }else{
+            inputType = <input className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] " type={"text"} onChange={this.processSentence}/>;
+        }
         return (
-            <div className = "text-center mx-auto   ">
-                <div >
-                    <button onClick={this.cycleLeft}> ⬅️ </button>
-                    <img width={300} height={200} src={this.signs[this.state.signIndex]} alt={"Sign Image"}/>
-                    <button onClick={this.cycleRight}> ➡️ </button>
+            <div>
+                <div className="bg-white p-2 rounded-lg mb-2 items-center mx-auto">
+                    <img className="w-[300px] h-[400px] object-contain mx-auto" src={this.state.signIndex === -1 ? null : this.signs[this.state.signIndex]} alt={"No sign available"}/>
                 </div>
-                <input className="inline outline outline-2 outline-red-500" type={"text"} onChange={this.processSentence}/>
+                <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
+                    <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] p-2 min-h-[60px]" onClick={this.cycleLeft}> Previous Character</button>
+                    <h1 className="w-1/3 text-center text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px]">{this.state.signIndex === -1 ? " " : this.letters[this.state.signIndex]}</h1>
+                    <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] p-2 min-h-[60px]" onClick={this.cycleRight}> Next Character </button>
+                </div>
+                <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
+                    <button className="bg-gray-300 p-3.5 border-2 border-black"><img src={conversationIcon} className="w-8 h-8" alt={"Conversation"}/></button>
+                    {inputType}
+                    <button onClick={this.changeMic} className="bg-gray-300 p-3.5 border-2 border-black"><img src={mic? MicOn : MicOff} className="w-8 h-8" alt={"Speaker"}/></button>
+                </div>
             </div>
         )
     }
