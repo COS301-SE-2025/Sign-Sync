@@ -10,9 +10,43 @@ class RegistrationPage extends React.Component
         this.state = {
             username: '',
             email: '',
-            password: ''
+            password: '', 
+            errors: {}
         };
     }
+
+    validateForm = () => 
+    {
+        const { username, email, password } = this.state;
+        const errors = {};
+
+        if(!username.trim()) 
+        {
+            errors.username = "Username is required.";
+        }
+
+        if(!email.trim()) 
+        {
+            errors.email = "Email is required.";
+        } 
+        else if(!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) 
+        {
+            errors.email = "Enter a valid email address.";
+        }
+
+        if(!password.trim()) 
+        {
+            errors.password = "Password is required.";
+        } 
+        else if(password.length < 6) 
+        {
+            errors.password = "Password must be at least 6 characters.";
+        }
+
+        this.setState({ errors });
+
+        return Object.keys(errors).length === 0;
+    };
 
     handleInputChange = (e) =>
     {        
@@ -23,6 +57,8 @@ class RegistrationPage extends React.Component
     handleSubmit = async (e) => 
     {
         e.preventDefault();
+
+        if(!this.validateForm()) return;
 
         const { username, email, password } = this.state;
 
@@ -78,9 +114,11 @@ class RegistrationPage extends React.Component
                             name="username"
                             value={username}
                             onChange={this.handleInputChange}
-                            required
                             className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
+                        {this.state.errors.username && (
+                            <p className="text-red-600 text-lg">{this.state.errors.username}</p>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-4 items-start w-full">
@@ -88,14 +126,16 @@ class RegistrationPage extends React.Component
                             Email
                         </label>
                         <input
-                            type="email"
+                            type="text"
                             placeholder="Enter email"
                             name="email"
                             value={email}
                             onChange={this.handleInputChange}
-                            required
                             className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
+                        {this.state.errors.email && (
+                            <p className="text-red-600 text-lg">{this.state.errors.email}</p>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-4 items-start w-full">
@@ -108,9 +148,11 @@ class RegistrationPage extends React.Component
                             name="password"
                             value={password}
                             onChange={this.handleInputChange}
-                            required
                             className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
+                        {this.state.errors.password && (
+                            <p className="text-red-600 text-lg">{this.state.errors.password}</p>
+                        )}
                     </div>
 
                     <div className="flex gap-8 items-center self-stretch">

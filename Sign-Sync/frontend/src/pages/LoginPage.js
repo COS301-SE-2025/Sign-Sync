@@ -114,7 +114,6 @@ class LoginPage extends React.Component
                             name="username"
                             value={username}
                             onChange={this.handleInputChange}
-                            //required
                             className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
                         {this.state.errors.username && (
@@ -132,10 +131,8 @@ class LoginPage extends React.Component
                             name="email"
                             value={email}
                             onChange={this.handleInputChange}
-                            //required
                             className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
                         />
-
                         {this.state.errors.email && (
                             <p className="text-red-600 text-lg">{this.state.errors.email}</p>
                         )}
@@ -151,7 +148,6 @@ class LoginPage extends React.Component
                             name="password"
                             value={password}
                             onChange={this.handleInputChange}
-                            //required
                             className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"     
                         />
                         {this.state.errors.password && (
