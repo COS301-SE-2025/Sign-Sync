@@ -1,7 +1,7 @@
 // import express from 'express';
 // import path from 'path';
 // import { MongoClient } from 'mongodb';
-// import apiRoutes from './userApi';
+// import apiRoutes from './userApi'; //this seems incorrect, but it is correct. It imports the userApi.js file relative to the dist. Leave it as is.
 
 // const app = express();
 // const port = process.env.PORT || 3000;
