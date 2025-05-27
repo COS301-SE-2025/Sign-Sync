@@ -4,7 +4,7 @@
   "description": "SignSync project",
   "main": "frontend/src/index.js",
   "scripts": {
-    "build": "webpack && babel backend/server.js backend/userApi.js --out-dir backend/dist",
+    "build": "webpack && babel backend/server.js backend/auth-service/userApi.js --out-dir backend/dist",
     "start": "npm run build && node backend/dist/server.js",
     "watch": "webpack -w"
   },
