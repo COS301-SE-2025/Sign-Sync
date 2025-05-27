@@ -21,15 +21,15 @@ class SettingsPage extends React.Component
     render() 
     {
         return (
-            <section>
+            <section className="flex h-screen overflow-hidden bg-white">
                 {/* Left: Sidebar */}
-                <div>
+                <div className="w-64 border-r">
                     <SideNavbar />
                 </div>
 
                 {/* Right: Main Settings */}
-                <div>
-                    <div>
+                <div className="flex-1 flex justify-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
+                    <div className="w-full max-w-lg">
                         <SettingsRow 
                             title="Name" 
                             value="Apollo Projects" 
@@ -38,9 +38,10 @@ class SettingsPage extends React.Component
                         <SettingsRow 
                             title="Email" 
                             value="apolloprojects.cos301@gmail.com" 
+                            className="mt-8" 
                         />
 
-                        <div>
+                        <div className="mt-12 space-y-7">
                             <SelectField 
                                 label="Display mode" 
                                 value={this.state.displayMode}
