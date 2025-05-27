@@ -67,7 +67,7 @@ class LoginPage extends React.Component
 
                 <form
                     onSubmit={this.handleSubmit}
-                    className="box-border flex relative flex-col gap-12 items-start p-12 bg-white rounded-xl border border-amber-50 border-solid h-fit max-h-screen overflow-auto min-w-80 w-[773px] z-[2] max-md:gap-8 max-md:p-8 max-md:h-auto max-md:max-w-[600px] max-md:w-[90%] max-sm:gap-6 max-sm:p-6 max-sm:max-w-[400px] max-sm:w-[95%]"
+                    className="box-border flex relative flex-col gap-12 items-start p-12 bg-white rounded-xl border border-amber-50 border-solid max-h-[90vh] overflow-y-auto min-w-80 w-[773px] z-[2] max-md:gap-8 max-md:p-8 max-md:h-auto max-md:max-w-[600px] max-md:w-[90%] max-sm:gap-6 max-sm:p-6 max-sm:max-w-[400px] max-sm:w-[95%]"
                 >
                     <div className="flex flex-col gap-4 items-start w-full">
                         <label className="self-stretch text-3xl font-bold leading-10 text-stone-900 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
