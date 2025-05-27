@@ -1,15 +1,59 @@
 import pytest
-import numpy as np
-import torch
 from fastapi.testclient import TestClient
+
 import os, sys
 
 # This workaround will be replaced by treating the folders and files as packages
 tests_dir = os.path.dirname(__file__)  
 backend_root = os.path.abspath(os.path.join(tests_dir, os.pardir))
-service_dir = os.path.join(backend_root, "alphabetTranslate-service")
+service_dir = os.path.join(backend_root, "speechToText-service")
 os.chdir(service_dir)
 sys.path.insert(0, service_dir)
+
+from API import app
+
+client = TestClient(app)
+
+import io
+import wave
+import numpy as np
+
+def make_test_wav(duration_s=0.1, rate=16000):
+    t = np.linspace(0, duration_s, int(rate*duration_s), endpoint=False)
+    data = (0.3 * np.sin(2*np.pi*440*t) * 32767).astype(np.int16) ## 440Hz sin wave and converts to 16 bit integers (required for API)
+    buf = io.BytesIO()
+
+    with wave.open(buf, 'wb') as w:
+        w.setnchannels(1)  # mono audio (also required by API)
+        w.setsampwidth(2) # 16 bits as needed and stated above
+        w.setframerate(rate) # need 16000Hz sample rate
+        w.writeframes(data.tobytes()) # writes to the file liek object
+        
+    buf.seek(0) # ewinds buffer to start from beginning
+    return buf
+
+def test_upload_audio():
+    audio_buf = make_test_wav()
+    response = client.post(
+        "/api/upload-audio",
+        files={"file": ("test.wav", audio_buf, "audio/wav")}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert "text" in data
+    assert isinstance(data["text"], str)
+
+
+
+import numpy as np
+import torch
+
+# This workaround will be replaced by treating the folders and files as packages
+tests_dir = os.path.dirname(__file__)  
+backend_root = os.path.abspath(os.path.join(tests_dir, os.pardir))
+service_dir1 = os.path.join(backend_root, "alphabetTranslate-service")
+os.chdir(service_dir1)
+sys.path.insert(0, service_dir1)
 
 import translator_api
 
