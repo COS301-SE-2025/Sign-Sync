@@ -5,10 +5,15 @@ import torch.nn as nn
 import json
 import numpy as np
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"])
+
 # Load label map
-with open("label_map.json", "r") as f:
+with open("./live-model/label_map.json", "r") as f:
     label_map = json.load(f)
     index_to_label = {int(k): v for k, v in label_map.items()}
 
@@ -34,7 +39,7 @@ class KeypointClassifier(nn.Module):
         return self.output(x)
     
 model = KeypointClassifier()
-model.load_state_dict(torch.load("../live-model/keypoint_model_upgraded.pth", map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("./live-model/keypoint_model_upgraded.pth", map_location=torch.device("cpu")))
 model.eval()
 
 class Landmark(BaseModel):

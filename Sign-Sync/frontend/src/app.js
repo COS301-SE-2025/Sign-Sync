@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SideNavbar from './components/sideNavbar';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
-import Translator from "./pages/Translator";
+import Translator from "./pages/TranslatorPage";
 
 //testing merge
 
