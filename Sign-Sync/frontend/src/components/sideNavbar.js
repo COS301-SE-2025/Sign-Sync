@@ -17,27 +17,29 @@ class SideNavbar extends React.Component
             <div className="flex flex-col w-24 items-center justify-center relative mt-[-18.00px] mb-[-18.00px] ml-[-17.50px] mr-[-17.50px] rounded-[28px] overflow-hidden">
               <div className="flex h-24 items-center justify-center relative self-stretch w-full">
                 <div className="w-12 h-12" />
-                    <img src={topBtn} alt="Logo" className="w-15 h-13 pt-2" />
+                  <img src={topBtn} alt="Logo" className="w-15 h-13 pt-2" />
               </div>
             </div>
           </div>
         </div>
 
         <div className="w-full flex flex-col gap-4 pt-4 text-white ">
-          <div className="p-2 text-4xl">
-              <Link to="/translator">
-            <img src={translateBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-            Translator
+            <div className="p-2 text-4xl">
+                <Link to="/translator">
+                  <img src={translateBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
+                  Translator
+                </Link>
+            </div>
+            <div className="p-2 text-4xl">
+              <img src={EducationBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
+              Education
+            </div>
+            <div className="p-2 text-4xl">
+              <Link to="/settings">
+                <img src={SettingsBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
+                Settings
               </Link>
-          </div>
-           <div className="p-2 text-4xl">
-            <img src={EducationBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-            Education
-          </div>
-           <div className="p-2 text-4xl">
-            <img src={SettingsBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-            Settings
-          </div>
+            </div>
         </div>
 
         <div className="flex w-full h-[78px] items-center justify-center gap-4 mt-auto px-2">
