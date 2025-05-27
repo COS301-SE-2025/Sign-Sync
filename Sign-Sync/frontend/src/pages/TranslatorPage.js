@@ -2,7 +2,6 @@ import React from "react";
 import Camera from "../components/Camera";
 import SideNavbar from "../components/sideNavbar";
 import TextToSign from "../components/textToSign";
-import SpeechToTextBox from "../components/speechToTextBox";
 import Swap from "../assets/Swap-icon.png"
 
 class TranslatorPage extends React.Component
@@ -28,7 +27,6 @@ class TranslatorPage extends React.Component
             </div>
         }else{
             translatorMode = <div>
-                <SpeechToTextBox/>
                 <TextToSign/>
             </div>
         }
