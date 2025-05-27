@@ -1,0 +1,9 @@
+node_modules/
+
+# Ignore backend build output
+backend/dist/
+
+# Ignore frontend bundle
+frontend/public/bundle.js
+
+package-lock.json

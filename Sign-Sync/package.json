@@ -1,0 +1,50 @@
+{
+  "name": "SignSync",
+  "version": "1.0.0",
+  "description": "SignSync project",
+  "main": "frontend/src/index.js",
+  "scripts": {
+    "build": "webpack && babel backend/server.js backend/auth-service/userApi.js --out-dir backend/dist",
+    "start": "npm run build && node backend/dist/server.js",
+    "watch": "webpack -w",
+    "test": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./__tests__/jest.setup.js"
+    ]
+  },
+  "author": "Apollo Projects",
+  "license": "ISC",
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "audio-recorder-polyfill": "^0.4.1",
+    "css-loader": "^7.1.2",
+    "express": "^4.20.0",
+    "mongodb": "^6.9.0",
+    "path": "^0.12.7",
+    "postcss-loader": "^8.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "style-loader": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "autoprefixer": "^10.4.21",
+    "babel-loader": "^9.1.3",
+    "file-loader": "^6.2.0",
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.4",
+    "postcss": "^8.5.3",
+    "supertest": "^7.1.1",
+    "tailwindcss": "^3.4.13",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
