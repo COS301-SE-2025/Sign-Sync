@@ -25,9 +25,26 @@ Built as a **web application**, it provides an intuitive, accessible platform fo
 
 Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes inclusivity, independence, and seamless communication. By blending advanced tech with real-world impact, this project empowers users while offering developers a chance to work on meaningful, next-gen AI systems.
 
-## Links
+## Demos
 
-- [Functional Requirements (SRS)](https://docs.google.com/document/d/1pcefn-Nhll3uHIxUDYLyK4dad5k8ZgvDUs-wr97H06Q/edit?tab=t.0#heading=h.tbpn49glggld)
+||**Demo Slides**|**Demo Video**|
+|-|-|-|
+|Demo 1| [Slides 1](https://docs.google.com/presentation/d/1dGRHy4usAEJKe0lt4n1SQhi-hZZ6lwPh31kqmcY2CO8/edit?slide=id.g35dd9153325_0_0#slide=id.g35dd9153325_0_0) | [Video 1]()
+|Demo 2| [Slides 2]() | [Video 2]()
+|Demo 3| [Slides 3]() | [Video 3]()
+|Demo 4| [Slides 4]() | [Video 4]()
+
+## Documentation Links
+
+|**Document**|**Description**|
+|-|-|
+|[SRS Requirements](https://docs.google.com/document/d/1pcefn-Nhll3uHIxUDYLyK4dad5k8ZgvDUs-wr97H06Q/edit?tab=t.0#heading=h.tbpn49glggld)| Software Requiremtn Specifications |
+|[User Manual]()| Guide for users on how to use the application |
+|[Technical Installation Manual]()| Instructions for setting up the applications |
+|[Testing Policy]()| Policies and procedures for testing |
+|[Coding Standards]()| Guidelines for coding pracices |
+|[Advertisment Video]()| Advertisment for Sign Sync |
+
 - [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)
 
 ## Team
