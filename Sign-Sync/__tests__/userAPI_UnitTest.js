@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import { MongoClient } from 'mongodb';
-import router from '../backend/userApi.js'; // Update with your actual file path
+import router from '../backend/dist/userApi.js'; // Update with your actual file path
 
 describe('User Authentication Routes', () => {
   let app;
@@ -162,6 +162,7 @@ describe('User Authentication Routes', () => {
         .post('/auth/login')
         .send({
           username: 'testuser',
+          email:'test@example.com',
           password: 'correctpassword',
         });
 
@@ -176,6 +177,7 @@ describe('User Authentication Routes', () => {
       const response = await request(app)
         .post('/auth/login')
         .send({
+          username: 'testuser',
           email: 'test@example.com',
           password: 'correctpassword',
         });
@@ -192,6 +194,7 @@ describe('User Authentication Routes', () => {
         .post('/auth/login')
         .send({
           username: 'nonexistent',
+          email: 'test@example.com',
           password: 'correctpassword',
         });
 
@@ -204,6 +207,7 @@ describe('User Authentication Routes', () => {
         .post('/auth/login')
         .send({
           username: 'testuser',
+          email: 'test@example.com',
           password: 'wrongpassword',
         });
 
@@ -219,6 +223,7 @@ describe('User Authentication Routes', () => {
         .post('/auth/login')
         .send({
           username: 'testuser',
+          email: 'test@example.com',
           password: 'correctpassword',
         });
 
