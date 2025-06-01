@@ -54,11 +54,10 @@ describe('User Authentication Routes', () => {
       const user = await userCollection.findOne({ username: 'testuser' });
       expect(user).toBeTruthy();
       expect(user.email).toBe('test@example.com');
-      expect(user.userID).toBe(1); // First user should have ID 1
+      expect(user.userID).toBe(1);
     });
 
     it('should return 400 if username already exists', async () => {
-      // Insert a test user first
       await userCollection.insertOne({
         userID: 1,
         username: 'existinguser',
@@ -79,7 +78,6 @@ describe('User Authentication Routes', () => {
     });
 
     it('should return 400 if email already exists', async () => {
-      // Insert a test user first
       await userCollection.insertOne({
         userID: 1,
         username: 'user1',
@@ -100,7 +98,6 @@ describe('User Authentication Routes', () => {
     });
 
     it('should auto-increment userID correctly', async () => {
-      // Insert first user
       await request(app)
         .post('/auth/register')
         .send({
@@ -109,7 +106,6 @@ describe('User Authentication Routes', () => {
           password: 'password123',
         });
 
-      // Insert second user
       const response = await request(app)
         .post('/auth/register')
         .send({
@@ -118,37 +114,13 @@ describe('User Authentication Routes', () => {
           password: 'password123',
         });
 
-      // Verify second user has ID 2
       const user = await userCollection.findOne({ username: 'user2' });
       expect(user.userID).toBe(2);
-    });
-
-    it('should return 500 if there is a database error', async () => {
-      // Simulate a database error by closing the connection
-      await connection.close();
-
-      const response = await request(app)
-        .post('/auth/register')
-        .send({
-          username: 'testuser',
-          email: 'test@example.com',
-          password: 'password123',
-        });
-
-      expect(response.status).toBe(500);
-      expect(response.body.message).toContain('Error signing up user');
-
-      // Reconnect for other tests
-      connection = await MongoClient.connect(global.__MONGO_URI__);
-      db = await connection.db(global.__MONGO_DB_NAME__);
-      userCollection = db.collection('users');
-      app.locals.userCollection = userCollection;
     });
   });
 
   describe('POST /auth/login', () => {
     beforeEach(async () => {
-      // Insert a test user for login tests
       await userCollection.insertOne({
         userID: 1,
         username: 'testuser',
@@ -157,23 +129,7 @@ describe('User Authentication Routes', () => {
       });
     });
 
-    it('should login successfully with correct credentials (username)', async () => {
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-          email:'test@example.com',
-          password: 'correctpassword',
-        });
-
-      expect(response.status).toBe(200);
-      expect(response.body.status).toBe('success');
-      expect(response.body.message).toBe('Login successful');
-      expect(response.body.user).toBeTruthy();
-      expect(response.body.user.username).toBe('testuser');
-    });
-
-    it('should login successfully with correct credentials (email)', async () => {
+    it('should login successfully with correct credentials', async () => {
       const response = await request(app)
         .post('/auth/login')
         .send({
@@ -185,7 +141,7 @@ describe('User Authentication Routes', () => {
       expect(response.status).toBe(200);
       expect(response.body.status).toBe('success');
       expect(response.body.message).toBe('Login successful');
-      expect(response.body.user).toBeTruthy();
+      expect(response.body.user.username).toBe('testuser');
       expect(response.body.user.email).toBe('test@example.com');
     });
 
@@ -214,9 +170,31 @@ describe('User Authentication Routes', () => {
       expect(response.status).toBe(401);
       expect(response.body.message).toBe('Incorrect password');
     });
+  });
 
-    it('should return 500 if there is a database error', async () => {
-      // Simulate a database error by closing the connection
+  describe('Database Error Handling', () => {
+    it('should return 500 if there is a database error during registration', async () => {
+      await connection.close();
+
+      const response = await request(app)
+        .post('/auth/register')
+        .send({
+          username: 'testuser',
+          email: 'test@example.com',
+          password: 'password123',
+        });
+
+      expect(response.status).toBe(500);
+      expect(response.body.message).toContain('Error signing up user');
+
+      // Reconnect for other tests
+      connection = await MongoClient.connect(global.__MONGO_URI__);
+      db = await connection.db(global.__MONGO_DB_NAME__);
+      userCollection = db.collection('users');
+      app.locals.userCollection = userCollection;
+    });
+
+    it('should return 500 if there is a database error during login', async () => {
       await connection.close();
 
       const response = await request(app)
