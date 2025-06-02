@@ -12,7 +12,7 @@ def normalize_keypoints(keypoints):
     range_vals = max_vals - min_vals + 1e-5
     return ((keypoints - min_vals) / range_vals)
 
-def extract_hand_keypoints(video_path, bbox=None, max_frames=50):
+def extract_hand_keypoints(video_path, bbox=None, max_frames=75):
     capture = cv2.VideoCapture(video_path)
     hands = mp_hands.Hands(static_image_mode=False,
                            max_num_hands=2,
