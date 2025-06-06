@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import Translator from "./pages/TranslatorPage";
 import SettingsPage from './pages/SettingsPage';
+import HelpMenuPage from './pages/HelpMenuPage';
 
 class app extends React.Component 
 {
@@ -18,7 +19,7 @@ class app extends React.Component
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/settings" element={<SettingsPage />} />
-
+          <Route path="/helpMenu" element={<HelpMenuPage />} />
         </Routes>
       </BrowserRouter>
     );
