@@ -28,7 +28,31 @@ class HelpMenuPage extends React.Component {
                             </div>
                         </div>
 
+                        {/* Help Categories */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            {/* Getting Started */}
+                            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+                                <div className="flex items-center mb-4">
+                                    <div className="bg-blue-100 p-3 rounded-full mr-4">
+                                        <FaBook className="text-blue-600 text-xl" />
+                                    </div>
+                                    <h2 className="text-xl font-semibold text-gray-800">Getting Started</h2>
+                                </div>
+                                <p className="text-gray-600 mb-4">New to our product? Start with these guides.</p>
+                                <ul className="space-y-2">
+                                    <li><a href="#" className="text-blue-600 hover:underline">Product overview</a></li>
+                                    <li><a href="#" className="text-blue-600 hover:underline">First steps tutorial</a></li>
+                                    <li><a href="#" className="text-blue-600 hover:underline">Setting up your account</a></li>
+                                </ul>
+                            </div>
+
+                            
                         </div>
+
+                        
+
+                        
+                    </div>
                 </div>
             </section>
         );
