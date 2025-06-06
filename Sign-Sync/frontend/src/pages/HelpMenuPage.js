@@ -46,12 +46,26 @@ class HelpMenuPage extends React.Component {
                                 </ul>
                             </div>
 
-                            
+                            {/* Tutorials & Videos */}
+                            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+                                <div className="flex items-center mb-4">
+                                    <div className="bg-purple-100 p-3 rounded-full mr-4">
+                                        <FaVideo className="text-purple-600 text-xl" />
+                                    </div>
+                                    <h2 className="text-xl font-semibold text-gray-800">Tutorials & Videos</h2>
+                                </div>
+                                <p className="text-gray-600 mb-4">Watch step-by-step video guides.</p>
+                                <ul className="space-y-2">
+                                    <li><a href="#" className="text-blue-600 hover:underline">Basic features walkthrough</a></li>
+                                    <li><a href="#" className="text-blue-600 hover:underline">Advanced techniques</a></li>
+                                    <li><a href="#" className="text-blue-600 hover:underline">Productivity tips</a></li>
+                                </ul>
+                            </div>
+
+                           
                         </div>
 
-                        
-
-                        
+                       
                     </div>
                 </div>
             </section>
