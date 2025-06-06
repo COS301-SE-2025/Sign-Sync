@@ -78,7 +78,21 @@ class HelpMenuPage extends React.Component {
                                 </ul>
                             </div>
 
-                            
+                            {/* Contact Support */}
+                            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+                                <div className="flex items-center mb-4">
+                                    <div className="bg-yellow-100 p-3 rounded-full mr-4">
+                                        <FaEnvelope className="text-yellow-600 text-xl" />
+                                    </div>
+                                    <h2 className="text-xl font-semibold text-gray-800">Contact Support</h2>
+                                </div>
+                                <p className="text-gray-600 mb-4">Can't find what you need? We're here to help.</p>
+                                <ul className="space-y-2">
+                                    <li><a href="#" className="text-blue-600 hover:underline">Email support</a></li>
+                                    <li><a href="#" className="text-blue-600 hover:underline">Live chat</a></li>
+                                    <li><a href="#" className="text-blue-600 hover:underline">Phone support</a></li>
+                                </ul>
+                            </div>
                         </div>
 
                        
