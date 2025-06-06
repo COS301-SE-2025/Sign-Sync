@@ -14,7 +14,7 @@ class HelpMenuPage extends React.Component {
                 {/* Main Content */}
                 <div className="flex-1 overflow-y-auto p-8">
                     <div className="max-w-4xl mx-auto">
-                        <h1 className="text-3xl font-bold text-gray-800 mb-6">Help Center</h1>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-6">Help Menu</h1>
                         
                         {/* Search Help */}
                         <div className="mb-8">
