@@ -123,7 +123,14 @@ class HelpMenuPage extends React.Component {
                             </div>
                         </div>
 
-                        
+                        {/* Still Need Help? */}
+                        <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                            <h2 className="text-xl font-semibold text-gray-800 mb-2">Still need help?</h2>
+                            <p className="text-gray-600 mb-4">Our support team is available 24/7 to assist you.</p>
+                            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                                Contact Support
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
