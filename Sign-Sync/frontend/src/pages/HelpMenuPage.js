@@ -95,7 +95,35 @@ class HelpMenuPage extends React.Component {
                             </div>
                         </div>
 
-                       
+                        {/* Popular Articles */}
+                        <div className="mb-8">
+                            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                                <FaLightbulb className="text-yellow-500 mr-2" /> Popular Help Articles
+                            </h2>
+                            <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                                {[
+                                    "How to reset your password",
+                                    "Understanding your dashboard",
+                                    "Exporting your data",
+                                    "Integrations with other tools",
+                                    "Privacy and security settings"
+                                ].map((article, index) => (
+                                    <div 
+                                        key={index} 
+                                        className={`p-4 hover:bg-gray-50 ${index !== 0 ? 'border-t border-gray-100' : ''}`}
+                                    >
+                                        <a href="#" className="flex justify-between items-center text-gray-800 hover:text-blue-600">
+                                            <span>{article}</span>
+                                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        
                     </div>
                 </div>
             </section>
