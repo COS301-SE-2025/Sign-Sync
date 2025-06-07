@@ -10,13 +10,14 @@ class RegistrationPage extends React.Component
         this.state = {
             email: '',
             password: '',
+            confirmPassword: '',
             errors: {}
         };
     }
 
     validateForm = () => 
     {
-        const { email, password } = this.state;
+        const { email, password, confirmPassword} = this.state;
         const errors = {};
 
         if(!email.trim()) 
@@ -37,6 +38,15 @@ class RegistrationPage extends React.Component
             errors.password = "Password must be at least 6 characters.";
         }
 
+        if(!confirmPassword.trim()) 
+        {
+            errors.confirmPassword = "Please confirm your password.";
+        } 
+        else if(password !== confirmPassword) 
+        {
+            errors.confirmPassword = "Passwords do not match.";
+        }
+
         this.setState({ errors });
 
         return Object.keys(errors).length === 0;
@@ -54,7 +64,7 @@ class RegistrationPage extends React.Component
 
         if(!this.validateForm()) return;
 
-        const { username, email, password } = this.state;
+        const { email, password } = this.state;
 
         try
         {
@@ -88,7 +98,7 @@ class RegistrationPage extends React.Component
 
     render() 
     {
-        const { username, email, password } = this.state;
+        const { email, password, confirmPassword} = this.state;
 
         return (
             <div className="flex relative justify-center items-center w-screen h-screen bg-blue-900">
@@ -129,6 +139,23 @@ class RegistrationPage extends React.Component
                         />
                         {this.state.errors.password && (
                             <p className="text-red-600 text-lg">{this.state.errors.password}</p>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-4 items-start w-full">
+                        <label className="self-stretch text-3xl font-bold leading-10 text-stone-900 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
+                            Confirm Password
+                        </label>
+                        <input
+                            type="password"
+                            placeholder="Please confirm your password"
+                            name="confirmPassword"
+                            value={confirmPassword}
+                            onChange={this.handleInputChange}
+                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
+                        />
+                        {this.state.errors.confirmPassword && (
+                            <p className="text-red-600 text-lg">{this.state.errors.confirmPassword}</p>
                         )}
                     </div>
 
