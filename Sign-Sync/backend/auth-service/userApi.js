@@ -4,17 +4,11 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => 
 {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     try
     {
-        const existingUsername = await req.app.locals.userCollection.findOne({ username })
         const existingEmail = await req.app.locals.userCollection.findOne({ email })
-
-        if(existingUsername) 
-        {
-            return res.status(400).json({ message: 'Username already exists' });
-        }
 
         if(existingEmail)
         {
@@ -40,7 +34,6 @@ router.post('/register', async (req, res) =>
 
         const newUser = {
             userID: newUserID,
-            username,
             email,
             password
         };
@@ -61,15 +54,15 @@ router.post('/register', async (req, res) =>
 
 router.post('/login', async (req, res) => 
 {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     try 
     {
-        const user = await req.app.locals.userCollection.findOne({ username, email});
+        const user = await req.app.locals.userCollection.findOne({ email });
 
         if(!user) 
         {
-            return res.status(400).json({ message: 'Invalid username or email' });
+            return res.status(400).json({ message: 'Email does not exist' });
         }
 
         if(user.password !== password) 
