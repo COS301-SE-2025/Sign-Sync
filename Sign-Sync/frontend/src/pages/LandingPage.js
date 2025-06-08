@@ -1,10 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-class LandingPage extends React.Component {
-  render() {
+class LandingPage extends React.Component 
+{
+  render() 
+  {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-900 text-white px-6 text-center">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="flex flex-col items-center justify-center min-h-screen bg-blue-900 text-white px-6 text-center"
+      >
         <h1 className="text-5xl font-bold mb-8">Welcome to Sign-Sync</h1>
 
         <div className="max-w-2xl mb-10 space-y-4 text-lg leading-relaxed">
@@ -33,7 +41,7 @@ class LandingPage extends React.Component {
             Continue to App
           </Link>
         </div>
-      </div>
+      </motion.div>
     );
   }
 }

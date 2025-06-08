@@ -23,6 +23,7 @@
     "audio-recorder-polyfill": "^0.4.1",
     "css-loader": "^7.1.2",
     "express": "^4.20.0",
+    "framer-motion": "^12.16.0",
     "mongodb": "^6.9.0",
     "path": "^0.12.7",
     "postcss-loader": "^8.1.1",
