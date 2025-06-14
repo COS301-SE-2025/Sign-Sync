@@ -23,7 +23,8 @@ class TranslatorPage extends React.Component
         let translatorType = this.state.type;
         if(translatorType === "SignText"){
             translatorMode = <div>
-                <Camera/>
+                {/*<Camera/>*/}
+                <TextToSign/>
             </div>
         }else{
             translatorMode = <div>

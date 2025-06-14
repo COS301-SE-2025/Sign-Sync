@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@react-three/fiber": "^8.18.0",
     "audio-recorder-polyfill": "^0.4.1",
     "css-loader": "^7.1.2",
     "express": "^4.20.0",
@@ -30,7 +31,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
-    "style-loader": "^4.0.0"
+    "style-loader": "^4.0.0",
+    "three": "^0.177.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.2",
