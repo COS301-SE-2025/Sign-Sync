@@ -20,6 +20,12 @@ function Avatar({signs}) {
         if(signs.length > 0){
             for(let i = 0; i < signs.length; i++){
                 actions[signs[i]]?.play();
+                const frames = actions[signs[i]].getClip().duration;
+                if(signs.length > 1) {
+                    setTimeout(() => {
+                        actions[signs[i]].stop();
+                    }, frames * 1000);
+                }
             }
         }
     }, [actions,signs]);
