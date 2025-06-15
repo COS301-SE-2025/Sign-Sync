@@ -18,15 +18,20 @@ function Avatar({signs}) {
 
     useEffect(() => {
         if(signs.length > 0){
-            for(let i = 0; i < signs.length; i++){
-                actions[signs[i]]?.play();
-                const frames = actions[signs[i]].getClip().duration;
-                if(signs.length > 1) {
-                    setTimeout(() => {
-                        actions[signs[i]].stop();
-                    }, frames * 1000);
+            if(signs.length > 1){
+                actions[signs[0]].play();
+                let duration = actions[signs[0]].getClip().duration;
+                for(let i = 1; i < signs.length; i++){
+                    setTimeout(()=>{
+                        actions[signs[i-1]].crossFadeTo(actions[signs[i]],duration,false);
+                        },duration*1000);
+
+                    duration = actions[signs[0]].getClip().duration;
                 }
+            }else{
+                actions[signs[0]].play();
             }
+
         }
     }, [actions,signs]);
 
