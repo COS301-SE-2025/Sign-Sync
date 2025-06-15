@@ -50,8 +50,10 @@ class TextToSign extends React.Component
 
 
     processSentence = (event) =>{
-        var sentence = event.target.value.toUpperCase();
-        this.setState({sentence: sentence});
+        var sentence = event.target.value.toLowerCase();
+        if(event.target.value.charAt(-1)!== " "){
+            this.setState({sentence: sentence});
+        }
         if(sentence.length === 1){
             this.showSign();
         }
@@ -105,7 +107,7 @@ class TextToSign extends React.Component
         return (
             <div>
                 <div className="bg-white p-2 rounded-lg mb-2 items-center mx-auto">
-                    <AvatarViewport />
+                    <AvatarViewport input={this.state.sentence}/>
                 </div>
                 <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
                     <button className="w-1/3 bg-[#801E20] text-[#FFFFFD] p-2 min-h-[60px]" onClick={this.cycleLeft}> Previous Character</button>
