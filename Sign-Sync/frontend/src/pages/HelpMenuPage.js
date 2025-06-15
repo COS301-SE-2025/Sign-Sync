@@ -42,7 +42,7 @@ class HelpMenuPage extends React.Component {
                                 <ul className="space-y-2">
                                     <li><a href="/productOverview" className="text-blue-600 hover:underline">Product overview</a></li>
                                     <li><a href="/firstStepsTutorial" className="text-blue-600 hover:underline">First steps tutorial</a></li>
-                                    <li><a href="#" className="text-blue-600 hover:underline">Setting up your account</a></li>
+                                    <li><a href="/settingUpYourAccount" className="text-blue-600 hover:underline">Setting up your account</a></li>
                                 </ul>
                             </div>
 

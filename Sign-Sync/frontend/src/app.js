@@ -8,6 +8,7 @@ import SettingsPage from './pages/SettingsPage';
 import HelpMenuPage from './pages/HelpMenuPage';
 import ProductOverview from "./pages/articles/ProductOverview";
 import FirstStepsTutorial from "./pages/articles/FirstStepsTutorial";
+import SettingUpYourAccount from "./pages/articles/SettingUpYourAccount";
 
 class app extends React.Component 
 {
@@ -24,6 +25,7 @@ class app extends React.Component
           <Route path="/helpMenu" element={<HelpMenuPage />} />
           <Route path="/productOverview" element={<ProductOverview  />} />
           <Route path="/firstStepsTutorial" element={<FirstStepsTutorial  />} />
+          <Route path="/settingUpYourAccount" element={<SettingUpYourAccount  />} />
         </Routes>
       </BrowserRouter>
     );
