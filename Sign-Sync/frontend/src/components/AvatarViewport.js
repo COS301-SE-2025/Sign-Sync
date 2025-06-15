@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
-import { MeshStandardMaterial, Color } from 'three';
+import {MeshStandardMaterial, Color, DirectionalLight} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 
 function Avatar() {
     const avatarReference = useRef();
     const {scene} = useGLTF(TranslatorAvatar);
+    scene.add(new DirectionalLight())
     return <primitive ref={avatarReference} object={scene} position={[0,-2,3]} />;
 }
 
