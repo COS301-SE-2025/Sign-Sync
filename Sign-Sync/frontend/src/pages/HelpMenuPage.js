@@ -41,7 +41,7 @@ class HelpMenuPage extends React.Component {
                                 <p className="text-gray-600 mb-4">New to our product? Start with these guides.</p>
                                 <ul className="space-y-2">
                                     <li><a href="/productOverview" className="text-blue-600 hover:underline">Product overview</a></li>
-                                    <li><a href="#" className="text-blue-600 hover:underline">First steps tutorial</a></li>
+                                    <li><a href="/firstStepsTutorial" className="text-blue-600 hover:underline">First steps tutorial</a></li>
                                     <li><a href="#" className="text-blue-600 hover:underline">Setting up your account</a></li>
                                 </ul>
                             </div>
