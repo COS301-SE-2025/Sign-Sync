@@ -14,7 +14,7 @@ export default function AvatarViewport() {
     return (
         <Canvas style={{ height: '50vh', background: '#222' }}>
             <ambientLight intensity={0.75} />
-            <pointLight position={[5,5,5]} />
+            <directionalLight position={[5,10,7.5]} />
             <Avatar />
         </Canvas>
     );
