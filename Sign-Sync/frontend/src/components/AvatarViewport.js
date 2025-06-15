@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
 import {MeshStandardMaterial, Color, DirectionalLight, AmbientLight} from 'three';
@@ -6,7 +6,12 @@ import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 
 function Avatar() {
     const avatarReference = useRef();
-    const {scene} = useGLTF(TranslatorAvatar);
+    const {scene, animations} = useGLTF(TranslatorAvatar);
+    const {actions} = useAnimations(animations,avatarReference);
+    useEffect(() => {
+        actions['NodsHead']?.play();
+    }, [actions]);
+
     const sun = new DirectionalLight('rgb(255,255,255)',1);
     sun.position.set(5,10,7.5);
     scene.add(sun);
