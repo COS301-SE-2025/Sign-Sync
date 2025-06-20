@@ -12,8 +12,20 @@ class SettingsPage extends React.Component
         
         this.state = {
             displayMode: "Light Mode",
-            preferredAvatar: "Default"
+            preferredAvatar: "Default",
         };
+    }
+
+    applyDisplayMode = (mode) =>
+    {
+        if(mode === "Dark Mode")
+        {
+            document.documentElement.classList.add('dark');
+        }
+        else 
+        {
+            document.documentElement.classList.remove('dark');
+        }
     }
 
     componentDidMount() 
@@ -26,7 +38,9 @@ class SettingsPage extends React.Component
             return;
         }
 
-        fetch(`/user/preferences/${user.userID}`)
+        this.setState({ email: user.email });
+
+        fetch(`/userApi/preferences/${user.userID}`)
             .then(res => res.json())
             .then(data => 
             {
@@ -34,15 +48,7 @@ class SettingsPage extends React.Component
                 {
                     this.setState(data.preferences);
 
-                    // Apply dark mode
-                    if(data.preferences.displayMode === "Dark Mode") 
-                    {
-                        document.documentElement.classList.add('dark');
-                    } 
-                    else 
-                    {
-                        document.documentElement.classList.remove('dark');
-                    }
+                    this.applyDisplayMode(data.preferences.displayMode);
                 }
             })
             .catch(err => console.error('Error loading preferences:', err));
@@ -55,7 +61,7 @@ class SettingsPage extends React.Component
 
         try 
         {
-            const response = await fetch(`/user/preferences/${user.userID}`, {
+            const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ displayMode, preferredAvatar })
@@ -66,6 +72,8 @@ class SettingsPage extends React.Component
             if(response.ok) 
             {
                 alert("Preferences saved successfully.");
+
+                this.applyDisplayMode(displayMode);
             } 
             else 
             {
@@ -83,12 +91,18 @@ class SettingsPage extends React.Component
     handleChange = (field, newValue) => 
     {
         this.setState({ [field]: newValue });
+
+        // Apply mode live as the user selects it
+        if(field === "displayMode") 
+        {
+            this.applyDisplayMode(newValue);
+        }
     };
 
     render() 
     {
         return (
-            <section className="flex h-screen overflow-hidden bg-white">
+            <section className="flex h-screen overflow-hidden bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
                 {/* Left: Sidebar */}
                 <div>
                     <SideNavbar />
@@ -96,54 +110,46 @@ class SettingsPage extends React.Component
 
                 {/* Right: Main Settings */}
                 <div className="flex-1 flex justify-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
-                    <div className="w-full max-w-lg">
-                        <SettingsRow 
-                            title="Name" 
-                            value="Apollo Projects" 
-                        />
+                    <div className="w-full max-w-lg bg-white dark:bg-gray-800 p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300">
                         
-                        <SettingsRow 
-                            title="Email" 
-                            value="apolloprojects.cos301@gmail.com" 
-                            className="mt-8" 
-                        />
+                        <SettingsRow title="Email" value={this.state.email} className="mt-4" />
 
                         <div className="mt-12 space-y-7">
-                            <SelectField 
-                                label="Display mode" 
+                            <SelectField
+                                label="Display mode"
                                 value={this.state.displayMode}
                                 onChange={(value) => this.handleChange("displayMode", value)}
                                 options={["Light Mode", "Dark Mode"]}
                             />
 
-                            <SelectField 
-                                label="Preferred Avatar" 
+                            <SelectField
+                                label="Preferred Avatar"
                                 value={this.state.preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
-                                options={["Default", "Custom1", "Custom2",]}
+                                options={["Default", "Custom1", "Custom2"]}
                             />
 
-                            <SliderField 
-                                leftLabel="Small" 
-                                rightLabel="Large" 
-                                description="Font Size" 
+                            <SliderField
+                                leftLabel="Small"
+                                rightLabel="Large"
+                                description="Font Size"
                             />
 
-                            <SliderField 
-                                leftLabel="Speed" 
-                                rightLabel="Accuracy" 
-                                description="Performance of Application" 
+                            <SliderField
+                                leftLabel="Speed"
+                                rightLabel="Accuracy"
+                                description="Performance of Application"
                             />
 
-                            <SliderField 
-                                leftLabel="Slow" 
-                                rightLabel="Fast" 
-                                description="Speed of AI Speech" 
+                            <SliderField
+                                leftLabel="Slow"
+                                rightLabel="Fast"
+                                description="Speed of AI Speech"
                             />
 
                             <button
                                 onClick={this.handleSavePreferences}
-                                className="mt-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                className="mt-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
                             >
                                 Save Preferences
                             </button>
