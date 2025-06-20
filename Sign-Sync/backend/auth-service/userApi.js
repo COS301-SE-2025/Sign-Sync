@@ -109,4 +109,30 @@ router.get('/preferences/:userID', async (req, res) =>
     }
 });
 
+router.put('/preferences/:userID', async (req, res) => 
+{
+    const { userID } = req.params;
+    const updatedPreferences = req.body;
+
+    try 
+    {
+        const result = await req.app.locals.userCollection.updateOne(
+            { userID: parseInt(userID) },
+            { $set: { preferences: updatedPreferences } }
+        );
+
+        if(result.matchedCount === 0) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ status: 'success', message: 'Preferences updated' });
+    } 
+    catch(error) 
+    {
+        res.status(500).json({ message: 'Error updating preferences', error: error.message });
+    }
+});
+
+
 export default router;
