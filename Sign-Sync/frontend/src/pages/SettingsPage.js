@@ -6,15 +6,82 @@ import SliderField from "../components/SliderField";
 
 class SettingsPage extends React.Component 
 {
-    constructor(props) {
+    constructor(props) 
+    {
         super(props);
+        
         this.state = {
             displayMode: "Light Mode",
             preferredAvatar: "Default"
         };
     }
 
-    handleChange = (field, newValue) => {
+    componentDidMount() 
+    {
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if(!user) 
+        {
+            window.location.href = '/login'; //if not logged in, login first to access settings.
+            return;
+        }
+
+        fetch(`/user/preferences/${user.userID}`)
+            .then(res => res.json())
+            .then(data => 
+            {
+                if(data.preferences) 
+                {
+                    this.setState(data.preferences);
+
+                    // Apply dark mode
+                    if(data.preferences.displayMode === "Dark Mode") 
+                    {
+                        document.documentElement.classList.add('dark');
+                    } 
+                    else 
+                    {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+            })
+            .catch(err => console.error('Error loading preferences:', err));
+    }
+
+    handleSavePreferences = async () => 
+    {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const { displayMode, preferredAvatar } = this.state;
+
+        try 
+        {
+            const response = await fetch(`/user/preferences/${user.userID}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ displayMode, preferredAvatar })
+            });
+
+            const data = await response.json();
+
+            if(response.ok) 
+            {
+                alert("Preferences saved successfully.");
+            } 
+            else 
+            {
+                alert("Failed to save preferences: " + data.message);
+            }
+        } 
+        catch(error) 
+        {
+            console.error("Error saving preferences:", error);
+            alert("An error occurred while saving.");
+        }
+    };
+
+
+    handleChange = (field, newValue) => 
+    {
         this.setState({ [field]: newValue });
     };
 
@@ -73,6 +140,13 @@ class SettingsPage extends React.Component
                                 rightLabel="Fast" 
                                 description="Speed of AI Speech" 
                             />
+
+                            <button
+                                onClick={this.handleSavePreferences}
+                                className="mt-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            >
+                                Save Preferences
+                            </button>
                         </div>
                     </div>
                 </div>
