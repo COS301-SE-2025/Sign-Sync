@@ -71,6 +71,8 @@
 
 import React, { useState, useRef } from 'react';
 
+import PreferenceManager from './PreferenceManager';
+
 const SpeechToTextBox = () => {
   const [text, setText] = useState('');
   const [recording, setRecording] = useState(false);
@@ -129,6 +131,8 @@ const SpeechToTextBox = () => {
     recording ? stopRecording() : startRecording();
   };
 
+  const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
   return (
     <div className=" items-center mx-auto">
       <div className="flex items-stretch">
@@ -136,11 +140,11 @@ const SpeechToTextBox = () => {
           type="text"
           value={text}
           readOnly
-          className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 flex-grow min-h-[60px]"
+          className={`text-center w-3/4 text-4xl font-bold border-2 border-black py-2.5 my-2 flex-grow min-h-[60px] ${isDarkMode ? "bg-gray-700 text-white" : "bg-gray-300 text-black"}`}
           placeholder="Speech will appear here..."
         />
         <button
-          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 text-white border-2 border-black ${recording ? 'bg-[#FFFFFD]' : 'bg-[#801E20]'}`}>
+          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 border-2 border-black ${recording ? 'bg-[#FFFFFD]' : 'bg-[#801E20]'} ${isDarkMode ? "text-black" : "text-white"}`}>
           {recording ? 'Stop' : 'Speak 🎙️'}
         </button>
       </div>
