@@ -7,17 +7,16 @@ class SliderField extends React.Component
         super(props);
 
         this.state = {
-        value: props.initialValue ?? 50,
+            value: props.initialValue ?? 50,
         };
     }
 
     handleChange = (e) => 
     {
         const newValue = parseInt(e.target.value, 10);
-
         this.setState({ value: newValue });
-        
-        if(this.props.onChange)
+
+        if(this.props.onChange) 
         {
             this.props.onChange(newValue);
         }
@@ -30,7 +29,7 @@ class SliderField extends React.Component
 
         return (
             <div className={`w-full ${className}`}>
-                <div className="flex justify-between text-sm text-gray-700">
+                <div className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                     <span>{leftLabel}</span>
                     <span>{rightLabel}</span>
                 </div>
@@ -40,9 +39,9 @@ class SliderField extends React.Component
                     max="100"
                     value={value}
                     onChange={this.handleChange}
-                    className="w-full mt-2"
+                    className="w-full mt-2 accent-blue-600 dark:accent-blue-400"
                 />
-                <p className="mt-1 text-sm text-gray-500">{description}</p>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{description}</p>
             </div>
         );
     }
