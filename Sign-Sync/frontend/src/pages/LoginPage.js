@@ -66,8 +66,10 @@ class LoginPage extends React.Component
 
             if(response.ok)
             {
-                await response.json();
+                const data = await response.json();
                 
+                localStorage.setItem('user', JSON.stringify(data.user));
+
                 alert("Login successful!, redirecting to Translator page...");
 
                 window.location.href = '/translator';

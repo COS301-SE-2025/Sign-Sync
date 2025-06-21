@@ -83,5 +83,56 @@ router.post('/login', async (req, res) =>
     }
 });
 
+router.get('/preferences/:userID', async (req, res) => 
+{
+    const { userID } = req.params;
+
+    try 
+    {
+        const user = await req.app.locals.userCollection.findOne({ userID: parseInt(userID) });
+
+        if(!user) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        //console.log("Fetched user for preferences:", user);
+
+        res.status(200).json({
+            status: 'success',
+            preferences: user.preferences || {},
+        });
+    } 
+    catch(error) 
+    {
+        res.status(500).json({ message: 'Error fetching preferences', error: error.message });
+    }
+});
+
+router.put('/preferences/:userID', async (req, res) => 
+{
+    const { userID } = req.params;
+    const updatedPreferences = req.body;
+
+    try 
+    {
+        const result = await req.app.locals.userCollection.updateOne(
+            { userID: parseInt(userID) },
+            { $set: { preferences: updatedPreferences } }
+        );
+
+        if(result.matchedCount === 0) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ status: 'success', message: 'Preferences updated' });
+    } 
+    catch(error) 
+    {
+        res.status(500).json({ message: 'Error updating preferences', error: error.message });
+    }
+});
+
 
 export default router;
