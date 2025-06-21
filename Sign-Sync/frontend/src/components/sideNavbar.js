@@ -8,8 +8,38 @@ import SettingsBtn from '../assets/Settings-icon.png';
 
 class SideNavbar extends React.Component 
 {
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+
+  componentDidMount()
+  {
+    const user = localStorage.getItem('user');
+    
+    if(user) 
+    {
+      this.setState({ isLoggedIn: true });
+    }
+  } 
+
+  handleLogout = () =>
+  {
+    localStorage.removeItem('user');
+    this.setState({ isLoggedIn: false });
+
+    alert("Logout successful!, redirecting to Splash page...");
+
+    window.location.href = '/';
+  }
+
   render()  
   {
+    const { isLoggedIn } = this.state;
+
     return (
       <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]"> 
         <div className="relative w-full h-[66px] bg-[#1c4a7c]">
@@ -43,15 +73,25 @@ class SideNavbar extends React.Component
         </div>
 
         <div className="flex w-full h-[78px] items-center justify-center gap-4 mt-auto px-2">
-          <Link to="/login" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-white text-[#801d1f] font-semibold rounded">
-            Sign in
-          </Link>
-          <Link to="/register" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-[#801d1f] text-white font-semibold rounded">
-            Register
-          </Link>
+
+          {!isLoggedIn ? (
+            <>
+              <Link to="/login" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-white text-[#801d1f] font-semibold rounded">
+                Sign in
+              </Link>
+              <Link to="/register" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-[#801d1f] text-white font-semibold rounded">
+                Register
+              </Link>
+            </>
+          ) : (
+            <button 
+              onClick={this.handleLogout} 
+              className="text-2xl h-12 w-[200px] bg-red-700 text-white font-semibold rounded hover:bg-red-800"
+            >
+              Sign out
+            </button>
+          )}
         </div>
-
-
       </div>
     );
   }

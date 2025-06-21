@@ -4,6 +4,11 @@ import { motion } from 'framer-motion';
 
 class LandingPage extends React.Component 
 {
+  componentDidMount() 
+  {
+      localStorage.clear(); // Clear any existing user data
+  };
+
   render() 
   {
     return (
