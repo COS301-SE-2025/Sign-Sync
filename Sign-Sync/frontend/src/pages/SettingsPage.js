@@ -3,6 +3,7 @@ import SideNavbar from "../components/sideNavbar";
 import SettingsRow from "../components/SettingsRow";
 import SelectField from "../components/SelectField";
 import SliderField from "../components/SliderField";
+import PreferenceManager from "../components/PreferenceManager";
 
 class SettingsPage extends React.Component 
 {
@@ -10,25 +11,15 @@ class SettingsPage extends React.Component
     {
         super(props);
         
+        const prefs = JSON.parse(localStorage.getItem('preferences')) || PreferenceManager.getPreferences();
+
         this.state = {
-            displayMode: "Light Mode",
-            preferredAvatar: "Default",
+            displayMode: prefs.displayMode,
+            preferredAvatar: prefs.preferredAvatar,
         };
     }
 
-    applyDisplayMode = (mode) =>
-    {
-        if(mode === "Dark Mode")
-        {
-            document.documentElement.classList.add('dark');
-        }
-        else 
-        {
-            document.documentElement.classList.remove('dark');
-        }
-    }
-
-    componentDidMount() 
+    async componentDidMount() 
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
@@ -40,18 +31,15 @@ class SettingsPage extends React.Component
 
         this.setState({ email: user.email });
 
-        fetch(`/userApi/preferences/${user.userID}`)
-            .then(res => res.json())
-            .then(data => 
-            {
-                if(data.preferences) 
-                {
-                    this.setState(data.preferences);
+        await PreferenceManager.initialize();
+        const loadedPrefs = PreferenceManager.getPreferences();
 
-                    this.applyDisplayMode(data.preferences.displayMode);
-                }
-            })
-            .catch(err => console.error('Error loading preferences:', err));
+        this.setState({
+            displayMode: loadedPrefs.displayMode,
+            preferredAvatar: loadedPrefs.preferredAvatar,
+        });
+
+        PreferenceManager.applyDisplayMode(loadedPrefs.displayMode);
     }
 
     handleSavePreferences = async () => 
@@ -72,8 +60,6 @@ class SettingsPage extends React.Component
             if(response.ok) 
             {
                 alert("Preferences saved successfully.");
-
-                this.applyDisplayMode(displayMode);
             } 
             else 
             {
@@ -87,16 +73,22 @@ class SettingsPage extends React.Component
         }
     };
 
-
     handleChange = (field, newValue) => 
     {
-        this.setState({ [field]: newValue });
+        this.setState(
+            { [field]: newValue },
+            () => {
+                PreferenceManager.updatePreferences({
+                    displayMode: this.state.displayMode,
+                    preferredAvatar: this.state.preferredAvatar,
+                });
 
-        // Apply mode live as the user selects it
-        if(field === "displayMode") 
-        {
-            this.applyDisplayMode(newValue);
-        }
+                if(field === "displayMode") 
+                {
+                    PreferenceManager.applyDisplayMode(newValue);
+                }
+            }
+        );
     };
 
     render() 
