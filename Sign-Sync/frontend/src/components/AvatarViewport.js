@@ -1,13 +1,14 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
-import {DirectionalLight, AmbientLight} from 'three';
+import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 
 function Avatar({signs}) {
     const avatarReference = useRef();
     const {scene, animations} = useGLTF(TranslatorAvatar);
     const {actions} = useAnimations(animations,avatarReference);
+    const animationSequencer = new AnimationMixer(avatarReference.current);
 
     useEffect(() => {
         const sun = new DirectionalLight('rgb(255,255,255)',1);
@@ -17,40 +18,26 @@ function Avatar({signs}) {
     }, [scene]);
 
     useEffect(() => {
-        if(signs.length > 0){
-            if(signs.length > 1){
-                actions[signs[0]].play();
-                let duration = actions[signs[0]].getClip().duration;
-                for(let i = 1; i < signs.length; i++){
-                    setTimeout(()=>{
-                        actions[signs[i-1]].crossFadeTo(actions[signs[i]],duration,false);
-                        },duration*1000);
-
-                    duration = actions[signs[0]].getClip().duration;
-                }
-            }else{
-                actions[signs[0]].play();
-            }
-
-        }
-    }, [actions,signs]);
+        console.log(signs);
+    },[signs]);
 
     return <primitive ref={avatarReference} object={scene} position={[0,-2,3]} />;
 }
 
 export default function AvatarViewport({input}) {
-    const words = input.split(' ');
-    const signs = [];
-    //Fast API connection will happen here but this will be implemented later
-    for (let i = 0; i < words.length; i++) {
-        if(words[i] === "nod"){
-            signs.push("NodsHead");
 
+    const signs = useMemo(() => {//Stops resubmitting the sentence
+        const arr = [];
+        const words = input.split(' ');
+
+        //FastAPI Goes here but this is just for testing
+        for (let i = 0; i < words.length; i++) {
+            if(words[i] === "nod")arr.push("Nod");
+            if(words[i] === "shake") arr.push("Shake");
         }
-        if(words[i] === "shake"){
-            signs.push("ShakesHead");
-        }
-    }
+        return arr;
+
+    }, [input]);
 
     return (
         <Canvas style={{ height: '50vh', background: '#222' }}>
