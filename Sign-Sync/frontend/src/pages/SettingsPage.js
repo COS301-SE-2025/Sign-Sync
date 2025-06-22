@@ -11,11 +11,13 @@ class SettingsPage extends React.Component
     {
         super(props);
         
-        const prefs = JSON.parse(localStorage.getItem('preferences')) || PreferenceManager.getPreferences();
+        const prefs = PreferenceManager.getPreferences();
 
         this.state = {
-            displayMode: prefs.displayMode,
-            preferredAvatar: prefs.preferredAvatar,
+            displayMode: prefs.displayMode || 'Light Mode',
+            fontSize: prefs.fontSize || 'Medium',
+            //preferredAvatar: prefs.preferredAvatar,
+            email: '',
         };
     }
 
@@ -36,7 +38,8 @@ class SettingsPage extends React.Component
 
         this.setState({
             displayMode: loadedPrefs.displayMode,
-            preferredAvatar: loadedPrefs.preferredAvatar,
+            fontSize: loadedPrefs.fontSize || 'Medium',
+            //preferredAvatar: loadedPrefs.preferredAvatar,
         });
 
         PreferenceManager.applyDisplayMode(loadedPrefs.displayMode);
@@ -45,17 +48,17 @@ class SettingsPage extends React.Component
     handleSavePreferences = async () => 
     {
         const user = JSON.parse(localStorage.getItem('user'));
-        const { displayMode, preferredAvatar } = this.state;
+        //const { displayMode, preferredAvatar } = this.state;
 
+        const { displayMode, fontSize } = this.state;
+        
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, preferredAvatar })
+                body: JSON.stringify({ displayMode, fontSize })
             });
-
-            const data = await response.json();
 
             if(response.ok) 
             {
@@ -63,6 +66,8 @@ class SettingsPage extends React.Component
             } 
             else 
             {
+                const data = await response.json();
+
                 alert("Failed to save preferences: " + data.message);
             }
         } 
@@ -73,22 +78,19 @@ class SettingsPage extends React.Component
         }
     };
 
-    handleChange = (field, newValue) => 
+    handleChange = (field, value) => 
     {
-        this.setState(
-            { [field]: newValue },
-            () => {
-                PreferenceManager.updatePreferences({
-                    displayMode: this.state.displayMode,
-                    preferredAvatar: this.state.preferredAvatar,
-                });
+        this.setState({ [field]: value });
+        PreferenceManager.updatePreferences({ [field]: value });
 
-                if(field === "displayMode") 
-                {
-                    PreferenceManager.applyDisplayMode(newValue);
-                }
-            }
-        );
+        if(field === "displayMode") 
+        {
+            PreferenceManager.applyDisplayMode(value);
+        }
+        else if (field === "fontSize") 
+        {
+            PreferenceManager.applyFontSize(value);
+        }
     };
 
     render() 
@@ -116,7 +118,7 @@ class SettingsPage extends React.Component
 
                             <SelectField
                                 label="Preferred Avatar"
-                                value={this.state.preferredAvatar}
+                                //value={this.state.preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
                                 options={["Default", "Custom1", "Custom2"]}
                             />
@@ -125,6 +127,8 @@ class SettingsPage extends React.Component
                                 leftLabel="Small"
                                 rightLabel="Large"
                                 description="Font Size"
+                                value={this.state.fontSize}
+                                onChange={(value) => this.handleChange("fontSize", value)}
                             />
 
                             <SliderField
