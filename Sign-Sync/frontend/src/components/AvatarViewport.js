@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
@@ -26,43 +26,38 @@ function Avatar({signs}) {
 
 export default function AvatarViewport({input}) {
 
-    const signs = useMemo(() => {//Stops resubmitting the sentence
-        const arr = [];
-        const words = input.split(' ');
-
-        handleSubmit = async (e) =>
-        {
-            e.preventDefault();
-
-            if(!this.validateForm()) return;
-
-            const { email, password } = this.state;
-
-            try
-            {
-                const response = await fetch('/userApi/register', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ word: words }),
-                });
-
-                if(response.ok) {
-                    await response.json();
-                }
-                else
+    const [signs,setSigns] = useState([]);
+    useEffect(() => {
+        async function API() {
+            const words = input.split(' ');
+            let signs = [];
+            for (let i = 0; i < words.length; i++) {
+                try {
+                    const response = await fetch('/textSignApi/getAnimation', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({word: words[i]}),
+                    });
+                    if (response.ok) {
+                        const sign = await response.json();
+                        signs.push(sign.response);
+                        console.log(sign.response);
+                    } else {
+                        const errorData = await response.json();
+                        alert(`Translation failed: ${errorData.message}`);
+                        console.error("Translation error:", errorData);
+                    }
+                }catch(error)
                 {
-                    const errorData = await response.json();
-                    alert(`Translation failed: ${errorData.message}`);
-                    console.error("Translation error:", errorData);
+                    console.error("Error during Translation:", error);
+                    alert("An error occurred during Translation. Please try again.");
                 }
             }
-            catch(error) {
-                console.error("Error during Translation:", error);
-                alert("An error occurred during Translation. Please try again.");
-            }
-        };
-        return arr;
-
+            setSigns(signs);
+        }
+        if(input.length >= 0){
+            API();
+        }
     }, [input]);
 
     return (

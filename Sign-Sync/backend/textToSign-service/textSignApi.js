@@ -23,7 +23,7 @@ router.post('/getAnimation', async (req, res) =>
         }else{
             return res.status(200).json({
                 status: 'success',
-                animation: response.animation,
+                response: response.animation,
             });
         }
     } 
