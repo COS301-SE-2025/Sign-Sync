@@ -30,11 +30,37 @@ export default function AvatarViewport({input}) {
         const arr = [];
         const words = input.split(' ');
 
-        //FastAPI Goes here but this is just for testing
-        for (let i = 0; i < words.length; i++) {
-            if(words[i] === "nod")arr.push("Nod");
-            if(words[i] === "shake") arr.push("Shake");
-        }
+        handleSubmit = async (e) =>
+        {
+            e.preventDefault();
+
+            if(!this.validateForm()) return;
+
+            const { email, password } = this.state;
+
+            try
+            {
+                const response = await fetch('/userApi/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ word: words }),
+                });
+
+                if(response.ok) {
+                    await response.json();
+                }
+                else
+                {
+                    const errorData = await response.json();
+                    alert(`Translation failed: ${errorData.message}`);
+                    console.error("Translation error:", errorData);
+                }
+            }
+            catch(error) {
+                console.error("Error during Translation:", error);
+                alert("An error occurred during Translation. Please try again.");
+            }
+        };
         return arr;
 
     }, [input]);

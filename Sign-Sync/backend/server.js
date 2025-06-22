@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'path';
 import { MongoClient } from 'mongodb';
 import apiRoutes from './userApi'; //this seems incorrect, but it is correct. It imports the userApi.js file relative to the dist. Leave it as is.
+import textSignApiRoutes from './textSignApi'; // The text to sign api
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,6 +20,7 @@ const publicPath = path.resolve('frontend', 'public');
 app.use(express.static(publicPath));
 
 app.use('/userApi', apiRoutes);
+app.use('/TextSignApi',textSignApiRoutes);
 
 //Fallback for React Router
 app.get('*', (req, res) => {
@@ -36,14 +39,15 @@ async function main()
     //console.log('Connected to MongoDB!');
 
     const db = client.db(dbName);
-
     //console.log('Available collections:', await db.listCollections().toArray()); //debugging
 
     const userCollection = db.collection('Users');
+    const signCollection = db.collection('Signs');
     
     //console.log('User collection:', await userCollection.find({}).toArray()); //debugging
     
     app.locals.userCollection = userCollection;
+    app.locals.signCollection = signCollection;
 
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
