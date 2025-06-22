@@ -2,7 +2,8 @@ class PreferenceManager
 {
     static preferences = {
         displayMode: 'Light Mode',
-        preferredAvatar: 'Default',
+        //preferredAvatar: 'Default',
+        fontSize: 'Medium',
     };
 
     static async initialize() 
@@ -21,6 +22,7 @@ class PreferenceManager
                 PreferenceManager.preferences = data.preferences;
                 localStorage.setItem('preferences', JSON.stringify(data.preferences));
                 PreferenceManager.applyDisplayMode(data.preferences.displayMode);
+                PreferenceManager.applyFontSize(data.preferences.fontSize);
             }
         } 
         catch(err) 
@@ -55,6 +57,28 @@ class PreferenceManager
             document.documentElement.classList.remove('dark');
         }
     }
+
+    static applyFontSize(size) 
+    {
+        const root = document.documentElement;
+        root.classList.remove('font-small', 'font-medium', 'font-large');
+
+        switch(size) 
+        {
+            case "Small":
+                root.classList.add('font-small');
+                break;
+            case "Medium":
+                root.classList.add('font-medium');
+                break;
+            case "Large":
+                root.classList.add('font-large');
+                break;
+            default:
+                root.classList.add('font-medium');
+        }
+    }
+
 }
 
 export default PreferenceManager;

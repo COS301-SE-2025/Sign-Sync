@@ -11,11 +11,12 @@ class SettingsPage extends React.Component
     {
         super(props);
         
-        const prefs = JSON.parse(localStorage.getItem('preferences')) || PreferenceManager.getPreferences();
+        const prefs = PreferenceManager.getPreferences();
 
         this.state = {
-            displayMode: prefs.displayMode,
-            preferredAvatar: prefs.preferredAvatar,
+            displayMode: prefs.displayMode || 'Light Mode',
+            fontSize: prefs.fontSize || 'Medium',
+            email: '',
         };
     }
 
@@ -36,7 +37,7 @@ class SettingsPage extends React.Component
 
         this.setState({
             displayMode: loadedPrefs.displayMode,
-            preferredAvatar: loadedPrefs.preferredAvatar,
+            fontSize: loadedPrefs.fontSize || 'Medium',
         });
 
         PreferenceManager.applyDisplayMode(loadedPrefs.displayMode);
@@ -45,17 +46,16 @@ class SettingsPage extends React.Component
     handleSavePreferences = async () => 
     {
         const user = JSON.parse(localStorage.getItem('user'));
-        const { displayMode, preferredAvatar } = this.state;
 
+        const { displayMode, fontSize } = this.state;
+        
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, preferredAvatar })
+                body: JSON.stringify({ displayMode, fontSize })
             });
-
-            const data = await response.json();
 
             if(response.ok) 
             {
@@ -63,6 +63,8 @@ class SettingsPage extends React.Component
             } 
             else 
             {
+                const data = await response.json();
+
                 alert("Failed to save preferences: " + data.message);
             }
         } 
@@ -73,26 +75,25 @@ class SettingsPage extends React.Component
         }
     };
 
-    handleChange = (field, newValue) => 
+    handleChange = (field, value) => 
     {
-        this.setState(
-            { [field]: newValue },
-            () => {
-                PreferenceManager.updatePreferences({
-                    displayMode: this.state.displayMode,
-                    preferredAvatar: this.state.preferredAvatar,
-                });
+        this.setState({ [field]: value });
+        PreferenceManager.updatePreferences({ [field]: value });
 
-                if(field === "displayMode") 
-                {
-                    PreferenceManager.applyDisplayMode(newValue);
-                }
-            }
-        );
+        if(field === "displayMode") 
+        {
+            PreferenceManager.applyDisplayMode(value);
+        }
+        else if (field === "fontSize") 
+        {
+            PreferenceManager.applyFontSize(value);
+        }
     };
 
     render() 
     {
+        const {displayMode, fontSize, email } = this.state;
+
         return (
             <section className="flex h-screen overflow-hidden bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
                 {/* Left: Sidebar */}
@@ -104,19 +105,19 @@ class SettingsPage extends React.Component
                 <div className="flex-1 flex justify-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
                     <div className="w-full max-w-lg bg-white dark:bg-gray-800 p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300">
                         
-                        <SettingsRow title="Email" value={this.state.email} className="mt-4" />
+                        <SettingsRow title="Email" value={email} className="mt-4" />
 
                         <div className="mt-12 space-y-7">
                             <SelectField
                                 label="Display mode"
-                                value={this.state.displayMode}
+                                value={displayMode}
                                 onChange={(value) => this.handleChange("displayMode", value)}
                                 options={["Light Mode", "Dark Mode"]}
                             />
 
                             <SelectField
                                 label="Preferred Avatar"
-                                value={this.state.preferredAvatar}
+                                //value={this.state.preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
                                 options={["Default", "Custom1", "Custom2"]}
                             />
@@ -125,6 +126,8 @@ class SettingsPage extends React.Component
                                 leftLabel="Small"
                                 rightLabel="Large"
                                 description="Font Size"
+                                value={fontSize}
+                                onChange={(value) => this.handleChange("fontSize", value)}
                             />
 
                             <SliderField
