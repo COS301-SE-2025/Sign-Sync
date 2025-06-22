@@ -40,7 +40,13 @@ export default function AvatarViewport({input}) {
                     });
                     if (response.ok) {
                         const sign = await response.json();
-                        signs.push(sign.response);
+                        if (Array.isArray(sign.response)) {
+                            for (let i = 0; i < sign.response.length; i++) {
+                                signs.push(sign.response[i]);
+                            }
+                        }else{
+                            signs.push(sign.response);
+                        }
                         console.log(sign.response);
                     } else {
                         const errorData = await response.json();
