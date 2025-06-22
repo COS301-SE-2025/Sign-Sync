@@ -16,7 +16,6 @@ class SettingsPage extends React.Component
         this.state = {
             displayMode: prefs.displayMode || 'Light Mode',
             fontSize: prefs.fontSize || 'Medium',
-            //preferredAvatar: prefs.preferredAvatar,
             email: '',
         };
     }
@@ -39,7 +38,6 @@ class SettingsPage extends React.Component
         this.setState({
             displayMode: loadedPrefs.displayMode,
             fontSize: loadedPrefs.fontSize || 'Medium',
-            //preferredAvatar: loadedPrefs.preferredAvatar,
         });
 
         PreferenceManager.applyDisplayMode(loadedPrefs.displayMode);
@@ -48,7 +46,6 @@ class SettingsPage extends React.Component
     handleSavePreferences = async () => 
     {
         const user = JSON.parse(localStorage.getItem('user'));
-        //const { displayMode, preferredAvatar } = this.state;
 
         const { displayMode, fontSize } = this.state;
         
@@ -95,6 +92,8 @@ class SettingsPage extends React.Component
 
     render() 
     {
+        const {displayMode, fontSize, email } = this.state;
+
         return (
             <section className="flex h-screen overflow-hidden bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
                 {/* Left: Sidebar */}
@@ -106,12 +105,12 @@ class SettingsPage extends React.Component
                 <div className="flex-1 flex justify-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
                     <div className="w-full max-w-lg bg-white dark:bg-gray-800 p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300">
                         
-                        <SettingsRow title="Email" value={this.state.email} className="mt-4" />
+                        <SettingsRow title="Email" value={email} className="mt-4" />
 
                         <div className="mt-12 space-y-7">
                             <SelectField
                                 label="Display mode"
-                                value={this.state.displayMode}
+                                value={displayMode}
                                 onChange={(value) => this.handleChange("displayMode", value)}
                                 options={["Light Mode", "Dark Mode"]}
                             />
@@ -127,7 +126,7 @@ class SettingsPage extends React.Component
                                 leftLabel="Small"
                                 rightLabel="Large"
                                 description="Font Size"
-                                value={this.state.fontSize}
+                                value={fontSize}
                                 onChange={(value) => this.handleChange("fontSize", value)}
                             />
 
