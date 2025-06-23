@@ -9,6 +9,9 @@ import HelpMenuPage from './pages/HelpMenuPage';
 import ProductOverview from "./pages/articles/ProductOverview";
 import FirstStepsTutorial from "./pages/articles/FirstStepsTutorial";
 import SettingUpYourAccount from "./pages/articles/SettingUpYourAccount";
+import AccountSettings from "./pages/articles/AccountSettings";
+import BillingQuestions from "./pages/articles/BillingQuestions";
+import Troubleshooting from "./pages/articles/Troubleshooting";
 
 class app extends React.Component 
 {
@@ -26,6 +29,9 @@ class app extends React.Component
           <Route path="/productOverview" element={<ProductOverview  />} />
           <Route path="/firstStepsTutorial" element={<FirstStepsTutorial  />} />
           <Route path="/settingUpYourAccount" element={<SettingUpYourAccount  />} />
+          <Route path="/accountSettings" element={<AccountSettings  />} />
+          <Route path="/billingQuestions" element={<BillingQuestions  />} />
+          <Route path="/troubleshooting" element={<Troubleshooting  />} />
         </Routes>
       </BrowserRouter>
     );

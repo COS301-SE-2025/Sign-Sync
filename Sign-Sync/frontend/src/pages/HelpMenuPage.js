@@ -72,9 +72,9 @@ class HelpMenuPage extends React.Component {
                                 </div>
                                 <p className="text-gray-600 mb-4">Find answers to common questions.</p>
                                 <ul className="space-y-2">
-                                    <li><a href="#" className="text-blue-600 hover:underline">Account settings</a></li>
-                                    <li><a href="#" className="text-blue-600 hover:underline">Billing questions</a></li>
-                                    <li><a href="#" className="text-blue-600 hover:underline">Troubleshooting</a></li>
+                                    <li><a href="/accountSettings" className="text-blue-600 hover:underline">Account settings</a></li>
+                                    <li><a href="/billingQuestions" className="text-blue-600 hover:underline">Billing questions</a></li>
+                                    <li><a href="/troubleshooting" className="text-blue-600 hover:underline">Troubleshooting</a></li>
                                 </ul>
                             </div>
 
