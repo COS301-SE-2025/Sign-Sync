@@ -75,16 +75,13 @@ router.post('/login', async (req, res) =>
         {
             return res.status(401).json({ message: 'Incorrect password' });
         }
-        
-        // if(user.password !== password) 
-        // {
-        //     return res.status(401).json({ message: 'Incorrect password' });
-        // }
+
+        const { password: _, ...userWithoutPassword } = user; //exclude password from response
 
         return res.status(200).json({
             status: 'success',
             message: 'Login successful',
-            user,
+            user: userWithoutPassword,
         });
 
     } 
