@@ -67,7 +67,7 @@ const EmailSupport = () => {
               Before You Email
             </h2>
             <ul className="list-disc pl-5 space-y-2 text-gray-600">
-              <li>Check our <a href="/help/troubleshooting" className="text-blue-600 hover:underline">Troubleshooting Guide</a></li>
+              <li>Check our <a href="/troubleshooting" className="text-blue-600 hover:underline">Troubleshooting Guide</a></li>
               <li>Include screenshots if applicable</li>
               <li>Note any error messages verbatim</li>
               <li>Specify your device/browser version</li>

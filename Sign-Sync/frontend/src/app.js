@@ -12,6 +12,9 @@ import SettingUpYourAccount from "./pages/articles/SettingUpYourAccount";
 import AccountSettings from "./pages/articles/AccountSettings";
 import BillingQuestions from "./pages/articles/BillingQuestions";
 import Troubleshooting from "./pages/articles/Troubleshooting";
+import EmailSupport from "./pages/articles/EmailSupport";
+import LiveChatSupport from "./pages/articles/LiveChatSupport";
+import PhoneSupport from "./pages/articles/PhoneSupport";
 
 class app extends React.Component 
 {
@@ -32,6 +35,9 @@ class app extends React.Component
           <Route path="/accountSettings" element={<AccountSettings  />} />
           <Route path="/billingQuestions" element={<BillingQuestions  />} />
           <Route path="/troubleshooting" element={<Troubleshooting  />} />
+          <Route path="/emailSupport" element={<EmailSupport  />} />
+          <Route path="/liveChatSupport" element={<LiveChatSupport  />} />
+          <Route path="/phoneSupport" element={<PhoneSupport  />} />
         </Routes>
       </BrowserRouter>
     );

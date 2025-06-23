@@ -88,9 +88,9 @@ class HelpMenuPage extends React.Component {
                                 </div>
                                 <p className="text-gray-600 mb-4">Can't find what you need? We're here to help.</p>
                                 <ul className="space-y-2">
-                                    <li><a href="#" className="text-blue-600 hover:underline">Email support</a></li>
-                                    <li><a href="#" className="text-blue-600 hover:underline">Live chat</a></li>
-                                    <li><a href="#" className="text-blue-600 hover:underline">Phone support</a></li>
+                                    <li><a href="/emailSupport" className="text-blue-600 hover:underline">Email support</a></li>
+                                    <li><a href="/liveChatSupport" className="text-blue-600 hover:underline">Live chat</a></li>
+                                    <li><a href="/phoneSupport" className="text-blue-600 hover:underline">Phone support</a></li>
                                 </ul>
                             </div>
                         </div>
