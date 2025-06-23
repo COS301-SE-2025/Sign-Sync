@@ -1,4 +1,5 @@
 import React from 'react';
+import SideNavbar from "../../components/sideNavbar";
 import { FiCamera, FiMic, FiWifi, FiAlertTriangle, FiMessageSquare } from 'react-icons/fi';
 
 const Troubleshooting = () => {
