@@ -7,8 +7,7 @@ import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 function Avatar({signs}) {
     const avatarReference = useRef();
     const {scene, animations} = useGLTF(TranslatorAvatar);
-    const {actions} = useAnimations(animations,avatarReference);
-    const animationSequencer = new AnimationMixer(avatarReference.current);
+    const {actions, mixer} = useAnimations(animations,avatarReference);
 
     useEffect(() => {
         const sun = new DirectionalLight('rgb(255,255,255)',1);
@@ -18,17 +17,33 @@ function Avatar({signs}) {
     }, [scene]);
 
     useEffect(() => {
-        console.log(signs);
+        let animationIndex = [null,null];
+        async function playAnimations (){
+            for (let i = 0; i < signs.length; i++) {
+                const animation = actions[signs[i]];
+                animationIndex[1] = mixer.clipAction(animation.getClip());
+                if(animationIndex[0]!==null){
+                    animationIndex[0].stop();
+                }
+                animationIndex[0] = animationIndex[1];
+                animationIndex[1].reset().play();
+                await new Promise(resolve => setTimeout(resolve, animation.getClip().duration * 1000));
+            }
+            if(animationIndex[0]!==null){
+                animationIndex[0].stop();
+            }
+        }
+        playAnimations();
+        return () => {mixer.stopAllAction();};
     },[signs]);
 
     return <primitive ref={avatarReference} object={scene} position={[0,-2,3]} />;
 }
 
 export default function AvatarViewport({input}) {
-
     const [signs,setSigns] = useState([]);
     useEffect(() => {
-        async function API() {
+        async function SignAPI() {
             const words = input.split(' ');
             let signs = [];
             for (let i = 0; i < words.length; i++) {
@@ -41,13 +56,10 @@ export default function AvatarViewport({input}) {
                     if (response.ok) {
                         const sign = await response.json();
                         if (Array.isArray(sign.response)) {
-                            for (let i = 0; i < sign.response.length; i++) {
-                                signs.push(sign.response[i]);
-                            }
+                            signs.push(...sign.response);
                         }else{
                             signs.push(sign.response);
                         }
-                        console.log(sign.response);
                     } else {
                         const errorData = await response.json();
                         alert(`Translation failed: ${errorData.message}`);
@@ -61,8 +73,9 @@ export default function AvatarViewport({input}) {
             }
             setSigns(signs);
         }
-        if(input.length >= 0){
-            API();
+
+        if(input.length > 0){
+            SignAPI();
         }
     }, [input]);
 
