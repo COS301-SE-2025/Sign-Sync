@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -14,6 +15,9 @@ router.post('/register', async (req, res) =>
         {
             return res.status(400).json({ message: 'Email already exists' });
         }
+
+        const salt = 10;
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const latestUser = await req.app.locals.userCollection
                             .find({})
@@ -35,7 +39,7 @@ router.post('/register', async (req, res) =>
         const newUser = {
             userID: newUserID,
             email,
-            password
+            password: hashedPassword,
         };
 
         await req.app.locals.userCollection.insertOne(newUser);
@@ -65,15 +69,19 @@ router.post('/login', async (req, res) =>
             return res.status(400).json({ message: 'Email does not exist' });
         }
 
-        if(user.password !== password) 
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if(!isMatch)
         {
             return res.status(401).json({ message: 'Incorrect password' });
         }
 
+        const { password: _, ...userWithoutPassword } = user; //exclude password from response
+
         return res.status(200).json({
             status: 'success',
             message: 'Login successful',
-            user,
+            user: userWithoutPassword,
         });
 
     } 
