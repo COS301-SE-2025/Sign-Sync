@@ -95,14 +95,14 @@ class SettingsPage extends React.Component
         const {displayMode, fontSize, email } = this.state;
 
         return (
-            <section className="flex h-screen overflow-hidden bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
+            <section className="flex h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
                 {/* Left: Sidebar */}
                 <div>
                     <SideNavbar />
                 </div>
 
                 {/* Right: Main Settings */}
-                <div className="flex-1 flex justify-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
+                <div className="flex-1 overflow-y-auto flex justify-center items-start px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
                     <div className="w-full max-w-lg bg-white dark:bg-gray-800 p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300">
                         
                         <SettingsRow title="Email" value={email} className="mt-4" />
