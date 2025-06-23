@@ -1,4 +1,5 @@
 import React from 'react';
+import SideNavbar from "../../components/sideNavbar";
 import { FiPhone, FiClock, FiGlobe } from 'react-icons/fi';
 
 const PhoneSupport = () => {

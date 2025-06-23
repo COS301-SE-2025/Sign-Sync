@@ -1,4 +1,5 @@
 import React from 'react';
+import SideNavbar from "../../components/sideNavbar";
 import { FiMail, FiClock, FiAlertCircle } from 'react-icons/fi';
 
 const EmailSupport = () => {

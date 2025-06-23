@@ -1,4 +1,5 @@
 import React from 'react';
+import SideNavbar from "../../components/sideNavbar";
 import { FiMessageSquare, FiUser, FiZap } from 'react-icons/fi';
 
 const LiveChatSupport = () => {
