@@ -1,4 +1,5 @@
 import React from 'react';
+import SideNavbar from "../../components/sideNavbar";
 import { FiCreditCard, FiDollarSign, FiRefreshCw, FiHelpCircle } from 'react-icons/fi';
 
 const BillingQuestions = () => {
