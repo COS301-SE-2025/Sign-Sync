@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -14,6 +15,9 @@ router.post('/register', async (req, res) =>
         {
             return res.status(400).json({ message: 'Email already exists' });
         }
+
+        const salt = 10;
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const latestUser = await req.app.locals.userCollection
                             .find({})
@@ -35,7 +39,7 @@ router.post('/register', async (req, res) =>
         const newUser = {
             userID: newUserID,
             email,
-            password
+            password: hashedPassword,
         };
 
         await req.app.locals.userCollection.insertOne(newUser);
