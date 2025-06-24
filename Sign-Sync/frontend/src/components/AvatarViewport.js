@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import { Canvas } from '@react-three/fiber';
+import {Canvas, useThree} from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
@@ -8,29 +8,36 @@ function Avatar({signs}) {
     const avatarReference = useRef();
     const {scene, animations} = useGLTF(TranslatorAvatar);
     const {actions, mixer} = useAnimations(animations,avatarReference);
+    const { camera } = useThree();
 
     useEffect(() => {
+        if (!actions["Idle"]) return;
+        mixer.clipAction(actions["Idle"].getClip());
+        actions["Idle"].reset().play();
         const sun = new DirectionalLight('rgb(255,255,255)',1);
         sun.position.set(5,10,7.5);
         scene.add(sun);
         scene.add(new AmbientLight(0xffffff,0.75));
-    }, [scene]);
+    }, [scene,camera]);
 
     useEffect(() => {
-        let animationIndex = [null,null];
+        let animationIndex = [ mixer.clipAction(actions["Idle"].getClip()),null];
         async function playAnimations (){
             for (let i = 0; i < signs.length; i++) {
                 const animation = actions[signs[i]];
                 animationIndex[1] = mixer.clipAction(animation.getClip());
                 if(animationIndex[0]!==null){
-                    animationIndex[0].stop();
+                    animationIndex[1].fadeIn(0.2).play();
+                    animationIndex[1].crossFadeFrom(animationIndex[0],0.2, false);
                 }
                 animationIndex[0] = animationIndex[1];
-                animationIndex[1].reset().play();
+
                 await new Promise(resolve => setTimeout(resolve, animation.getClip().duration * 1000));
             }
             if(animationIndex[0]!==null){
-                animationIndex[0].stop();
+                animationIndex[0].fadeOut(0.2).stop();
+                mixer.clipAction(actions["Idle"].getClip());
+                actions["Idle"].reset().play();
             }
         }
         playAnimations();
@@ -80,7 +87,7 @@ export default function AvatarViewport({input}) {
     }, [input]);
 
     return (
-        <Canvas style={{ height: '50vh', background: '#222' }}>
+        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 175}} style={{ height: '50vh', background: '#222' }}>
             <Avatar signs={signs}/>
         </Canvas>
     );
