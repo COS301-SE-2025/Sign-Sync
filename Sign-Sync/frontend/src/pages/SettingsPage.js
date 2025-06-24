@@ -90,6 +90,39 @@ class SettingsPage extends React.Component
         }
     };
 
+    handleDeleteAccount = async () => 
+    {
+        const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+
+        if(!confirmed) return;
+
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        try 
+        {
+            const response = await fetch(`/userApi/deleteAccount/${user.userID}`, {
+                method: 'DELETE'
+            });
+
+            if(response.ok) 
+            {
+                localStorage.removeItem('user');
+                window.location.href = '/';
+            } 
+            else 
+            {
+                const data = await response.json();
+                alert("Failed to delete account: " + data.message);
+            }
+        } 
+        catch(error) 
+        {
+            console.error("Error deleting account:", error);
+            alert("An error occurred while deleting the account.");
+        }
+    };
+
+
     render() 
     {
         const {displayMode, fontSize, email } = this.state;
@@ -142,12 +175,21 @@ class SettingsPage extends React.Component
                                 description="Speed of AI Speech"
                             />
 
-                            <button
-                                onClick={this.handleSavePreferences}
-                                className="mt-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
-                            >
-                                Save Preferences
-                            </button>
+                           <div className="mt-10 flex justify-between">
+                                <button
+                                    onClick={this.handleSavePreferences}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
+                                >
+                                    Save Preferences
+                                </button>
+
+                                <button
+                                    onClick={this.handleDeleteAccount}
+                                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-all duration-200"
+                                >
+                                    Delete Account
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
