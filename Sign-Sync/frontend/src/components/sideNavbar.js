@@ -5,6 +5,7 @@ import topBtn from "../assets/sideNav-topButton.png";
 import translateBtn from '../assets/Translator-icon.png';
 import EducationBtn from '../assets/Education-icon.png';
 import SettingsBtn from '../assets/Settings-icon.png';
+import HelpMenuBtn from '../assets/info-icon.png';
 
 class SideNavbar extends React.Component 
 {
@@ -68,6 +69,12 @@ class SideNavbar extends React.Component
               <Link to="/settings">
                 <img src={SettingsBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
                 Settings
+              </Link>
+            </div>
+            <div className="p-2 text-4xl">
+              <Link to="/helpMenu">
+                <img src={HelpMenuBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
+                Help Menu
               </Link>
             </div>
         </div>
