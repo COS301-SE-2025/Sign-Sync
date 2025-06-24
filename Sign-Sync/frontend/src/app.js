@@ -15,6 +15,15 @@ import Troubleshooting from "./pages/articles/Troubleshooting";
 import EmailSupport from "./pages/articles/EmailSupport";
 import LiveChatSupport from "./pages/articles/LiveChatSupport";
 import PhoneSupport from "./pages/articles/PhoneSupport";
+import AdvancedTechniques from "./pages/articles/AdvancedTechniques";
+import BasicFeatures from "./pages/articles/BasicFeatures";
+import ContactSupport from "./pages/articles/ContactSupport";
+import DashboardGuide from "./pages/articles/DashboardGuide";
+import DataExport from "./pages/articles/DataExport";
+import Integrations from "./pages/articles/Integrations";
+import PasswordReset from "./pages/articles/PasswordReset";
+import PrivacySettings from "./pages/articles/PrivacySettings";
+import ProductivityTips from "./pages/articles/ProductivityTips";
 
 class app extends React.Component 
 {
@@ -38,6 +47,15 @@ class app extends React.Component
           <Route path="/emailSupport" element={<EmailSupport  />} />
           <Route path="/liveChatSupport" element={<LiveChatSupport  />} />
           <Route path="/phoneSupport" element={<PhoneSupport  />} />
+          <Route path="/advancedTechniques" element={<AdvancedTechniques  />} />
+          <Route path="/basicFeatures" element={<BasicFeatures  />} />
+          <Route path="/contactSupport" element={<ContactSupport  />} />
+          <Route path="/dashboardGuide" element={<DashboardGuide  />} />
+          <Route path="/dataExport" element={<DataExport  />} />
+          <Route path="/integrations" element={<Integrations  />} />
+          <Route path="/passwordReset" element={<PasswordReset  />} />
+          <Route path="/privacySettings" element={<PrivacySettings  />} />
+          <Route path="/productivityTips" element={<ProductivityTips  />} />
         </Routes>
       </BrowserRouter>
     );
