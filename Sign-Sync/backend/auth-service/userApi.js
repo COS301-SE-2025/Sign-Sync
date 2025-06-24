@@ -91,6 +91,27 @@ router.post('/login', async (req, res) =>
     }
 });
 
+router.delete('/deleteAccount/:userID', async (req, res) => 
+{
+    const { userID } = req.params;
+
+    try 
+    {
+        const result = await req.app.locals.userCollection.deleteOne({ userID: parseInt(userID) });
+
+        if(result.deletedCount === 0) 
+        {
+            return res.status(404).json({ message: 'User not found or already deleted' });
+        }
+
+        res.status(200).json({ status: 'success', message: 'User account deleted successfully' });
+    } 
+    catch(error) 
+    {
+        res.status(500).json({ message: 'Error deleting user', error: error.message });
+    }
+});
+
 router.get('/preferences/:userID', async (req, res) => 
 {
     const { userID } = req.params;
