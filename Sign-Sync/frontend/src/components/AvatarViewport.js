@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Canvas, useThree} from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import { useGLTF, useAnimations, Text } from '@react-three/drei';
 import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 
@@ -9,6 +9,7 @@ function Avatar({signs}) {
     const {scene, animations} = useGLTF(TranslatorAvatar);
     const {actions, mixer} = useAnimations(animations,avatarReference);
     const { camera } = useThree();
+    const [translatedWord, setTranslatedWord] = useState("");
 
     useEffect(() => {
         if (!actions["Idle"]) return;
@@ -29,22 +30,27 @@ function Avatar({signs}) {
                 if(animationIndex[0]!==null){
                     animationIndex[1].fadeIn(0.2).play();
                     animationIndex[1].crossFadeFrom(animationIndex[0],0.2, false);
+
                 }
                 animationIndex[0] = animationIndex[1];
-
+                setTranslatedWord(signs[i]);
                 await new Promise(resolve => setTimeout(resolve, animation.getClip().duration * 1000));
             }
             if(animationIndex[0]!==null){
                 animationIndex[0].fadeOut(0.2).stop();
                 mixer.clipAction(actions["Idle"].getClip());
                 actions["Idle"].reset().play();
+                setTranslatedWord("");
             }
         }
         playAnimations();
         return () => {mixer.stopAllAction();};
     },[signs]);
 
-    return <primitive ref={avatarReference} object={scene} position={[0,-2,3]} />;
+    return <>
+        <primitive ref={avatarReference} object={scene} position={[0,-2,3]}/>
+        {<Text position={[1, -0.5, 3]} fontSize={0.8} color="white"> {translatedWord} </Text>}
+    </>;
 }
 
 export default function AvatarViewport({input}) {
