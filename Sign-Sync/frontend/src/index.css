@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-small {
+  @apply text-custom-sm;
+}
+
+.font-medium {
+  @apply text-custom-md;
+}
+
+.font-large {
+  @apply text-custom-lg;
+}

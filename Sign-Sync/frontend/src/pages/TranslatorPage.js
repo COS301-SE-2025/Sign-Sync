@@ -3,6 +3,7 @@ import Camera from "../components/Camera";
 import SideNavbar from "../components/sideNavbar";
 import TextToSign from "../components/textToSign";
 import Swap from "../assets/Swap-icon.png"
+import PreferenceManager from "../components/PreferenceManager";
 
 class TranslatorPage extends React.Component
 {
@@ -31,10 +32,13 @@ class TranslatorPage extends React.Component
                 <TextToSign/>
             </div>
         }
+
+        const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
         return (
-            <div className={"flex h-screen"}>
+            <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
                 <SideNavbar/>
-                <div className={"w-[300px] flex-1 flex flex-col items-center justify-center bg-gray-100"}>
+                <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"} px-6 py-10`}>
                     {translatorMode}
                     <div className={"flex mt-2"}>
                         <button onClick={this.changeType} className={`p-2 font-bold w-20 ${translatorType === "SignText" ? "bg-[#801E20] text-[#FFFFFD]": "bg-[#FFFFFD] text-[#801E20]"}  border-gray-600 rounded`}>
