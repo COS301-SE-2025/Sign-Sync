@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 from phrase_matcher import match_phrase
 from gloss_converter import convert_to_gloss
 from asl_templates import apply_asl_template
 
 app = FastAPI()
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"])
 
 class TranslationRequest(BaseModel):
     sentence: str

@@ -73,7 +73,7 @@ import React, { useState, useRef } from 'react';
 
 import PreferenceManager from './PreferenceManager';
 
-const SpeechToTextBox = () => {
+const SpeechToTextBox = ({onSpeechInput}) => {
   const [text, setText] = useState('');
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -105,6 +105,7 @@ const SpeechToTextBox = () => {
 
           const result = await response.json();
           setText(result.text || 'No speech detected');
+          onSpeechInput(result.text);
         } catch (error) {
           console.error('Error uploading audio:', error);
           setText('Error transcribing audio');

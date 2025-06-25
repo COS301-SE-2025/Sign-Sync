@@ -25,7 +25,14 @@ class TextToSign extends React.Component
         this.setState({sentence: sentence});
     }
 
+    processSpeech = (text) =>{
+        let sentence = text.toLowerCase();
+        this.setState({sentence: sentence});
+    }
+
     sendText = () => {
+        let sentence = this.state.sentence;
+        console.log(sentence);
         const aslGlossFunction = async () => {
             try {
                 const request = await fetch("http://localhost:8002/translate", {
@@ -38,15 +45,13 @@ class TextToSign extends React.Component
 
                 const response = await request.json();
                 this.setState({textToBeSent: response.gloss});
+                this.setState({timestamp: Date.now()});
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
             }
         }
-
-        let sentence = this.state.sentence;
         if(sentence !== ""){
             aslGlossFunction();
-            this.state.timestamp = Date.now()
         }
     }
 
@@ -59,7 +64,7 @@ class TextToSign extends React.Component
         var mic = this.state.mic;
         let inputType;
         if(mic){
-            inputType = <SpeechToTextBox />;
+            inputType = <SpeechToTextBox onSpeechInput={this.processSpeech}/>;
         }else{
             inputType = <input className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2.5 justify-center flex flex-grow min-h-[60px] " type={"text"} onChange={this.processSentence} />;
         }
