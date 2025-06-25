@@ -1,10 +1,10 @@
 {
   "name": "SignSync",
-  "version": "1.0.0",
+  "version": "1.0.0", 
   "description": "SignSync project",
   "main": "frontend/src/index.js",
   "scripts": {
-    "build": "webpack && npx babel backend/server.js backend/auth-service/userApi.js --out-dir backend/dist",
+    "build": "webpack && npx babel backend/server.js backend/auth-service/userApi.js backend/textToSign-service/textSignApi.js --out-dir backend/dist",
     "start": "npm run build && node backend/dist/server.js",
     "watch": "webpack -w",
     "test": "jest --watchAll",
@@ -20,6 +20,8 @@
   "license": "ISC",
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@react-three/drei": "^9.57.0",
+    "@react-three/fiber": "^8.18.0",
     "audio-recorder-polyfill": "^0.4.1",
     "bcrypt": "^6.0.0",
     "css-loader": "^7.1.2",
@@ -33,7 +35,8 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.26.2",
-    "style-loader": "^4.0.0"
+    "style-loader": "^4.0.0",
+    "three": "^0.177.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.2",
