@@ -1,10 +1,13 @@
 import React from 'react';
 import SideNavbar from "../../components/sideNavbar";
 import { FiUser, FiMail, FiLock, FiCheckCircle, FiLogIn } from 'react-icons/fi';
+import PreferenceManager from "../../components/PreferenceManager";
 
 const SettingUpYourAccount = () => {
+  const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
   return (
-    <section className="flex h-screen overflow-hidden bg-gray-50">
+    <section className={`flex h-screen overflow-hidden ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"}`}>
       {/* Sidebar */}
       <div>
         <SideNavbar />
@@ -13,11 +16,11 @@ const SettingUpYourAccount = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Account Setup</h1>
+          <h1 className={`text-3xl font-bold mb-6 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Account Setup</h1>
           
           {/* Registration Section */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+          <div className={`p-6 rounded-xl shadow-sm border mb-8 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
+            <h2 className={`text-2xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
               <FiUser className="mr-2 text-blue-600" />
               Create Your Account
             </h2>
@@ -31,23 +34,19 @@ const SettingUpYourAccount = () => {
                       <FiUser className="text-lg" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-gray-800 mb-1">Registration Form</h3>
-                      <p className="text-gray-600">
-                        Fill in the required fields:
-                      </p>
-                      <ul className="mt-2 space-y-2 text-gray-600">
-                        <li className="flex items-start">
-                          <FiCheckCircle className="text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span><span className="font-medium">Username:</span> 6-20 characters (letters, numbers, _)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <FiCheckCircle className="text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span><span className="font-medium">Email:</span> Valid email address</span>
-                        </li>
-                        <li className="flex items-start">
-                          <FiCheckCircle className="text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span><span className="font-medium">Password:</span> 8+ characters with 1 number</span>
-                        </li>
+                      <h3 className={`text-lg font-medium mb-1 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Registration Form</h3>
+                      <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>Fill in the required fields:</p>
+                      <ul className={`mt-2 space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        {[
+                          ["Username:", "6-20 characters (letters, numbers, _)"],
+                          ["Email:", "Valid email address"],
+                          ["Password:", "8+ characters with 1 number"]
+                        ].map(([label, desc], i) => (
+                          <li className="flex items-start" key={i}>
+                            <FiCheckCircle className="text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                            <span><span className="font-medium">{label}</span> {desc}</span>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </li>
@@ -56,10 +55,9 @@ const SettingUpYourAccount = () => {
                       <FiMail className="text-lg" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-gray-800 mb-1">Email Verification</h3>
-                      <p className="text-gray-600">
-                        After submitting, check your email (including spam folder) for a verification link.
-                        Click the link to activate your account.
+                      <h3 className={`text-lg font-medium mb-1 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Email Verification</h3>
+                      <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        After submitting, check your email (including spam folder) for a verification link. Click the link to activate your account.
                       </p>
                     </div>
                   </li>
@@ -67,75 +65,69 @@ const SettingUpYourAccount = () => {
               </div>
 
               {/* Visual Demo */}
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <div className={`p-6 rounded-lg border ${isDarkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
                 <div className="mb-4 text-center">
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">Example Registration</h3>
-                  <div className="inline-block bg-white p-4 rounded-lg shadow-xs border border-gray-300">
+                  <h3 className={`text-lg font-medium mb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Example Registration</h3>
+                  <div className={`inline-block p-4 rounded-lg shadow-xs border ${isDarkMode ? "bg-gray-800 border-gray-600" : "bg-white border-gray-300"}`}>
                     <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                        <div className="h-9 bg-gray-100 rounded-md">Help</div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <div className="h-9 bg-gray-100 rounded-md">help@gmail.com</div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <div className="h-9 bg-gray-100 rounded-md">*****</div>
-                      </div>
+                      {["Username", "Email", "Password"].map((label, i) => (
+                        <div key={i}>
+                          <label className={`block text-sm font-medium mb-1 ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>{label}</label>
+                          <div className={`h-9 rounded-md px-2 flex items-center ${isDarkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100"}`}>
+                            {label === "Username" ? "Help" : label === "Email" ? "help@gmail.com" : "*****"}
+                          </div>
+                        </div>
+                      ))}
                       <button className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">
                         Register
                       </button>
                     </div>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 text-center">Your information is secured with encryption</p>
+                <p className={`text-xs text-center ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  Your information is secured with encryption
+                </p>
               </div>
             </div>
           </div>
 
           {/* Login Section */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+          <div className={`p-6 rounded-xl shadow-sm border ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
+            <h2 className={`text-2xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
               <FiLogIn className="mr-2 text-purple-600" />
               Existing Users
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Sign In Process</h3>
-                <ol className="space-y-3 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="bg-purple-100 text-purple-600 rounded-full w-5 h-5 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0 text-sm">1</span>
-                    <span>Click <span className="font-semibold">"Sign in"</span> in the top navigation</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-purple-100 text-purple-600 rounded-full w-5 h-5 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0 text-sm">2</span>
-                    <span>Enter your registered email and password</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-purple-100 text-purple-600 rounded-full w-5 h-5 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0 text-sm">3</span>
-                    <span>Click <span className="font-semibold">"Login"</span> to access your dashboard</span>
-                  </li>
+                <h3 className={`text-lg font-medium mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Sign In Process</h3>
+                <ol className={`space-y-3 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  {[
+                    'Click "Sign in" in the top navigation',
+                    'Enter your registered email and password',
+                    'Click "Login" to access your dashboard'
+                  ].map((step, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className="bg-purple-100 text-purple-600 rounded-full w-5 h-5 flex items-center justify-center mr-3 mt-0.5 text-sm">{i + 1}</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
                 </ol>
               </div>
-              
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Troubleshooting</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <FiLock className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">Forgot password?</span> Use the recovery option</span>
-                  </li>
-                  <li className="flex items-start">
-                    <FiMail className="text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">No verification email?</span> Check spam or resend</span>
-                  </li>
-                  <li className="flex items-start">
-                    <FiUser className="text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span><span className="font-medium">Account locked?</span> Contact support</span>
-                  </li>
+
+              <div className={`p-4 rounded-lg border ${isDarkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+                <h3 className={`text-lg font-medium mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Troubleshooting</h3>
+                <ul className={`space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  {[
+                    [<FiLock className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />, "Forgot password?", "Use the recovery option"],
+                    [<FiMail className="text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />, "No verification email?", "Check spam or resend"],
+                    [<FiUser className="text-blue-500 mr-2 mt-0.5 flex-shrink-0" />, "Account locked?", "Contact support"]
+                  ].map(([icon, label, desc], i) => (
+                    <li key={i} className="flex items-start">
+                      {icon}
+                      <span><span className="font-medium">{label}</span> {desc}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

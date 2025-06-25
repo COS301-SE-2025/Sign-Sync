@@ -1,32 +1,38 @@
 import React from 'react';
 import SideNavbar from "../../components/sideNavbar";
 import { FiUser, FiEye, FiMoon, FiAward, FiGlobe } from 'react-icons/fi';
+import PreferenceManager from "../../components/PreferenceManager";
 
 const AccountSettings = () => {
+  const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
   return (
-    <section className="flex h-screen overflow-hidden bg-gray-50">
+    <section className={`flex h-screen overflow-hidden ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"}`}>
       <div>
         <SideNavbar />
       </div>
 
       <div className="flex-1 overflow-y-auto p-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Account Settings Guide</h1>
-          
+          <h1 className={`text-3xl font-bold mb-6 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            Account Settings Guide
+          </h1>
+
           <div className="space-y-6">
             {/* Profile Settings */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div className={`p-6 rounded-xl shadow-sm border 
+              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
+              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
                 <FiUser className="mr-2 text-blue-600" />
                 Profile Configuration
               </h2>
-              <ul className="space-y-4 text-gray-600">
+              <ul className={`space-y-4 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                 <li className="flex items-start">
                   <span className="bg-blue-100 text-blue-600 rounded-full p-1 mr-3">
                     <FiUser className="text-sm" />
                   </span>
                   <div>
-                    <h3 className="font-medium text-gray-800">Update Personal Information</h3>
+                    <h3 className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}>Update Personal Information</h3>
                     <p className="text-sm">Change your display name, email, or profile picture</p>
                   </div>
                 </li>
@@ -35,7 +41,7 @@ const AccountSettings = () => {
                     <FiGlobe className="text-sm" />
                   </span>
                   <div>
-                    <h3 className="font-medium text-gray-800">Language Preferences</h3>
+                    <h3 className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}>Language Preferences</h3>
                     <p className="text-sm">Set your preferred language for the interface</p>
                   </div>
                 </li>
@@ -43,23 +49,24 @@ const AccountSettings = () => {
             </div>
 
             {/* Accessibility */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div className={`p-6 rounded-xl shadow-sm border 
+              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
+              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
                 <FiEye className="mr-2 text-purple-600" />
                 Accessibility Settings
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h3 className="font-medium text-gray-800 mb-2">Display Options</h3>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                  <h3 className={`font-medium mb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Display Options</h3>
+                  <ul className={`text-sm space-y-1 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                     <li>• Light/Dark mode toggle</li>
                     <li>• Font size adjustment</li>
                     <li>• High contrast mode</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-800 mb-2">Avatar Customization</h3>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                  <h3 className={`font-medium mb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Avatar Customization</h3>
+                  <ul className={`text-sm space-y-1 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                     <li>• Change avatar style</li>
                     <li>• Adjust animation speed</li>
                     <li>• Enable/disable gestures</li>
@@ -69,12 +76,13 @@ const AccountSettings = () => {
             </div>
 
             {/* Advanced Settings */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div className={`p-6 rounded-xl shadow-sm border 
+              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
+              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
                 <FiAward className="mr-2 text-green-600" />
                 Advanced Options
               </h2>
-              <div className="space-y-3 text-gray-600">
+              <div className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} space-y-3`}>
                 <p><span className="font-medium">Data Export:</span> Download your translation history</p>
                 <p><span className="font-medium">Account Deletion:</span> Permanently remove your account</p>
                 <p><span className="font-medium">API Access:</span> Connect third-party applications</p>
