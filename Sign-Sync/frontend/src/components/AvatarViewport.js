@@ -53,7 +53,7 @@ function Avatar({signs}) {
     </>;
 }
 
-export default function AvatarViewport({input}) {
+export default function AvatarViewport({input,trigger}) {
     const [signs,setSigns] = useState([]);
     useEffect(() => {
         async function SignAPI() {
@@ -91,7 +91,7 @@ export default function AvatarViewport({input}) {
         if(input.length > 0){
             SignAPI();
         }
-    }, [input]);
+    }, [input,trigger]);
 
     return (
         <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: '#e5e7eb' }}>
