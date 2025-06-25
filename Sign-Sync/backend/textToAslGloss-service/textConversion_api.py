@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from app.phrase_matcher import match_phrase
-from app.gloss_converter import convert_to_gloss
-from app.asl_templates import apply_asl_template
+from phrase_matcher import match_phrase
+from gloss_converter import convert_to_gloss
+from asl_templates import apply_asl_template
 
 app = FastAPI()
 
