@@ -71,7 +71,7 @@ class TextToSign extends React.Component
         if(mic){
             inputType = <SpeechToTextBox />;
         }else{
-            inputType = <input className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] " type={"text"} onChange={this.processSentence} />;
+            inputType = <input className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2.5 justify-center flex flex-grow min-h-[60px] " type={"text"} onChange={this.processSentence} />;
         }
         return (
             <div>

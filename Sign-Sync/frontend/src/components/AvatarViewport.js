@@ -48,8 +48,8 @@ function Avatar({signs}) {
     },[signs]);
 
     return <>
-        <primitive ref={avatarReference} object={scene} position={[0,-2,3]}/>
-        {<Text position={[1, -0.5, 3]} fontSize={0.8} color="black"> {translatedWord} </Text>}
+        <primitive ref={avatarReference} object={scene} position={[-0.5,-2,3]}/>
+        {<Text position={[1, -0.5, 3]} fontSize={0.3} color="black"> {translatedWord} </Text>}
     </>;
 }
 
@@ -93,7 +93,7 @@ export default function AvatarViewport({input}) {
     }, [input]);
 
     return (
-        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '75vh',width:'100vh', background: '#e5e7eb' }}>
+        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: '#e5e7eb' }}>
             <Avatar signs={signs}/>
         </Canvas>
     );
