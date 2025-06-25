@@ -57,7 +57,8 @@ export default function AvatarViewport({input}) {
     const [signs,setSigns] = useState([]);
     useEffect(() => {
         async function SignAPI() {
-            const words = input.split(' ');
+            const words = input.toLowerCase().split(' ');
+            console.log("Words:", words);
             let signs = [];
             for (let i = 0; i < words.length; i++) {
                 try {

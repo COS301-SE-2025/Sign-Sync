@@ -13,8 +13,6 @@ class TextToSign extends React.Component
     {
         super(props);
         this.state = {
-            index:0,
-            signIndex:0,
             sentence:"",
             textToBeSent:"",
             mic : false
@@ -27,9 +25,26 @@ class TextToSign extends React.Component
     }
 
     sendText = () => {
+        const aslGlossFunction = async () => {
+            try {
+                const request = await fetch("http://localhost:8002/translate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({sentence: sentence})
+                });
+
+                const response = await request.json();
+                this.setState({textToBeSent: response.gloss});
+            } catch (err) {
+                console.error("Failed to fetch prediction:", err);
+            }
+        }
+
         let sentence = this.state.sentence;
         if(sentence !== ""){
-            this.setState({textToBeSent: sentence});
+            aslGlossFunction();
         }
     }
 
