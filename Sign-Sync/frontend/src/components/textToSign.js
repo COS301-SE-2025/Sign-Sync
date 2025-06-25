@@ -13,8 +13,7 @@ class TextToSign extends React.Component
     {
         super(props);
         this.state = {
-            index:0,
-            signIndex:0,
+            timestamp: Date.now(),
             sentence:"",
             textToBeSent:"",
             mic : false
@@ -27,9 +26,27 @@ class TextToSign extends React.Component
     }
 
     sendText = () => {
+        const aslGlossFunction = async () => {
+            try {
+                const request = await fetch("http://localhost:8002/translate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({sentence: sentence})
+                });
+
+                const response = await request.json();
+                this.setState({textToBeSent: response.gloss});
+            } catch (err) {
+                console.error("Failed to fetch prediction:", err);
+            }
+        }
+
         let sentence = this.state.sentence;
         if(sentence !== ""){
-            this.setState({textToBeSent: sentence});
+            aslGlossFunction();
+            this.state.timestamp = Date.now()
         }
     }
 
@@ -53,7 +70,7 @@ class TextToSign extends React.Component
 
             <div className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}>
                 <div className={`${isDarkMode ? "bg-gray-800" : "bg-white"} p-2 rounded-lg mb-2 items-center mx-auto`}>
-                    <AvatarViewport input={this.state.textToBeSent}/>
+                    <AvatarViewport input={this.state.textToBeSent} trigger={this.state.timestamp}/>
                 </div>
                 <div className={`flex items-center border rounded-lg px-4 py-2 ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"}`}>
                     <button onClick={this.changeMic} className="bg-gray-300 p-3.5 border-2 border-black"><img src={mic? MicOn : MicOff} className="w-8 h-8" alt={"Speaker"}/></button>

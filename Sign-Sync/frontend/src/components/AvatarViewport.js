@@ -3,6 +3,7 @@ import {Canvas, useThree} from '@react-three/fiber';
 import { useGLTF, useAnimations, Text } from '@react-three/drei';
 import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
+import PreferenceManager from "./PreferenceManager";
 
 function Avatar({signs}) {
     const avatarReference = useRef();
@@ -10,6 +11,7 @@ function Avatar({signs}) {
     const {actions, mixer} = useAnimations(animations,avatarReference);
     const { camera } = useThree();
     const [translatedWord, setTranslatedWord] = useState("");
+    const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
     useEffect(() => {
         if (!actions["Idle"]) return;
@@ -49,15 +51,18 @@ function Avatar({signs}) {
 
     return <>
         <primitive ref={avatarReference} object={scene} position={[-0.5,-2,3]}/>
-        {<Text position={[1, -0.5, 3]} fontSize={0.3} color="black"> {translatedWord} </Text>}
+        {<Text position={[1, -0.5, 3]} fontSize={0.3}  color = {isDarkMode ? "white": "black"}> {translatedWord} </Text>}
     </>;
 }
 
-export default function AvatarViewport({input}) {
+export default function AvatarViewport({input,trigger}) {
     const [signs,setSigns] = useState([]);
+    const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
     useEffect(() => {
         async function SignAPI() {
-            const words = input.split(' ');
+            const words = input.toLowerCase().split(' ');
+            console.log("Words:", words);
             let signs = [];
             for (let i = 0; i < words.length; i++) {
                 try {
@@ -90,10 +95,10 @@ export default function AvatarViewport({input}) {
         if(input.length > 0){
             SignAPI();
         }
-    }, [input]);
+    }, [input,trigger]);
 
     return (
-        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: '#e5e7eb' }}>
+        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
             <Avatar signs={signs}/>
         </Canvas>
     );
