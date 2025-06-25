@@ -27,17 +27,17 @@ function Avatar({signs}) {
             for (let i = 0; i < signs.length; i++) {
                 const animation = actions[signs[i]];
                 animationIndex[1] = mixer.clipAction(animation.getClip());
+                animationIndex[1].reset();
                 if(animationIndex[0]!==null){
                     animationIndex[1].fadeIn(0.2).play();
                     animationIndex[1].crossFadeFrom(animationIndex[0],0.2, false);
-
                 }
                 animationIndex[0] = animationIndex[1];
                 setTranslatedWord(signs[i]);
                 await new Promise(resolve => setTimeout(resolve, animation.getClip().duration * 1000));
             }
             if(animationIndex[0]!==null){
-                animationIndex[0].fadeOut(0.2).stop();
+                animationIndex[0].fadeOut(0.5).stop();
                 mixer.clipAction(actions["Idle"].getClip());
                 actions["Idle"].reset().play();
                 setTranslatedWord("");
@@ -49,7 +49,7 @@ function Avatar({signs}) {
 
     return <>
         <primitive ref={avatarReference} object={scene} position={[0,-2,3]}/>
-        {<Text position={[1, -0.5, 3]} fontSize={0.8} color="white"> {translatedWord} </Text>}
+        {<Text position={[1, -0.5, 3]} fontSize={0.8} color="black"> {translatedWord} </Text>}
     </>;
 }
 
@@ -93,7 +93,7 @@ export default function AvatarViewport({input}) {
     }, [input]);
 
     return (
-        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 175}} style={{ height: '50vh', background: '#222' }}>
+        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '75vh',width:'100vh', background: '#e5e7eb' }}>
             <Avatar signs={signs}/>
         </Canvas>
     );
