@@ -4,12 +4,10 @@ import mediapipe as mp
 import requests
 from collections import deque
 
-# Constants
 SEQ_LEN = 50
 FEATURES = 126
 API_URL = "http://localhost:8000/predict/"
 
-# MediaPipe setup
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False,
                        max_num_hands=2,
@@ -40,10 +38,9 @@ def extract_frame_keypoints(frame):
             else:
                 right_hand = arr
 
-    combined = np.vstack((left_hand, right_hand))  # shape: (42, 3)
-    return normalize_keypoints(combined).flatten()  # shape: (126,)
+    combined = np.vstack((left_hand, right_hand))  
+    return normalize_keypoints(combined).flatten()  
 
-# Frame buffer
 buffer = deque(maxlen=SEQ_LEN)
 
 cap = cv2.VideoCapture(0)
@@ -54,13 +51,11 @@ while cap.isOpened():
 
     keypoints = extract_frame_keypoints(frame)
 
-    # Only add if both hands were detected or at least keypoints are valid
     if np.count_nonzero(keypoints) > 0:
         buffer.append(keypoints)
-
-    # Once we have 50 frames
+    
     if len(buffer) == SEQ_LEN:
-        # Send to API
+        
         payload = {
             "sequence": [list(f) for f in buffer]
         }
@@ -79,7 +74,7 @@ while cap.isOpened():
         except Exception as e:
             print("Request failed:", e)
 
-        buffer.clear()  # Reset for next prediction
+        buffer.clear()  
 
     cv2.imshow("Live Sign Feed", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
