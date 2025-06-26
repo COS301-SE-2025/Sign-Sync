@@ -2,6 +2,7 @@ import React from "react";
 import SideNavbar from "../../components/sideNavbar";
 import { FiGlobe, FiUser, FiActivity, FiLock, FiSmile, FiVideo } from "react-icons/fi";
 import PreferenceManager from "../../components/PreferenceManager";
+import logo from "../../assets/Apollo_Projects_Logo.png"
 
 const ProductOverview = () => {
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
@@ -76,11 +77,6 @@ const ProductOverview = () => {
                   desc: "Less than 500ms latency for natural conversations",
                   bg: "bg-blue-50"
                 }, {
-                  icon: <FiLock className="text-purple-500" />,
-                  title: "Enterprise-Grade Security",
-                  desc: "End-to-end encryption for all communications",
-                  bg: "bg-purple-50"
-                }, {
                   icon: <FiSmile className="text-green-500" />,
                   title: "Accessibility First",
                   desc: "WCAG 2.1 AA compliant interface",
@@ -96,10 +92,11 @@ const ProductOverview = () => {
                 ))}
               </div>
               <div className={`md:w-1/2 rounded-lg flex items-center justify-center ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
-                <div className={`text-center p-8 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  <p className="mb-4">[Product Interface Mockup]</p>
-                  <p className="text-sm">SignSync Web Application</p>
-                </div>
+                <img 
+                  src={logo} 
+                  alt="SignSync Web Application Preview" 
+                  className="max-w-full max-h-full object-contain p-6" 
+                />
               </div>
             </div>
           </div>
@@ -147,21 +144,7 @@ const ProductOverview = () => {
             </div>
           </div>
 
-          {/* Call to Action */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-8 text-center text-white">
-            <h2 className="text-2xl font-semibold mb-3">Ready to Transform Communication?</h2>
-            <p className="mb-6 max-w-2xl mx-auto opacity-90">
-              SignSync is available for educational institutions, healthcare providers, and enterprise customers.
-            </p>
-            <div className="space-x-4">
-              <button className="bg-white text-blue-600 font-medium py-2 px-6 rounded-lg hover:bg-blue-50 transition-colors">
-                Request Demo
-              </button>
-              <button className="border border-white text-white font-medium py-2 px-6 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors">
-                Contact Sales
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>
