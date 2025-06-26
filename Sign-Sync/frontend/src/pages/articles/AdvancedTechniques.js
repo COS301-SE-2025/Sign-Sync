@@ -54,53 +54,6 @@ const AdvancedTechniques = () => {
                 </div>
               </div>
             </div>
-
-            {/* API Section */}
-            <div className={`p-6 rounded-xl shadow-sm border 
-              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                <FiCode className="mr-2 text-purple-500" />
-                API Integration
-              </h2>
-              <div className="space-y-4">
-                <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                  Connect SignSync with other applications using our REST API:
-                </p>
-                <div className="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto">
-                  <code className="text-sm">
-                    {`// Sample API call\n`}
-                    {`fetch('https://api.signsync.com/v1/translate', {\n`}
-                    {`  method: 'POST',\n`}
-                    {`  headers: { 'Authorization': 'Bearer YOUR_API_KEY' },\n`}
-                    {`  body: JSON.stringify({ text: 'Hello world' })\n`}
-                    {`})`}
-                  </code>
-                </div>
-                <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Get your API key from Account Settings → Developer Options
-                </p>
-              </div>
-            </div>
-
-            {/* Performance Section */}
-            <div className={`p-6 rounded-xl shadow-sm border 
-              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                <FiCpu className="mr-2 text-blue-500" />
-                Performance Optimization
-              </h2>
-              <div className="space-y-3">
-                <h3 className={`${isDarkMode ? "text-white" : "text-gray-800"} font-medium`}>Hardware Acceleration</h3>
-                <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} text-sm`}>
-                  Enable GPU processing in Settings → Performance to reduce CPU usage by up to 40%.
-                </p>
-
-                <h3 className={`${isDarkMode ? "text-white" : "text-gray-800"} font-medium`}>Quality Presets</h3>
-                <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} text-sm`}>
-                  Choose between "Speed", "Balanced", or "Accuracy" modes based on your needs.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

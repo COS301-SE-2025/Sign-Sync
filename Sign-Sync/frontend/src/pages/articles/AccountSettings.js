@@ -19,35 +19,6 @@ const AccountSettings = () => {
           </h1>
 
           <div className="space-y-6">
-            {/* Profile Settings */}
-            <div className={`p-6 rounded-xl shadow-sm border 
-              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                <FiUser className="mr-2 text-blue-600" />
-                Profile Configuration
-              </h2>
-              <ul className={`space-y-4 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                <li className="flex items-start">
-                  <span className="bg-blue-100 text-blue-600 rounded-full p-1 mr-3">
-                    <FiUser className="text-sm" />
-                  </span>
-                  <div>
-                    <h3 className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}>Update Personal Information</h3>
-                    <p className="text-sm">Change your display name, email, or profile picture</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <span className="bg-blue-100 text-blue-600 rounded-full p-1 mr-3">
-                    <FiGlobe className="text-sm" />
-                  </span>
-                  <div>
-                    <h3 className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}>Language Preferences</h3>
-                    <p className="text-sm">Set your preferred language for the interface</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
             {/* Accessibility */}
             <div className={`p-6 rounded-xl shadow-sm border 
               ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
@@ -69,7 +40,6 @@ const AccountSettings = () => {
                   <ul className={`text-sm space-y-1 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                     <li>• Change avatar style</li>
                     <li>• Adjust animation speed</li>
-                    <li>• Enable/disable gestures</li>
                   </ul>
                 </div>
               </div>
@@ -83,9 +53,7 @@ const AccountSettings = () => {
                 Advanced Options
               </h2>
               <div className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} space-y-3`}>
-                <p><span className="font-medium">Data Export:</span> Download your translation history</p>
                 <p><span className="font-medium">Account Deletion:</span> Permanently remove your account</p>
-                <p><span className="font-medium">API Access:</span> Connect third-party applications</p>
               </div>
             </div>
           </div>
