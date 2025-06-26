@@ -42,13 +42,11 @@ const FirstStepsTutorial = () => {
                     <>
                       Fill in your details:
                       <ul className="list-disc pl-5 mt-1">
-                        <li>Username</li>
                         <li>Email (e.g., apolloprojects.cos301@gmail.com)</li>
                         <li>Password</li>
                       </ul>
                     </>,
                     `Click the "Register" button`,
-                    `Verify your email if required`
                   ]
                 },
                 {
@@ -58,7 +56,7 @@ const FirstStepsTutorial = () => {
                     <>
                       Enter your credentials:
                       <ul className="list-disc pl-5 mt-1">
-                        <li>Username/Email</li>
+                        <li>Email</li>
                         <li>Password</li>
                       </ul>
                     </>,
@@ -192,7 +190,6 @@ const FirstStepsTutorial = () => {
                     ["Camera not working", "Check browser permissions"],
                     ["Poor hand detection", "Improve lighting conditions"],
                     ["Translation errors", "Check Help Menu > Troubleshooting"],
-                    ["Performance lag", "Adjust Settings > Performance mode"]
                   ].map(([issue, solution], i) => (
                     <tr key={i} className={`${i !== 3 ? (isDarkMode ? "border-b border-gray-600" : "border-b border-gray-200") : ""}`}>
                       <td className={`px-4 py-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>{issue}</td>
