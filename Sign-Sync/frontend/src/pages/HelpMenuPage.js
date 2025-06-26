@@ -189,7 +189,6 @@ class HelpMenuPage extends React.Component {
                                             desc: "Find answers to common questions.",
                                             links: [
                                                 { to: "/accountSettings", text: "Account settings" },
-                                                { to: "/billingQuestions", text: "Billing questions" },
                                                 { to: "/troubleshooting", text: "Troubleshooting" },
                                             ]
                                         },
