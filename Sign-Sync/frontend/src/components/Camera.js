@@ -57,7 +57,6 @@ const Camera = () => {
                                 arrayLandmarks = [...arrayLandmarks,tempArr];
                             }
                             if(arrayLandmarks.length === 50) {
-                                console.log(arrayLandmarks);
                                 makePredictionGesture(arrayLandmarks);
                                 console.log(Date.now()-start);
                                 start = Date.now();
@@ -88,7 +87,6 @@ const Camera = () => {
                 });
 
                 const response = await request.json();
-                console.log(response);
                 setPrediction(response.gloss);
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
