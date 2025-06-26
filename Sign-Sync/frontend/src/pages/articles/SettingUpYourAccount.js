@@ -38,9 +38,8 @@ const SettingUpYourAccount = () => {
                       <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>Fill in the required fields:</p>
                       <ul className={`mt-2 space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                         {[
-                          ["Username:", "6-20 characters (letters, numbers, _)"],
                           ["Email:", "Valid email address"],
-                          ["Password:", "8+ characters with 1 number"]
+                          ["Password:", "8+ characters"]
                         ].map(([label, desc], i) => (
                           <li className="flex items-start" key={i}>
                             <FiCheckCircle className="text-green-500 mr-2 mt-0.5 flex-shrink-0" />
@@ -48,17 +47,6 @@ const SettingUpYourAccount = () => {
                           </li>
                         ))}
                       </ul>
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <div className="flex-shrink-0 bg-blue-100 text-blue-600 rounded-full p-2 mr-4">
-                      <FiMail className="text-lg" />
-                    </div>
-                    <div>
-                      <h3 className={`text-lg font-medium mb-1 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Email Verification</h3>
-                      <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                        After submitting, check your email (including spam folder) for a verification link. Click the link to activate your account.
-                      </p>
                     </div>
                   </li>
                 </ol>
@@ -70,11 +58,11 @@ const SettingUpYourAccount = () => {
                   <h3 className={`text-lg font-medium mb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Example Registration</h3>
                   <div className={`inline-block p-4 rounded-lg shadow-xs border ${isDarkMode ? "bg-gray-800 border-gray-600" : "bg-white border-gray-300"}`}>
                     <div className="space-y-4">
-                      {["Username", "Email", "Password"].map((label, i) => (
+                      {["Email", "Password"].map((label, i) => (
                         <div key={i}>
                           <label className={`block text-sm font-medium mb-1 ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>{label}</label>
                           <div className={`h-9 rounded-md px-2 flex items-center ${isDarkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100"}`}>
-                            {label === "Username" ? "Help" : label === "Email" ? "help@gmail.com" : "*****"}
+                            {label === "Email" ? "help@gmail.com" : "*****"}
                           </div>
                         </div>
                       ))}
@@ -84,9 +72,6 @@ const SettingUpYourAccount = () => {
                     </div>
                   </div>
                 </div>
-                <p className={`text-xs text-center ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Your information is secured with encryption
-                </p>
               </div>
             </div>
           </div>
@@ -103,9 +88,9 @@ const SettingUpYourAccount = () => {
                 <h3 className={`text-lg font-medium mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Sign In Process</h3>
                 <ol className={`space-y-3 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                   {[
-                    'Click "Sign in" in the top navigation',
+                    'Click "Sign in" ',
                     'Enter your registered email and password',
-                    'Click "Login" to access your dashboard'
+                    'Click "Login" to access the application'
                   ].map((step, i) => (
                     <li key={i} className="flex items-start">
                       <span className="bg-purple-100 text-purple-600 rounded-full w-5 h-5 flex items-center justify-center mr-3 mt-0.5 text-sm">{i + 1}</span>
@@ -113,22 +98,6 @@ const SettingUpYourAccount = () => {
                     </li>
                   ))}
                 </ol>
-              </div>
-
-              <div className={`p-4 rounded-lg border ${isDarkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-                <h3 className={`text-lg font-medium mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Troubleshooting</h3>
-                <ul className={`space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                  {[
-                    [<FiLock className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />, "Forgot password?", "Use the recovery option"],
-                    [<FiMail className="text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />, "No verification email?", "Check spam or resend"],
-                    [<FiUser className="text-blue-500 mr-2 mt-0.5 flex-shrink-0" />, "Account locked?", "Contact support"]
-                  ].map(([icon, label, desc], i) => (
-                    <li key={i} className="flex items-start">
-                      {icon}
-                      <span><span className="font-medium">{label}</span> {desc}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>
