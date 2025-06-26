@@ -81,26 +81,6 @@ const AdvancedTechniques = () => {
                 </p>
               </div>
             </div>
-
-            {/* Performance Section */}
-            <div className={`p-6 rounded-xl shadow-sm border 
-              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                <FiCpu className="mr-2 text-blue-500" />
-                Performance Optimization
-              </h2>
-              <div className="space-y-3">
-                <h3 className={`${isDarkMode ? "text-white" : "text-gray-800"} font-medium`}>Hardware Acceleration</h3>
-                <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} text-sm`}>
-                  Enable GPU processing in Settings → Performance to reduce CPU usage by up to 40%.
-                </p>
-
-                <h3 className={`${isDarkMode ? "text-white" : "text-gray-800"} font-medium`}>Quality Presets</h3>
-                <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} text-sm`}>
-                  Choose between "Speed", "Balanced", or "Accuracy" modes based on your needs.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
