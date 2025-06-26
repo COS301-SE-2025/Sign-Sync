@@ -222,36 +222,6 @@ class HelpMenuPage extends React.Component {
                                         </div>
                                     ))}
                                 </div>
-
-                                {/* Popular Articles */}
-                                <div className="mb-8">
-                                    <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                                        <FaLightbulb className="text-yellow-500 mr-2" /> Popular Help Articles
-                                    </h2>
-                                    <div className={`rounded-lg shadow-sm border overflow-hidden 
-                                        ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-                                        {[
-                                            { title: "How to reset your password", path: "/passwordReset" },
-                                            { title: "Understanding your dashboard", path: "/dashboardGuide" },
-                                            { title: "Exporting your data", path: "/dataExport" },
-                                            { title: "Integrations with other tools", path: "/integrations" },
-                                            { title: "Privacy and security settings", path: "/privacySettings" }
-                                        ].map((article, index) => (
-                                            <div 
-                                                key={index} 
-                                                className={`p-4 ${isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"} 
-                                                    ${index !== 0 ? (isDarkMode ? "border-t border-gray-700" : "border-t border-gray-100") : ""}`}
-                                            >
-                                                <Link to={article.path} className={`flex justify-between items-center ${isDarkMode ? "text-white hover:text-blue-400" : "text-gray-800 hover:text-blue-600"}`}>
-                                                    <span>{article.title}</span>
-                                                    <svg className={`w-5 h-5 ${isDarkMode ? "text-gray-400" : "text-gray-400"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </Link>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
                             </>
                         )}
 
