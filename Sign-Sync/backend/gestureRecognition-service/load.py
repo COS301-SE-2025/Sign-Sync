@@ -14,7 +14,7 @@ def load_dataset(json_path, video_folder, test_size=0.1, min_instances=2):
         instances = entry['instances']
 
         if len(instances) < min_instances:
-            continue  # skip glosses with too few examples
+            continue
 
         train, test = train_test_split(instances, test_size=test_size, random_state=42)
 

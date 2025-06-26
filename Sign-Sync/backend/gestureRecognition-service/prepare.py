@@ -4,7 +4,7 @@ from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tqdm import tqdm
 from multiprocessing import Pool, cpu_count
-import keypoints  # you already use this
+import keypoints
 
 def _process_video(item, cache_dir, maxlen):
     try:
