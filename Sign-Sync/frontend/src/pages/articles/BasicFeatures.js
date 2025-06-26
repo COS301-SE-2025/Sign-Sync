@@ -141,33 +141,6 @@ const BasicFeatures = () => {
                 <li>View the avatar's sign language translation</li>
               </ol>
             </div>
-
-            {/* Account Dashboard Section */}
-            <div className={`p-6 rounded-xl shadow-sm border 
-              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                <FiUser className="mr-2 text-green-500" />
-                Your Account Dashboard
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h3 className={`font-medium mb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Key Features</h3>
-                  <ul className={`space-y-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                    <li>• View your translation history</li>
-                    <li>• Access saved phrases</li>
-                    <li>• Check your subscription status</li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className={`font-medium mb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>Quick Actions</h3>
-                  <ul className={`space-y-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                    <li>• Edit your profile</li>
-                    <li>• Change password</li>
-                    <li>• Manage connected devices</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
