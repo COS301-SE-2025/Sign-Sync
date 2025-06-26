@@ -54,33 +54,6 @@ const AdvancedTechniques = () => {
                 </div>
               </div>
             </div>
-
-            {/* API Section */}
-            <div className={`p-6 rounded-xl shadow-sm border 
-              ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`}>
-              <h2 className={`text-xl font-semibold mb-4 flex items-center ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                <FiCode className="mr-2 text-purple-500" />
-                API Integration
-              </h2>
-              <div className="space-y-4">
-                <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                  Connect SignSync with other applications using our REST API:
-                </p>
-                <div className="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto">
-                  <code className="text-sm">
-                    {`// Sample API call\n`}
-                    {`fetch('https://api.signsync.com/v1/translate', {\n`}
-                    {`  method: 'POST',\n`}
-                    {`  headers: { 'Authorization': 'Bearer YOUR_API_KEY' },\n`}
-                    {`  body: JSON.stringify({ text: 'Hello world' })\n`}
-                    {`})`}
-                  </code>
-                </div>
-                <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Get your API key from Account Settings → Developer Options
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
