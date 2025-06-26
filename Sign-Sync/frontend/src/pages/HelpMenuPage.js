@@ -180,9 +180,7 @@ class HelpMenuPage extends React.Component {
                                             desc: "Watch step-by-step video guides.",
                                             links: [
                                                 { to: "/basicFeatures", text: "Basic features walkthrough" },
-                                                { to: "/advancedTechniques", text: "Advanced techniques" },
-                                                { to: "/productivityTips", text: "Productivity tips" },
-                                            ]
+                                                { to: "/advancedTechniques", text: "Advanced techniques" },                                            ]
                                         },
                                         {
                                             icon: <FaFileAlt className="text-green-600 text-xl" />,
