@@ -32,20 +32,19 @@ def extract_hand_keypoints(video_path, bbox=None, max_frames=75):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = hands.process(frame_rgb)
 
-        # Create empty keypoints for left and right hands
         left_hand = np.zeros((21, 3))
         right_hand = np.zeros((21, 3))
 
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                label = handedness.classification[0].label  # 'Left' or 'Right'
+                label = handedness.classification[0].label
                 arr = np.array([[lm.x, lm.y, lm.z] for lm in hand_landmarks.landmark])
                 if label == 'Left':
                     left_hand = arr
                 else:
                     right_hand = arr
 
-        combined = np.vstack((left_hand, right_hand))  # shape (42, 3)
+        combined = np.vstack((left_hand, right_hand))
         keypoints = normalize_keypoints(combined).flatten()
         sequence.append(keypoints)
 
