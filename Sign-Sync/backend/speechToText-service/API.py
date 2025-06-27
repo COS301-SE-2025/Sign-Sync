@@ -70,8 +70,15 @@ async def upload_audio(file: UploadFile = File(...)):
         f.write(await file.read())
 
     # Convert to 16-bit mono 16kHz PCM raw using FFmpeg
+    # subprocess.run([
+    #     "ffmpeg", "-y", "-i", input_path,
+    #     "-ac", "1", "-ar", "16000", "-f", "s16le", raw_path
+    # ], check=True)
+
+    ffmpeg_path = os.path.join(os.path.dirname(__file__), "ffmpeg", "ffmpeg.exe")
+
     subprocess.run([
-        "ffmpeg", "-y", "-i", input_path,
+        ffmpeg_path, "-y", "-i", input_path,
         "-ac", "1", "-ar", "16000", "-f", "s16le", raw_path
     ], check=True)
 

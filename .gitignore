@@ -18,3 +18,10 @@ venv/
 #OS-specific,
 .DS_Store
 Thumbs.db
+
+#data folder
+data
+cached/
+
+#execution file
+*.bat

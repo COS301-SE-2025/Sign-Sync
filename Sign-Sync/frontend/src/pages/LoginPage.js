@@ -8,7 +8,6 @@ class LoginPage extends React.Component
         super(props);
         
         this.state = {
-            username: '',
             email: '',
             password: '',
             errors: {}
@@ -17,13 +16,8 @@ class LoginPage extends React.Component
 
     validateForm = () => 
     {
-        const { username, email, password } = this.state;
+        const { email, password } = this.state;
         const errors = {};
-
-        if(!username.trim()) 
-        {
-            errors.username = "Username is required.";
-        }
 
         if(!email.trim()) 
         {
@@ -60,20 +54,22 @@ class LoginPage extends React.Component
 
         if(!this.validateForm()) return;
 
-        const { username, email, password } = this.state;
+        const { email, password } = this.state;
 
         try
         {
             const response = await fetch('/userApi/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: username, email: email, password: password }),
+                body: JSON.stringify({ email: email, password: password }),
             });
 
             if(response.ok)
             {
-                await response.json();
+                const data = await response.json();
                 
+                localStorage.setItem('user', JSON.stringify(data.user));
+
                 alert("Login successful!, redirecting to Translator page...");
 
                 window.location.href = '/translator';
@@ -82,7 +78,7 @@ class LoginPage extends React.Component
             {
                 const errorData = await response.json();
                 alert(`Login failed: ${errorData.message}`);
-                console.error("Registration error:", errorData);
+                console.error("Login error:", errorData);
             }
         }
         catch(error)
@@ -94,7 +90,7 @@ class LoginPage extends React.Component
 
     render() 
     {
-        const { username, email, password } = this.state;
+        const { email, password } = this.state;
 
         return (
             <div className="flex relative justify-center items-center w-screen h-screen bg-blue-900">
@@ -104,22 +100,6 @@ class LoginPage extends React.Component
                     onSubmit={this.handleSubmit}
                     className="box-border flex relative flex-col gap-12 items-start p-12 bg-white rounded-xl border border-amber-50 border-solid max-h-[90vh] overflow-y-auto min-w-80 w-[773px] z-[2] max-md:gap-8 max-md:p-8 max-md:h-auto max-md:max-w-[600px] max-md:w-[90%] max-sm:gap-6 max-sm:p-6 max-sm:max-w-[400px] max-sm:w-[95%]"
                 >
-                    <div className="flex flex-col gap-4 items-start w-full">
-                        <label className="self-stretch text-3xl font-bold leading-10 text-stone-900 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">
-                            Username
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Enter username"
-                            name="username"
-                            value={username}
-                            onChange={this.handleInputChange}
-                            className="self-stretch px-8 py-6 text-2xl font-bold leading-4 bg-white rounded-lg border border-solid flex-[1_0_0] min-w-60 text-zinc-900 max-md:px-6 max-md:py-5 max-md:text-sm max-sm:px-5 max-sm:py-4 max-sm:text-sm"
-                        />
-                        {this.state.errors.username && (
-                            <p className="text-red-600 text-lg">{this.state.errors.username}</p>
-                        )}
-                    </div>
 
                     <div className="flex flex-col gap-4 items-start w-full">
                         <label className="self-stretch text-3xl font-bold leading-10 text-stone-900 max-md:text-3xl max-md:leading-9 max-sm:text-2xl max-sm:leading-8">

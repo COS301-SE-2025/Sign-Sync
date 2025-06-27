@@ -1,10 +1,10 @@
 {
   "name": "SignSync",
-  "version": "1.0.0",
+  "version": "1.0.0", 
   "description": "SignSync project",
   "main": "frontend/src/index.js",
   "scripts": {
-    "build": "webpack && babel backend/server.js backend/auth-service/userApi.js --out-dir backend/dist",
+    "build": "webpack && npx babel backend/server.js backend/auth-service/userApi.js backend/textToSign-service/textSignApi.js --out-dir backend/dist",
     "start": "npm run build && node backend/dist/server.js",
     "watch": "webpack -w",
     "test": "jest --watchAll",
@@ -13,38 +13,51 @@
   "jest": {
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "./__tests__/jest.setup.js"
+      "./jest.setup.js"
     ]
   },
   "author": "Apollo Projects",
   "license": "ISC",
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@react-three/drei": "^9.57.0",
+    "@react-three/fiber": "^8.18.0",
     "audio-recorder-polyfill": "^0.4.1",
+    "bcrypt": "^6.0.0",
     "css-loader": "^7.1.2",
+    "dotenv": "^16.5.0",
     "express": "^4.20.0",
+    "framer-motion": "^12.19.1",
     "mongodb": "^6.9.0",
     "path": "^0.12.7",
     "postcss-loader": "^8.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^6.26.2",
-    "style-loader": "^4.0.0"
+    "style-loader": "^4.0.0",
+    "three": "^0.177.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.25.6",
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.4",
+    "@babel/cli": "^7.27.2",
+    "@babel/core": "^7.27.3",
+    "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.24.7",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "autoprefixer": "^10.4.21",
     "babel-loader": "^9.1.3",
     "file-loader": "^6.2.0",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.2",
     "mongodb-memory-server": "^10.1.4",
     "postcss": "^8.5.3",
     "supertest": "^7.1.1",
     "tailwindcss": "^3.4.13",
+    "util": "^0.12.5",
     "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "whatwg-url": "^14.2.0"
   }
 }

@@ -42,6 +42,14 @@ module.exports = {
                 generator:{
                     filename: 'assets/[name][ext]',
                 }
+            },
+
+            { // For 3D models imported from Blender
+                test: /\.(glb|gltf)$/,
+                type: "asset/resource",
+                generator: {
+                    filename: 'assets/3DModels/[name][ext]',
+                },
             }
         ]
         
