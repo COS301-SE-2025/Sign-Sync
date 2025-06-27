@@ -22,3 +22,6 @@ Thumbs.db
 #data folder
 data
 cached/
+
+#execution file
+*.bat
