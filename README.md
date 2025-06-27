@@ -38,19 +38,19 @@ Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes
 
 |**Document**|**Description**|
 |-|-|
-|[SRS Document](https://docs.google.com/document/d/19Cd9SOPiPcP2DXkhDCLFXw9Jwvya7J5Auz-O1MkowoQ/edit?usp=sharing)| Software Requirment Specifications |
+|[SRS Document](https://docs.google.com/document/d/19Cd9SOPiPcP2DXkhDCLFXw9Jwvya7J5Auz-O1MkowoQ/edit?usp=sharing)| Software Requirements Specifications |
 |[Architectural Requirements](https://docs.google.com/document/d/1Tnh146qLCFfTAsckCTdKblfy7kKlUrFplQvQblJZ0vA/edit?usp=sharing)| Architectural Requirements |
 |[User Manual](https://docs.google.com/document/d/1Bk0NdBohSFItGukwDSZP4zm9DRhANWsKz6us0H9VsQ8/edit?usp=sharing )| Guide for users on how to use the application |
 |[Technical Installation Manual]()| Instructions for setting up the applications |
 |[Testing Policy]()| Policies and procedures for testing |
-|[Coding Standards](https://docs.google.com/document/d/1ZnLRcQ9KtcQ8gEb8ZXcpKxrKWBadmjbpuJ4pylKs6Ak/edit?usp=sharing)| Guidelines for coding pracices |
-|[Advertisment Video]()| Advertisment for Sign Sync |
+|[Coding Standards](https://docs.google.com/document/d/1ZnLRcQ9KtcQ8gEb8ZXcpKxrKWBadmjbpuJ4pylKs6Ak/edit?usp=sharing)| Guidelines for coding practices |
+|[Advertisement Video]()| Advertisement for Sign Sync |
 
 - [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)
 
 ## Team
 
-|**Name**|**Discription**|**LinkedIn**|
+|**Name**|**Description**|**LinkedIn**|
 |--------|---------------|----------|
 | Michael Stone | Michael is an enthusiastic final-year BSc Information and Knowledge Systems student. With a strong foundation in both Computer Science and Informatics, he possesses a well-rounded skill set and a deep interest in full-stack development. His versatility enables him to contribute effectively to frontend, backend, and system integration projects. He has built several web applications and APIs, and has experience integrating them with backend systems. He enjoys working individually and alongside others, sharing ideas, and contributing to team success. Even when faced with unfamiliar challenges, Michael is committed to finding effective solutions through persistence, research, and a willingness to learn. | [LinkedIn](https://www.linkedin.com/in/michael-stone-7209b3216/)
 | Matthew Gravette | Matthew is a final year BSc Computer Science student, he has completed many projects, big and small. He has extensive experience in both C++ and Java. Matthew has a deep interest in full stack web development, having built a website for auctions that could handle multiple concurrent bidders and a progressive web app for sound engineers. He strives to bring all these skills to help the team with the development of this project. He has worked in many teams of various sizes and has played both a managing role and a supporting role. He is experienced in all standard web development languages and , He is also proficient in data science and does 3rd year statistics and is well versed in database creation and management. | [LinkedIn](https://www.linkedin.com/in/matthew-gravette-0a32402ab/)
