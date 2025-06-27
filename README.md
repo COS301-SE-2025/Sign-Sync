@@ -38,11 +38,12 @@ Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes
 
 |**Document**|**Description**|
 |-|-|
-|[SRS Requirements](https://docs.google.com/document/d/1pcefn-Nhll3uHIxUDYLyK4dad5k8ZgvDUs-wr97H06Q/edit?tab=t.0#heading=h.tbpn49glggld)| Software Requiremtn Specifications |
-|[User Manual]()| Guide for users on how to use the application |
+|[SRS Requirements](https://docs.google.com/document/d/19Cd9SOPiPcP2DXkhDCLFXw9Jwvya7J5Auz-O1MkowoQ/edit?usp=sharing)| Software Requiremtn Specifications |
+|[Architectural Requirements](https://docs.google.com/document/d/1Tnh146qLCFfTAsckCTdKblfy7kKlUrFplQvQblJZ0vA/edit?usp=sharing)| Architectural Requirements |
+|[User Manual](https://docs.google.com/document/d/1Bk0NdBohSFItGukwDSZP4zm9DRhANWsKz6us0H9VsQ8/edit?usp=sharing )| Guide for users on how to use the application |
 |[Technical Installation Manual]()| Instructions for setting up the applications |
 |[Testing Policy]()| Policies and procedures for testing |
-|[Coding Standards]()| Guidelines for coding pracices |
+|[Coding Standards](https://docs.google.com/document/d/1ZnLRcQ9KtcQ8gEb8ZXcpKxrKWBadmjbpuJ4pylKs6Ak/edit?usp=sharing)| Guidelines for coding pracices |
 |[Advertisment Video]()| Advertisment for Sign Sync |
 
 - [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)
