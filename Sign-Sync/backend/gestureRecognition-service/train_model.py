@@ -1,29 +1,19 @@
 
 import load
 import prepare
-import LSTM_model
-import os
 import numpy as np
 import pandas as pd
 import json
 import pickle
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.preprocessing import StandardScaler
-from tensorflow.keras.layers import BatchNormalization
 import augment
 from tensorflow.keras import Sequential, layers, regularizers
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dropout, Dense, Masking, GRU
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 from collections import defaultdict
-from tensorflow.keras.regularizers import l2
 from collections import Counter
 from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
-from tensorflow.keras.layers import Bidirectional
 
 
 def main():
@@ -204,7 +194,7 @@ def main():
         layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=2, 
                     activation='relu', kernel_regularizer=regularizers.l2(0.001)),
         layers.BatchNormalization(),
-
+ 
         layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=4, 
                     activation='relu', kernel_regularizer=regularizers.l2(0.001)),
         layers.BatchNormalization(),
