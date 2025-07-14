@@ -1,6 +1,6 @@
 {
   "name": "SignSync",
-  "version": "1.0.0", 
+  "version": "1.0.0",
   "description": "SignSync project",
   "main": "frontend/src/index.js",
   "scripts": {
