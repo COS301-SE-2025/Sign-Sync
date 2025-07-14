@@ -25,6 +25,7 @@ import Integrations from "./pages/articles/Integrations";
 import PasswordReset from "./pages/articles/PasswordReset";
 import PrivacySettings from "./pages/articles/PrivacySettings";
 import ProductivityTips from "./pages/articles/ProductivityTips";
+import LearnAlphabet from "./pages/LearnAlphabetPage";
 
 class app extends React.Component 
 {
@@ -38,6 +39,7 @@ class app extends React.Component
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/learn-Alphabet" element={<LearnAlphabet/>} />
           <Route path="/helpMenu" element={<HelpMenuPage />} />
           <Route path="/productOverview" element={<ProductOverview  />} />
           <Route path="/firstStepsTutorial" element={<FirstStepsTutorial  />} />

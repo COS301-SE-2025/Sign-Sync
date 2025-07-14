@@ -95,7 +95,7 @@ class SideNavbar extends React.Component
 
                 {learnOpen && (
                   <div className="pl-6 flex flex-col gap-1 text-xl">
-                    <Link to="/translator" className="hover:underline">Alphabet</Link>
+                    <Link to="/learn-Alphabet" className="hover:underline">Alphabet</Link>
                     <Link to="/translator" className="hover:underline">Words</Link>
                   </div>
                 )}
