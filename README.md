@@ -30,7 +30,7 @@ Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes
 ||**Demo Slides**|**Demo Video**|**Demo SRS**|
 |-|-|-|-|
 |Demo 1| [Slides 1](https://docs.google.com/presentation/d/1dGRHy4usAEJKe0lt4n1SQhi-hZZ6lwPh31kqmcY2CO8/edit?slide=id.g35dd9153325_0_0#slide=id.g35dd9153325_0_0) | [Video 1](https://drive.google.com/file/d/1HBEssni3iBMv5fkkdSIUH8-DIDpXS4gm/view) | [SRS v1](https://docs.google.com/document/d/1sP_p0daATYNUXX4lYOwxOqUTUqLfePrAfgcNW5VCOOc/edit?tab=t.0#heading=h.66l8rjciz4an) 
-|Demo 2| [Slides 2](https://docs.google.com/presentation/d/1o3arcSAfqdQyx9oVDkeOo0SE7wujC1OT_jKca6QPjxI/edit?slide=id.p#slide=id.p) | [Video 2]() | [SRS v2](https://docs.google.com/document/d/19Cd9SOPiPcP2DXkhDCLFXw9Jwvya7J5Auz-O1MkowoQ/edit?tab=t.0#heading=h.hixx8hr3nvyk) 
+|Demo 2| [Slides 2](https://docs.google.com/presentation/d/1o3arcSAfqdQyx9oVDkeOo0SE7wujC1OT_jKca6QPjxI/edit?slide=id.p#slide=id.p) | [Video 2](https://drive.google.com/drive/folders/1INMoJEG3mvPEBpTpcbPcwoYKCdPumQZ8?usp=sharing) | [SRS v2](https://docs.google.com/document/d/19Cd9SOPiPcP2DXkhDCLFXw9Jwvya7J5Auz-O1MkowoQ/edit?tab=t.0#heading=h.hixx8hr3nvyk) 
 |Demo 3| [Slides 3]() | [Video 3]() | [SRS v3]() 
 |Demo 4| [Slides 4]() | [Video 4]() | [SRS v4]() 
 
