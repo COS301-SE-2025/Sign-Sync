@@ -12,7 +12,7 @@ function Avatar({signs}) {
     const { camera } = useThree();
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
-    const animationSpeed = 5.0; //User preference will set this value
+    const animationSpeed = 0.75; //User preference will set this value
 
     useEffect(() => {
         if (!actions["Idle"]) return;
@@ -37,7 +37,11 @@ function Avatar({signs}) {
                     animationIndex[1].timeScale = animationSpeed;
                 }
                 animationIndex[0] = animationIndex[1];
-                setTranslatedWord(signs[i]);
+                if(signs[i].contain("Pronoun-")){
+                    setTranslatedWord(signs[i].slice(signs[i].indexOf("Pronoun-")[1]));
+                }else{
+                    setTranslatedWord(signs[i]);
+                }
                 await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration/animationSpeed)*1000));
             }
             if(animationIndex[0]!==null){
