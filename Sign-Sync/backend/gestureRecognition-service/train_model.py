@@ -25,7 +25,7 @@ def main():
     test_glosses  = {e['gloss'] for e in test_set}
     print("Only in test:", test_glosses - train_glosses)
 
-    top_n = 100
+    top_n = 500
     all_glosses = [item['gloss'] for item in train_set]
     gloss_freq = Counter(all_glosses)
     top_glosses = set(g for g, _ in gloss_freq.most_common(top_n))
@@ -79,8 +79,8 @@ def main():
     for xi, yi in zip(x_train, y_train):
         class_to_samples[yi].append(np.array(xi, dtype=np.float32))
 
-    augmentations_per_sample = 25
-    target_total_per_class = 1500
+    augmentations_per_sample = 10
+    target_total_per_class = 800
 
     new_x = []
     new_y = []
@@ -123,8 +123,8 @@ def main():
     for xi, yi in zip(x_val, y_val):
         class_to_val_samples[yi].append(np.array(xi, dtype=np.float32))
 
-    augment_val_per_sample = 4
-    target_val_per_class = 50
+    augment_val_per_sample = 7
+    target_val_per_class = 200
 
     new_val_x = []
     new_val_y = []
@@ -189,28 +189,16 @@ def main():
                                                 y=y_train)
     class_weights = dict(enumerate(weights))
 
-    # This model incorrectly trained on only the first 15 frames. This is because of the dilation fields which results in a receptive field of 15. We need 50
-    # Furthermore, the dropout might be too aggressive
     model = Sequential([
-        layers.Masking(mask_value=0.0, input_shape=(x_train.shape[1], x_train.shape[2])),
-    # [[],[],...]
-        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=1, 
-                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.BatchNormalization(),
-
-        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=2, 
-                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.BatchNormalization(),
- 
-        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=4, 
-                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.BatchNormalization(),
-
-        layers.GlobalAveragePooling1D(),
-        layers.Dense(128, activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.Dropout(0.6),
-        layers.Dense(num_classes, activation='softmax')
-    ])
+    Masking(mask_value=0.0, input_shape=(x_train.shape[1], x_train.shape[2])),  # allow variable length
+    LSTM(128, return_sequences=True),
+    Dropout(0.3),
+    LSTM(64),
+    Dropout(0.3),
+    Dense(256, activation='relu'),
+    Dropout(0.3),
+    Dense(num_classes, activation='softmax')
+])
 
     early_stop = EarlyStopping(
         monitor='val_loss', patience=5, restore_best_weights=True, verbose=1
