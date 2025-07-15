@@ -11,6 +11,7 @@ from tensorflow.keras import Sequential, layers, regularizers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.layers import Dropout, Masking, LSTM, Dense
 from collections import defaultdict
 from collections import Counter
 from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
@@ -25,7 +26,7 @@ def main():
     test_glosses  = {e['gloss'] for e in test_set}
     print("Only in test:", test_glosses - train_glosses)
 
-    top_n = 500
+    top_n = 100
     all_glosses = [item['gloss'] for item in train_set]
     gloss_freq = Counter(all_glosses)
     top_glosses = set(g for g, _ in gloss_freq.most_common(top_n))
@@ -42,7 +43,7 @@ def main():
     print("Classes: ", label_enc.classes_)
     
     x_val, y_val, _ = prepare.prepare_data_parallel(test_set, False, maxlen=50, label_encoder=label_enc)
-    return
+    
     train_classes = set(np.unique(y_train))
     val_classes = set(np.unique(y_val))
     shared_classes = sorted(train_classes & val_classes)
@@ -80,7 +81,7 @@ def main():
         class_to_samples[yi].append(np.array(xi, dtype=np.float32))
 
     augmentations_per_sample = 10
-    target_total_per_class = 800
+    target_total_per_class = 2000
 
     new_x = []
     new_y = []
@@ -124,7 +125,7 @@ def main():
         class_to_val_samples[yi].append(np.array(xi, dtype=np.float32))
 
     augment_val_per_sample = 7
-    target_val_per_class = 200
+    target_val_per_class = 500
 
     new_val_x = []
     new_val_y = []
