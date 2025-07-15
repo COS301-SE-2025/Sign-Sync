@@ -12,6 +12,7 @@ function Avatar({signs}) {
     const { camera } = useThree();
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+    const animationSpeed = 5.0; //User preference will set this value
 
     useEffect(() => {
         if (!actions["Idle"]) return;
@@ -33,10 +34,11 @@ function Avatar({signs}) {
                 if(animationIndex[0]!==null){
                     animationIndex[1].fadeIn(0.2).play();
                     animationIndex[1].crossFadeFrom(animationIndex[0],0.2, false);
+                    animationIndex[1].timeScale = animationSpeed;
                 }
                 animationIndex[0] = animationIndex[1];
                 setTranslatedWord(signs[i]);
-                await new Promise(resolve => setTimeout(resolve, animation.getClip().duration * 1000));
+                await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration/animationSpeed)*1000));
             }
             if(animationIndex[0]!==null){
                 animationIndex[0].fadeOut(0.5).stop();
