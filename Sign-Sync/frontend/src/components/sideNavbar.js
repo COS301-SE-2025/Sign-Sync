@@ -86,7 +86,7 @@ class SideNavbar extends React.Component
 
             {educationOpen && (
               <div className="pl-8 flex flex-col gap-1 text-2xl">
-                <Link to="/translator" className="hover:underline">Achievements</Link>
+                <Link to="/achievements" className="hover:underline">Achievements</Link>
 
                 <div className="cursor-pointer flex items-center justify-between" onClick={this.toggleLearn}>
                   <div>Learn</div>

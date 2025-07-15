@@ -25,7 +25,9 @@ import Integrations from "./pages/articles/Integrations";
 import PasswordReset from "./pages/articles/PasswordReset";
 import PrivacySettings from "./pages/articles/PrivacySettings";
 import ProductivityTips from "./pages/articles/ProductivityTips";
+import ProductivityTips from "./pages/articles/ProductivityTips";
 import Education from "./pages/articles/Education";
+import Achievements from "./pages/AchievementsPage";
 
 class app extends React.Component 
 {
@@ -59,6 +61,7 @@ class app extends React.Component
           <Route path="/privacySettings" element={<PrivacySettings  />} />
           <Route path="/productivityTips" element={<ProductivityTips  />} />
           <Route path="/education" element={<Education  />} />
+          <Route path="/achievements" element={<Achievements  />} />
         </Routes>
       </BrowserRouter>
     );
