@@ -21,7 +21,11 @@ def main():
 
     train_set, test_set = load.load_dataset("data/WLASL_v0.3.json", "data/videos")
 
-    top_n = 60
+    train_glosses = {e['gloss'] for e in train_set}
+    test_glosses  = {e['gloss'] for e in test_set}
+    print("Only in test:", test_glosses - train_glosses)
+
+    top_n = 100
     all_glosses = [item['gloss'] for item in train_set]
     gloss_freq = Counter(all_glosses)
     top_glosses = set(g for g, _ in gloss_freq.most_common(top_n))
@@ -33,11 +37,12 @@ def main():
     train_glosses = set(item['gloss'] for item in train_set)
     test_set = [item for item in test_set if item['gloss'] in train_glosses]
 
-
+    # keypoints are extracted, normalized and then padded to 50 frames
     x_train, y_train, label_enc = prepare.prepare_data_parallel(train_set, maxlen=50)
-    x_val, y_val, _ = prepare.prepare_data_parallel(test_set, maxlen=50, label_encoder=label_enc)
-
-
+    print("Classes: ", label_enc.classes_)
+    
+    x_val, y_val, _ = prepare.prepare_data_parallel(test_set, False, maxlen=50, label_encoder=label_enc)
+    return
     train_classes = set(np.unique(y_train))
     val_classes = set(np.unique(y_val))
     shared_classes = sorted(train_classes & val_classes)
@@ -75,7 +80,7 @@ def main():
         class_to_samples[yi].append(np.array(xi, dtype=np.float32))
 
     augmentations_per_sample = 25
-    target_total_per_class = 2000
+    target_total_per_class = 1500
 
     new_x = []
     new_y = []
@@ -184,9 +189,11 @@ def main():
                                                 y=y_train)
     class_weights = dict(enumerate(weights))
 
+    # This model incorrectly trained on only the first 15 frames. This is because of the dilation fields which results in a receptive field of 15. We need 50
+    # Furthermore, the dropout might be too aggressive
     model = Sequential([
         layers.Masking(mask_value=0.0, input_shape=(x_train.shape[1], x_train.shape[2])),
-
+    # [[],[],...]
         layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=1, 
                     activation='relu', kernel_regularizer=regularizers.l2(0.001)),
         layers.BatchNormalization(),
@@ -214,7 +221,7 @@ def main():
     )
 
     checkpoint = ModelCheckpoint(
-    filepath="best_model_val_accccccd.keras", 
+    filepath="better_model_val_acccccc.keras", 
     monitor='val_accuracy',
     save_best_only=True,
     save_weights_only=False,

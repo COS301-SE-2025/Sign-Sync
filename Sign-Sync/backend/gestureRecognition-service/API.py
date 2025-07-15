@@ -43,11 +43,21 @@ def load_model_and_labels():
     with open(label_map_path, "r") as f:
         label_map = json.load(f)
 
+
+def normalize_keypoints(keypoints):
+    if keypoints.size == 0:
+        return keypoints
+    min_vals = np.min(keypoints, axis=0)
+    max_vals = np.max(keypoints, axis=0)
+    range_vals = max_vals - min_vals + 1e-5
+    return ((keypoints - min_vals) / range_vals)
+
 @app.post("/predict/")
 def predict_gloss(data: KeypointSequence):
     try:
         sequence = np.array(data.sequence, dtype=np.float32)
         sequence = np.expand_dims(sequence, axis=0)
+        sequence = normalize_keypoints(sequence)
 
         pred_probs = model.predict(sequence)[0]
         class_idx = int(np.argmax(pred_probs))

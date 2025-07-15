@@ -26,7 +26,7 @@ def _process_video(item, cache_dir, maxlen):
         return None
 
 
-def prepare_data_parallel(dataset, cache_dir="cached", maxlen=50, label_encoder=None):
+def prepare_data_parallel(dataset, isTrain=True, cache_dir="cached", maxlen=50, label_encoder=None):
     os.makedirs(cache_dir, exist_ok=True)
     print(f"[INFO] Processing {len(dataset)} videos using {cpu_count()} CPU cores...")
 
@@ -43,8 +43,13 @@ def prepare_data_parallel(dataset, cache_dir="cached", maxlen=50, label_encoder=
             continue
         path, gloss = result
         try:
-            sequences.append(np.load(path))
-            labels.append(gloss)
+            if isTrain:
+                sequences.append(np.load(path))
+                labels.append(gloss)
+            elif not isTrain:
+                if label_encoder is not None and gloss in label_encoder.classes_:
+                    sequences.append(np.load(path))
+                    labels.append(gloss)
         except Exception as e:
             print(f"[WARNING] Skipping cached file {path}: {e}")
 

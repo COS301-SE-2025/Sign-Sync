@@ -6,7 +6,7 @@ from collections import deque
 
 SEQ_LEN = 50
 FEATURES = 126
-API_URL = "http://localhost:8000/predict/"
+API_URL = "http://localhost:8003/predict/"
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False,
