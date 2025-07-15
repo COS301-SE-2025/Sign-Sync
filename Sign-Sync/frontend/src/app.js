@@ -25,7 +25,6 @@ import Integrations from "./pages/articles/Integrations";
 import PasswordReset from "./pages/articles/PasswordReset";
 import PrivacySettings from "./pages/articles/PrivacySettings";
 import ProductivityTips from "./pages/articles/ProductivityTips";
-import ProductivityTips from "./pages/articles/ProductivityTips";
 import Education from "./pages/articles/Education";
 import Achievements from "./pages/AchievementsPage";
 
