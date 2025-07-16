@@ -16,6 +16,7 @@ class SideNavbar extends React.Component
     this.state = {
       isLoggedIn: false,
       educationOpen: false,
+      practiseOpen: false,
       learnOpen: false
     };
   }
@@ -45,6 +46,11 @@ class SideNavbar extends React.Component
     this.setState(prevState => ({ educationOpen: !prevState.educationOpen })); 
   };
 
+  togglePractise = () =>
+  {
+    this.setState(prevState => ({ practiseOpen: !prevState.practiseOpen })); 
+  }
+
   toggleLearn = () =>
   {
     this.setState(prevState => ({ learnOpen: !prevState.learnOpen })); 
@@ -52,7 +58,7 @@ class SideNavbar extends React.Component
 
   render()  
   {
-    const { isLoggedIn, educationOpen, learnOpen } = this.state;
+    const { isLoggedIn, educationOpen, practiseOpen, learnOpen } = this.state;
 
     return (
       <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]"> 
@@ -100,7 +106,18 @@ class SideNavbar extends React.Component
                   </div>
                 )}
 
-                <Link to="/translator" className="hover:underline">Practise</Link>
+                <div className="cursor-pointer flex items-center justify-between" onClick={this.toggleLearn}>
+                  <div>Practise</div>
+                  <FaChevronDown className={`transition-transform duration-300 ${learnOpen ? "rotate-180" : ""}`} />
+                </div>
+
+                {practiseOpen && (
+                  <div className="pl-6 flex flex-col gap-1 text-xl">
+                    <Link to="/practise-Alphabet" className="hover:underline">Alphabet</Link>
+                    <Link to="/translator" className="hover:underline">Words</Link>
+                  </div>
+                )}
+
               </div>
             )}
 
