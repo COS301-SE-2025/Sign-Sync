@@ -40,7 +40,7 @@ router.post('/register', async (req, res) =>
             userID: newUserID,
             email,
             password: hashedPassword,
-            achievements: [],
+            achievements: [1],
         };
 
         await req.app.locals.userCollection.insertOne(newUser);
