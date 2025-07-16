@@ -40,6 +40,7 @@ router.post('/register', async (req, res) =>
             userID: newUserID,
             email,
             password: hashedPassword,
+            achievements: [],
         };
 
         await req.app.locals.userCollection.insertOne(newUser);
@@ -161,6 +162,101 @@ router.put('/preferences/:userID', async (req, res) =>
     {
         res.status(500).json({ message: 'Error updating preferences', error: error.message });
     }
+});
+
+/**
+ * @swagger
+ * tags:
+ *   name: Achievements
+ *   description: User achievements management
+ */
+
+/**
+ * @swagger
+ * /achievements/{userID}:
+ *   get:
+ *     summary: Get user achievements
+ *     description: Retrieve all achievements for a specific user
+ *     tags: [Achievements]
+ *     parameters:
+ *       - in: path
+ *         name: userID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user whose achievements to retrieve
+ *     responses:
+ *       200:
+ *         description: A list of user achievements
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Achievement'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */ 
+router.get('/achievements/:userID', async (req, res) => 
+{
+    const { userID } = req.params;
+
+    try 
+    {
+        const user = await req.app.locals.userCollection.findOne({ userID: parseInt(userID) });
+
+        if(!user) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(user.achievements || []);
+    } 
+    catch (error) 
+    {
+        res.status(500).json({ message: 'Error getting achievements', error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /achievements/{userID}:
+ *   put:
+ *     summary: Update user achievements
+ *     description: Update or add achievements for a specific user
+ *     tags: [Achievements]
+ *     parameters:
+ *       - in: path
+ *         name: userID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user whose achievements to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AchievementUpdate'
+ *     responses:
+ *       200:
+ *         description: Achievements updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Achievement'
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/achievements/:userID', async (req, res) => 
+{
+    
 });
 
 
