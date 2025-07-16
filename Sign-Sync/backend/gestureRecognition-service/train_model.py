@@ -192,25 +192,50 @@ def main():
     class_weights = dict(enumerate(weights))
 
     model = Sequential([
-        layers.Masking(mask_value=0.0, input_shape=(x_train.shape[1], x_train.shape[2])),
 
-        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=1, 
-                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.BatchNormalization(),
+    layers.Masking(mask_value=0.0,
+                   input_shape=(x_train.shape[1], x_train.shape[2])),
 
-        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=2, 
-                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.BatchNormalization(),
+    layers.Conv1D(
+        filters=32, kernel_size=5, padding='causal', dilation_rate=1,
+        activation='relu',
+        kernel_regularizer=regularizers.l2(0.01)
+    ),
+    layers.BatchNormalization(),
+    layers.SpatialDropout1D(0.3),
 
-        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=4, 
-                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.BatchNormalization(),
+    layers.Conv1D(
+        filters=32, kernel_size=5, padding='causal', dilation_rate=2,
+        activation='relu',
+        kernel_regularizer=regularizers.l2(0.01)
+    ),
+    layers.BatchNormalization(),
+    layers.SpatialDropout1D(0.3),
 
-        layers.GlobalAveragePooling1D(),
-        layers.Dense(128, activation='relu', kernel_regularizer=regularizers.l2(0.001)),
-        layers.Dropout(0.6),
-        layers.Dense(num_classes, activation='softmax')
-    ])
+    layers.Conv1D(
+        filters=32, kernel_size=5, padding='causal', dilation_rate=4,
+        activation='relu',
+        kernel_regularizer=regularizers.l2(0.01)
+    ),
+    layers.BatchNormalization(),
+    layers.SpatialDropout1D(0.3),
+
+    layers.LSTM(
+        units=64,
+        return_sequences=False,
+        dropout=0.3,
+        recurrent_dropout=0.4
+    ),
+
+    layers.Dense(
+        units=64,
+        activation='relu',
+        kernel_regularizer=regularizers.l2(0.01)
+    ),
+    layers.Dropout(0.6),
+
+    layers.Dense(num_classes, activation='softmax')
+])
 
     early_stop = EarlyStopping(
         monitor='val_loss', patience=5, restore_best_weights=True, verbose=1

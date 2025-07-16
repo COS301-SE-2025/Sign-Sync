@@ -1,26 +1,38 @@
 import numpy as np
 import random
 
-def rotate_keypoints(kps, axis='z', angle_deg=5):
+def rotate_keypoints(kps, axis=[False, True, False], angle_deg=5):
     """Rotate 3D keypoints around the specified axis, centered on their centroid."""
     angle = np.radians(angle_deg)
     cos_a, sin_a = np.cos(angle), np.sin(angle)
 
-    if axis == 'x':
-        R = np.array([[1, 0, 0],
+    if axis[0]:
+        Rx = np.array([[1, 0, 0],
                       [0, cos_a, -sin_a],
                       [0, sin_a, cos_a]])
-    elif axis == 'y':
-        R = np.array([[cos_a, 0, sin_a],
+    else: 
+        Rx = np.array([[1, 1, 1],
+                        [1, 1, 1],
+                        [1, 1, 1]])
+    if axis[1]:
+        Ry = np.array([[cos_a, 0, sin_a],
                       [0, 1, 0],
                       [-sin_a, 0, cos_a]])
-    else:  # z-axis
-        R = np.array([[cos_a, -sin_a, 0],
+    else:
+        Ry = np.array([[1, 1, 1],
+                        [1, 1, 1],
+                        [1, 1, 1]])
+    if axis[2]:  # z-axis
+        Rz = np.array([[cos_a, -sin_a, 0],
                       [sin_a, cos_a, 0],
                       [0, 0, 1]])
+    else:
+        Rz = np.array([[1, 1, 1],
+                        [1, 1, 1],
+                        [1, 1, 1]])
 
     center = kps.mean(axis=0, keepdims=True)
-    return np.dot(kps - center, R.T) + center
+    return np.dot(np.dot(np.dot(kps - center, Rx.T), Ry.T), Rz.T) + center
 
 def augment_keypoints_3d(seq, prob_drop=0.1, seed=None, global_dropout=False, intensity=1.0):
     """
@@ -47,10 +59,13 @@ def augment_keypoints_3d(seq, prob_drop=0.1, seed=None, global_dropout=False, in
         keypoints += shift_vec
 
     if 'rotate' in transforms:
-        axis = random.choice(['x', 'y', 'z'])
+        axis_flags = np.random.rand(3) < 0.5 
+        if not True in axis_flags:
+            rand = np.array(random.choice([0, 1, 2]))
+            axis_flags[rand] = True
         angles = np.random.uniform(-8 * intensity, 8 * intensity, size=T)
         for t in range(T):
-            keypoints[t] = rotate_keypoints(keypoints[t], axis=axis, angle_deg=angles[t])
+            keypoints[t] = rotate_keypoints(keypoints[t], axis=axis_flags, angle_deg=angles[t])
 
     if 'occlude' in transforms:
         num_joints_to_zero = random.randint(1, max(1, int(5 * intensity)))
