@@ -11,7 +11,8 @@ from tensorflow.keras import Sequential, layers, regularizers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.layers import Dropout, Masking, LSTM, Dense
+from tensorflow.keras.layers import Dropout, Masking, LSTM, Dense, SpatialDropout1D, BatchNormalization
+from tensorflow.keras.regularizers import l2
 from collections import defaultdict
 from collections import Counter
 from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
@@ -26,7 +27,7 @@ def main():
     test_glosses  = {e['gloss'] for e in test_set}
     print("Only in test:", test_glosses - train_glosses)
 
-    top_n = 100
+    top_n = 200
     all_glosses = [item['gloss'] for item in train_set]
     gloss_freq = Counter(all_glosses)
     top_glosses = set(g for g, _ in gloss_freq.most_common(top_n))
@@ -191,14 +192,34 @@ def main():
     class_weights = dict(enumerate(weights))
 
     model = Sequential([
-    Masking(mask_value=0.0, input_shape=(x_train.shape[1], x_train.shape[2])),  # allow variable length
-    LSTM(128, return_sequences=True),
-    Dropout(0.3),
-    LSTM(64),
-    Dropout(0.3),
-    Dense(256, activation='relu'),
-    Dropout(0.3),
-    Dense(num_classes, activation='softmax')
+    # ---- core TCN block ----
+    layers.Masking(mask_value=0.0, 
+                   input_shape=(x_train.shape[1], x_train.shape[2])),
+    layers.SpatialDropout1D(0.2),
+
+    # Block 1
+    layers.Conv1D(128, kernel_size=3, padding='causal', dilation_rate=1,
+                  activation='relu',
+                  kernel_regularizer=regularizers.l2(1e-3)),
+    layers.BatchNormalization(),
+    layers.Dropout(0.4),
+
+    # Block 2
+    layers.Conv1D(64, kernel_size=10, padding='causal', dilation_rate=3,
+                  activation='relu',
+                  kernel_regularizer=regularizers.l2(1e-3)),
+    layers.BatchNormalization(),
+    layers.Dropout(0.4),
+
+    # you can add a 3rd block here if you need a larger receptive field
+
+    layers.GlobalAveragePooling1D(),
+
+    # ---- classification head ----
+    layers.Dense(64, activation='relu',
+                 kernel_regularizer=regularizers.l2(1e-4)),
+    layers.Dropout(0.5),
+    layers.Dense(num_classes, activation='softmax')
 ])
 
     early_stop = EarlyStopping(
@@ -236,6 +257,13 @@ def main():
     )
 
     model.save("save_model.keras")
+
+    train_loss, train_acc = model.evaluate(
+    x_train, y_train_cat,
+    batch_size=32,
+    verbose=1
+    )
+    print(f"Train accuracy (no dropout/bn training): {train_acc:.3f}")
 
     with open("label_encoder.pkl", "wb") as f:
         pickle.dump(label_enc, f)
