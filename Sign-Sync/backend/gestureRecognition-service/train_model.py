@@ -192,35 +192,25 @@ def main():
     class_weights = dict(enumerate(weights))
 
     model = Sequential([
-    # ---- core TCN block ----
-    layers.Masking(mask_value=0.0, 
-                   input_shape=(x_train.shape[1], x_train.shape[2])),
-    layers.SpatialDropout1D(0.2),
+        layers.Masking(mask_value=0.0, input_shape=(x_train.shape[1], x_train.shape[2])),
 
-    # Block 1
-    layers.Conv1D(128, kernel_size=3, padding='causal', dilation_rate=1,
-                  activation='relu',
-                  kernel_regularizer=regularizers.l2(1e-3)),
-    layers.BatchNormalization(),
-    layers.Dropout(0.4),
+        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=1, 
+                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+        layers.BatchNormalization(),
 
-    # Block 2
-    layers.Conv1D(64, kernel_size=10, padding='causal', dilation_rate=3,
-                  activation='relu',
-                  kernel_regularizer=regularizers.l2(1e-3)),
-    layers.BatchNormalization(),
-    layers.Dropout(0.4),
+        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=2, 
+                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+        layers.BatchNormalization(),
 
-    # you can add a 3rd block here if you need a larger receptive field
+        layers.Conv1D(64, kernel_size=3, padding='causal', dilation_rate=4, 
+                    activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+        layers.BatchNormalization(),
 
-    layers.GlobalAveragePooling1D(),
-
-    # ---- classification head ----
-    layers.Dense(64, activation='relu',
-                 kernel_regularizer=regularizers.l2(1e-4)),
-    layers.Dropout(0.5),
-    layers.Dense(num_classes, activation='softmax')
-])
+        layers.GlobalAveragePooling1D(),
+        layers.Dense(128, activation='relu', kernel_regularizer=regularizers.l2(0.001)),
+        layers.Dropout(0.6),
+        layers.Dense(num_classes, activation='softmax')
+    ])
 
     early_stop = EarlyStopping(
         monitor='val_loss', patience=5, restore_best_weights=True, verbose=1
