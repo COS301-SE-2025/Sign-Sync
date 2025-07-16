@@ -106,9 +106,9 @@ class SideNavbar extends React.Component
                   </div>
                 )}
 
-                <div className="cursor-pointer flex items-center justify-between" onClick={this.toggleLearn}>
+                <div className="cursor-pointer flex items-center justify-between" onClick={this.togglePractise}>
                   <div>Practise</div>
-                  <FaChevronDown className={`transition-transform duration-300 ${learnOpen ? "rotate-180" : ""}`} />
+                  <FaChevronDown className={`transition-transform duration-300 ${practiseOpen ? "rotate-180" : ""}`} />
                 </div>
 
                 {practiseOpen && (
