@@ -74,6 +74,12 @@ class HelpMenuPage extends React.Component {
             path: "/dashboardGuide",
             category: "Popular",
             content: "Navigation and feature overview"
+        },
+        {
+            title: "Education",
+            path: "/education",
+            category: "FAQs",
+            content: "Overview on the Education tab"
         }
     ];
 
@@ -180,7 +186,8 @@ class HelpMenuPage extends React.Component {
                                             desc: "Watch step-by-step video guides.",
                                             links: [
                                                 { to: "/basicFeatures", text: "Basic features walkthrough" },
-                                                { to: "/advancedTechniques", text: "Advanced techniques" },                                            ]
+                                                { to: "/advancedTechniques", text: "Advanced techniques" },
+                                            ]
                                         },
                                         {
                                             icon: <FaFileAlt className="text-green-600 text-xl" />,
@@ -190,6 +197,7 @@ class HelpMenuPage extends React.Component {
                                             links: [
                                                 { to: "/accountSettings", text: "Account settings" },
                                                 { to: "/troubleshooting", text: "Troubleshooting" },
+                                                { to: "/education", text: "Education" },
                                             ]
                                         },
                                         {
