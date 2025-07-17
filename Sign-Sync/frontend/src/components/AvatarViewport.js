@@ -18,10 +18,6 @@ function Avatar({signs}) {
         if (!actions["Idle"]) return;
         mixer.clipAction(actions["Idle"].getClip());
         actions["Idle"].reset().play();
-        const sun = new DirectionalLight('rgb(255,255,255)',1);
-        sun.position.set(5,10,7.5);
-        scene.add(sun);
-        scene.add(new AmbientLight(0xffffff,0.75));
     }, [scene,camera]);
 
     useEffect(() => {
@@ -106,6 +102,8 @@ export default function AvatarViewport({input,trigger}) {
     return (
         <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
             <Avatar signs={signs}/>
+            <directionalLight color="white" position={[5,10,7.5]} intensity={1}/>
+            <ambientLight color="white" intensity={0.75}/>
         </Canvas>
     );
 }
