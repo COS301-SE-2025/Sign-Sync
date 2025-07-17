@@ -1,7 +1,7 @@
 from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
 import torch
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 import numpy as np
 
 # followed https://www.geeksforgeeks.org/nlp/distilbert-in-natural-language-processing for setup of the distilBert
@@ -25,19 +25,37 @@ distilBertModel = AutoModelForSequenceClassification.from_pretrained("distilbert
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
-    predictions = np.argmax(logits, axis=-1)
-    return {"accuracy": accuracy_score(labels, predictions)}
+    preds = np.argmax(logits, axis=-1)
+
+    acc = accuracy_score(labels, preds)
+    precision, recall, f1, _ = precision_recall_fscore_support(
+        labels, preds, average="weighted", zero_division=0
+    )
+
+    return {
+        "accuracy": acc,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1,
+    }
 
 trainingSettings = TrainingArguments(
     output_dir="./results",
-    eval_strategy="epoch",
+    eval_strategy="steps",
+    eval_steps=150,
+    logging_strategy="steps",
+    logging_steps=15,
+    save_strategy="epoch",
+
     learning_rate=2e-5,
     per_device_train_batch_size=32,
     per_device_eval_batch_size=32,
     num_train_epochs=3,
     weight_decay=0.01,
     logging_dir='./logs',
-    logging_steps=10,
+
+    no_cuda=False,     
+    fp16=True, 
 )
 
 trainer = Trainer(
