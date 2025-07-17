@@ -28,6 +28,11 @@ import ProductivityTips from "./pages/articles/ProductivityTips";
 import Education from "./pages/articles/Education";
 import Achievements from "./pages/AchievementsPage";
 
+import LearnAlphabet from "./pages/LearnAlphabetPage";
+import PractiseAlphabet from "./pages/PractiseAlphabetPage";
+
+
+
 class app extends React.Component 
 {
   render() 
@@ -61,6 +66,9 @@ class app extends React.Component
           <Route path="/productivityTips" element={<ProductivityTips  />} />
           <Route path="/education" element={<Education  />} />
           <Route path="/achievements" element={<Achievements  />} />
+            
+          <Route path="/learn-Alphabet" element={<LearnAlphabet/>} />
+          <Route path="/practise-Alphabet" element={<PractiseAlphabet />} />
         </Routes>
       </BrowserRouter>
     );
