@@ -50,37 +50,28 @@ class AchievementsManager {
      * @returns {Promise<boolean>} Returns true if update was successful
      */
     static async updateAchievements(newAchievements) {
-        if (!this.userID) {
-            console.error("No user ID available for updating achievements");
-            return false;
-        }
-
-        if (!Array.isArray(newAchievements)) {
-            console.error("Invalid achievements format - expected array");
-            return false;
-        }
-
-        try {
-            const response = await fetch(`/userApi/achievements/${this.userID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ achievements: newAchievements })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            this.achievements = data.achievements || newAchievements;
-            return true;
-        } catch (error) {
-            console.error("Failed to update achievements:", error);
-            return false;
-        }
+    if (!this.userID) {
+      console.error("No user ID available");
+      return false;
     }
+
+    try {
+      const response = await fetch(`/userApi/achievements/${this.userID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ achievements: newAchievements })
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
+      const data = await response.json();
+      this.achievements = data.achievements || newAchievements;
+      return true;
+    } catch (error) {
+      console.error("Update failed:", error);
+      return false;
+    }
+  }
 
     /**
      * Adds a new achievement to the user's achievements
