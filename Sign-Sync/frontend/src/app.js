@@ -27,6 +27,8 @@ import PrivacySettings from "./pages/articles/PrivacySettings";
 import ProductivityTips from "./pages/articles/ProductivityTips";
 import LearnAlphabet from "./pages/LearnAlphabetPage";
 import PractiseAlphabet from "./pages/PractiseAlphabetPage";
+import Education from "./pages/articles/Education";
+import Achievements from "./pages/AchievementsPage";
 
 class app extends React.Component 
 {
@@ -61,6 +63,8 @@ class app extends React.Component
           <Route path="/passwordReset" element={<PasswordReset  />} />
           <Route path="/privacySettings" element={<PrivacySettings  />} />
           <Route path="/productivityTips" element={<ProductivityTips  />} />
+          <Route path="/education" element={<Education  />} />
+          <Route path="/achievements" element={<Achievements  />} />
         </Routes>
       </BrowserRouter>
     );
