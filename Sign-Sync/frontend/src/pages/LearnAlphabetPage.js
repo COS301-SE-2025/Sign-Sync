@@ -13,7 +13,7 @@ class LearnAlphabetPage extends React.Component
         this.initialState = {
             currentIndex: 0,
             // alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
-            alphabet: ["b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"],
+            alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"],
             success: false,
             completedLetters: new Set(),
             showCongratulations: false,
@@ -27,6 +27,14 @@ class LearnAlphabetPage extends React.Component
         this.setState((prevState) => ({
             currentIndex: Math.min(prevState.currentIndex + 1, prevState.alphabet.length - 1),
             success: false,
+        }));
+    };
+
+    handlePrev = () => 
+    {
+        this.setState((prevState) => ({
+        currentIndex: Math.max(prevState.currentIndex - 1, 0),
+        success: false,
         }));
     };
 
@@ -102,6 +110,14 @@ class LearnAlphabetPage extends React.Component
                                     {success && (
                                         <p className="text-green-500 font-semibold text-lg">✔ Well Done!</p>
                                     )}
+
+                                    <button
+                                        onClick={this.handlePrev}
+                                        disabled={currentIndex === 0}
+                                        className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+                                    >
+                                        Previous
+                                    </button>
 
                                     <button
                                         onClick={isLastLetter ? this.handleFinish : this.handleNext}

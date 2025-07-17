@@ -114,39 +114,39 @@ class PractiseAlphabetPage extends React.Component
                     )}
 
                     <nav className="flex gap-4 justify-center">
-                    <button
-                        onClick={this.handlePrev}
-                        disabled={currentIndex === 0}
-                        className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
-                    >
-                        Previous
-                    </button>
+                      <button
+                          onClick={this.handlePrev}
+                          disabled={currentIndex === 0}
+                          className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+                      >
+                          Previous
+                      </button>
 
-                    <button
-                        onClick={this.handleSkip}
-                        className="px-5 py-2 rounded-md bg-yellow-400 text-black hover:bg-yellow-500 transition"
-                    >
-                        Skip
-                    </button>
+                      <button
+                          onClick={this.handleSkip}
+                          className="px-5 py-2 rounded-md bg-yellow-400 text-black hover:bg-yellow-500 transition"
+                      >
+                          Skip
+                      </button>
 
-                    {!isLastLetter && (
-                        <button
-                          onClick={this.handleNext}
-                          disabled={!success}
-                          className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
-                        >
-                          Next
-                        </button>
-                    )}
+                      {!isLastLetter && (
+                          <button
+                            onClick={this.handleNext}
+                            disabled={!success}
+                            className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
+                          >
+                            Next
+                          </button>
+                      )}
 
-                    {isLastLetter && success && (
-                        <button
-                          onClick={this.handleFinish}
-                          className="px-5 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
-                        >
-                          Finish
-                        </button>
-                    )}
+                      {isLastLetter && success && (
+                          <button
+                            onClick={this.handleFinish}
+                            className="px-5 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
+                          >
+                            Finish
+                          </button>
+                      )}
                     </nav>
                 </section>
                 </>
