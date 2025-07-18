@@ -7,6 +7,8 @@ pycache/
 env/
 venv/
 .venv/
+oh_env/
+openenv/
 
 #Environment variables,
 .env
@@ -25,3 +27,11 @@ cached/
 
 #execution file
 *.bat
+
+# MSASL dataset 
+MSASL*
+RAW_DIR/
+OUTPUT_ROOT
+raw_videos
+filtered
+
