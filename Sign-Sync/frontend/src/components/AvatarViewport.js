@@ -1,54 +1,59 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Canvas, useThree} from '@react-three/fiber';
+import {Canvas, useFrame, useLoader, useThree} from '@react-three/fiber';
 import { useGLTF, useAnimations, Text } from '@react-three/drei';
-import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 import PreferenceManager from "./PreferenceManager";
 
 function Avatar({signs}) {
     const avatarReference = useRef();
-    const {scene, animations} = useGLTF(TranslatorAvatar);
+    const {scene, animations, materials} = useGLTF(TranslatorAvatar);
     const {actions, mixer} = useAnimations(animations,avatarReference);
     const { camera } = useThree();
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
-    const animationSpeed = 2.75; //User preference will set this value
+    const animationSpeed = 1.0  ; //User preference will set this value
+
 
     useEffect(() => {
+        materials["Face-CM-Material"].map.offset.x = 0.0; // How to change emotions
+        materials["Face-CM-Material"].map.offset.y = 0.25; // How to change emotions
         if (!actions["Idle"]) return;
         mixer.clipAction(actions["Idle"].getClip());
         actions["Idle"].reset().play();
     }, [scene,camera]);
 
     useEffect(() => {
-        let animationIndex = [ mixer.clipAction(actions["Idle"].getClip()),null];
-        async function playAnimations (){
-            for (let i = 0; i < signs.length; i++) {
-                const animation = actions[signs[i]];
-                animationIndex[1] = mixer.clipAction(animation.getClip());
-                animationIndex[1].reset();
-                if(animationIndex[0]!==null){
-                    animationIndex[1].fadeIn(0.2).play();
-                    animationIndex[1].crossFadeFrom(animationIndex[0],0.2, false);
-                    animationIndex[1].timeScale = animationSpeed;
+            let animationIndex = [mixer.clipAction(actions["Idle"].getClip()), null];
+            async function playAnimations() {
+                for (let i = 0; i < signs.length; i++) {
+                    const animation = actions[signs[i]];
+                    animationIndex[1] = mixer.clipAction(animation.getClip());
+                    animationIndex[1].reset();
+                    if (animationIndex[0] !== null) {
+                        animationIndex[1].fadeIn(0.2).play();
+                        animationIndex[1].crossFadeFrom(animationIndex[0], 0.2, false);
+                        animationIndex[1].timeScale = animationSpeed;
+                    }
+                    animationIndex[0] = animationIndex[1];
+                    if (signs[i].includes("Pronoun-")) {
+                        setTranslatedWord(signs[i].substring(signs[i].indexOf("-") + 1, signs[i].length));
+                    } else {
+                        setTranslatedWord(signs[i]);
+                    }
+                    await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration / animationSpeed) * 1000));
                 }
-                animationIndex[0] = animationIndex[1];
-                if(signs[i].includes("Pronoun-")){
-                    setTranslatedWord(signs[i].substring(signs[i].indexOf("-")+1,signs[i].length));
-                }else{
-                    setTranslatedWord(signs[i]);
+                if (animationIndex[0] !== null) {
+                    animationIndex[0].fadeOut(0.5).stop();
+                    mixer.clipAction(actions["Idle"].getClip());
+                    actions["Idle"].reset().play();
+                    setTranslatedWord("");
                 }
-                await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration/animationSpeed)*1000));
             }
-            if(animationIndex[0]!==null){
-                animationIndex[0].fadeOut(0.5).stop();
-                mixer.clipAction(actions["Idle"].getClip());
-                actions["Idle"].reset().play();
+            playAnimations();
+            return () => {
+                mixer.stopAllAction();
                 setTranslatedWord("");
-            }
-        }
-        playAnimations();
-        return () => {mixer.stopAllAction();};
+            };
     },[signs]);
 
     return <>
