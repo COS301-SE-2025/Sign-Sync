@@ -3,6 +3,7 @@ import {Canvas, useFrame, useLoader, useThree} from '@react-three/fiber';
 import { useGLTF, useAnimations, Text } from '@react-three/drei';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 import PreferenceManager from "./PreferenceManager";
+import * as THREE from "three";
 
 function Avatar({signs}) {
     const avatarReference = useRef();
@@ -12,11 +13,14 @@ function Avatar({signs}) {
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
     const animationSpeed = 1.0  ; //User preference will set this value
-
+    const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Angry":[0,0.75],"Surprise":[0.5,0]};
+    const emotionsRef = useRef(null);
 
     useEffect(() => {
-        materials["Face-CM-Material"].map.offset.x = 0.0; // How to change emotions
-        materials["Face-CM-Material"].map.offset.y = 0.25; // How to change emotions
+        emotionsRef.current = "Angry";
+        materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
+        materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
+        materials["Face-CM-Material"].map.needsUpdate = true;
         if (!actions["Idle"]) return;
         mixer.clipAction(actions["Idle"].getClip());
         actions["Idle"].reset().play();
