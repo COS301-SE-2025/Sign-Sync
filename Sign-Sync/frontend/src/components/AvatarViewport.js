@@ -17,8 +17,8 @@ function Avatar({signs}) {
     const emotionsRef = useRef(null);
 
     useEffect(() => {
-        setAvatarType("Jenny")
-        emotionsRef.current = "Sad";
+        setAvatarType("Zac")
+        emotionsRef.current = "Neutral";
         materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
         materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
         materials["Face-CM-Material"].map.needsUpdate = true;
