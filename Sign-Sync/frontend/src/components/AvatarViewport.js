@@ -1,53 +1,88 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Canvas, useThree} from '@react-three/fiber';
+import {Canvas, useFrame, useLoader, useThree} from '@react-three/fiber';
 import { useGLTF, useAnimations, Text } from '@react-three/drei';
-import {DirectionalLight, AmbientLight, AnimationMixer} from 'three';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 import PreferenceManager from "./PreferenceManager";
+import * as THREE from "three";
 
 function Avatar({signs}) {
     const avatarReference = useRef();
-    const {scene, animations} = useGLTF(TranslatorAvatar);
+    const {scene, animations, materials} = useGLTF(TranslatorAvatar);
     const {actions, mixer} = useAnimations(animations,avatarReference);
     const { camera } = useThree();
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+    const animationSpeed = 1.0  ; //User preference will set this value
+    const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Angry":[0,0.75],"Surprise":[0.5,0]};
+    const emotionsRef = useRef(null);
 
     useEffect(() => {
+        setAvatarType("Zac")
+        emotionsRef.current = "Neutral";
+        materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
+        materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
+        materials["Face-CM-Material"].map.needsUpdate = true;
+
         if (!actions["Idle"]) return;
         mixer.clipAction(actions["Idle"].getClip());
         actions["Idle"].reset().play();
-        const sun = new DirectionalLight('rgb(255,255,255)',1);
-        sun.position.set(5,10,7.5);
-        scene.add(sun);
-        scene.add(new AmbientLight(0xffffff,0.75));
     }, [scene,camera]);
 
     useEffect(() => {
-        let animationIndex = [ mixer.clipAction(actions["Idle"].getClip()),null];
-        async function playAnimations (){
-            for (let i = 0; i < signs.length; i++) {
-                const animation = actions[signs[i]];
-                animationIndex[1] = mixer.clipAction(animation.getClip());
-                animationIndex[1].reset();
-                if(animationIndex[0]!==null){
-                    animationIndex[1].fadeIn(0.2).play();
-                    animationIndex[1].crossFadeFrom(animationIndex[0],0.2, false);
+            let animationIndex = [mixer.clipAction(actions["Idle"].getClip()), null];
+            async function playAnimations() {
+                for (let i = 0; i < signs.length; i++) {
+                    const animation = actions[signs[i]];
+                    animationIndex[1] = mixer.clipAction(animation.getClip());
+                    animationIndex[1].reset();
+                    if (animationIndex[0] !== null) {
+                        animationIndex[1].fadeIn(0.2).play();
+                        animationIndex[1].crossFadeFrom(animationIndex[0], 0.2, false);
+                        animationIndex[1].timeScale = animationSpeed;
+                    }
+                    animationIndex[0] = animationIndex[1];
+                    if (signs[i].includes("Pronoun-")) {
+                        setTranslatedWord(signs[i].substring(signs[i].indexOf("-") + 1, signs[i].length));
+                    } else {
+                        setTranslatedWord(signs[i]);
+                    }
+                    await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration / animationSpeed) * 1000));
                 }
-                animationIndex[0] = animationIndex[1];
-                setTranslatedWord(signs[i]);
-                await new Promise(resolve => setTimeout(resolve, animation.getClip().duration * 1000));
+                if (animationIndex[0] !== null) {
+                    animationIndex[0].fadeOut(0.5).stop();
+                    mixer.clipAction(actions["Idle"].getClip());
+                    actions["Idle"].reset().play();
+                    setTranslatedWord("");
+                }
             }
-            if(animationIndex[0]!==null){
-                animationIndex[0].fadeOut(0.5).stop();
-                mixer.clipAction(actions["Idle"].getClip());
-                actions["Idle"].reset().play();
+            playAnimations();
+            return () => {
+                mixer.stopAllAction();
                 setTranslatedWord("");
-            }
-        }
-        playAnimations();
-        return () => {mixer.stopAllAction();};
+            };
     },[signs]);
+
+    function setVisibility(visible) {
+        scene.getObjectByName("Head-F").visible = !visible;
+        scene.getObjectByName("Body-F").visible = !visible;
+        scene.getObjectByName("Body-M").visible = visible;
+        scene.getObjectByName("Head-M").visible = visible;
+        scene.getObjectByName("Hair-CM").visible = false;
+        scene.getObjectByName("Hair-CF").visible = false;
+    }
+
+    function setAvatarType(type) {
+        switch (type) {
+            case "Zac":
+                setVisibility(true);
+                scene.getObjectByName("Hair-CM").visible = true;
+                break;
+            case "Jenny":
+                setVisibility(false);
+                scene.getObjectByName("Hair-CF").visible = true;
+                break;
+        }
+    }
 
     return <>
         <primitive ref={avatarReference} object={scene} position={[-0.5,-2,3]}/>
@@ -100,6 +135,8 @@ export default function AvatarViewport({input,trigger}) {
     return (
         <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
             <Avatar signs={signs}/>
+            <directionalLight color="white" position={[5,10,7.5]} intensity={1}/>
+            <ambientLight color="white" intensity={0.75}/>
         </Canvas>
     );
 }
