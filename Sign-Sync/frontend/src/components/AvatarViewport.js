@@ -17,10 +17,12 @@ function Avatar({signs}) {
     const emotionsRef = useRef(null);
 
     useEffect(() => {
-        emotionsRef.current = "Angry";
+        setAvatarType("Jenny")
+        emotionsRef.current = "Sad";
         materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
         materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
         materials["Face-CM-Material"].map.needsUpdate = true;
+
         if (!actions["Idle"]) return;
         mixer.clipAction(actions["Idle"].getClip());
         actions["Idle"].reset().play();
@@ -59,6 +61,28 @@ function Avatar({signs}) {
                 setTranslatedWord("");
             };
     },[signs]);
+
+    function setVisibility(visible) {
+        scene.getObjectByName("Head-F").visible = !visible;
+        scene.getObjectByName("Body-F").visible = !visible;
+        scene.getObjectByName("Body-M").visible = visible;
+        scene.getObjectByName("Head-M").visible = visible;
+        scene.getObjectByName("Hair-CM").visible = false;
+        scene.getObjectByName("Hair-CF").visible = false;
+    }
+
+    function setAvatarType(type) {
+        switch (type) {
+            case "Zac":
+                setVisibility(true);
+                scene.getObjectByName("Hair-CM").visible = true;
+                break;
+            case "Jenny":
+                setVisibility(false);
+                scene.getObjectByName("Hair-CF").visible = true;
+                break;
+        }
+    }
 
     return <>
         <primitive ref={avatarReference} object={scene} position={[-0.5,-2,3]}/>
