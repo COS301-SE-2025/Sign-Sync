@@ -159,7 +159,6 @@ class AchievementsPage extends React.Component {
         );
       } catch (checkError) {
         console.error("Error checking achievements:", checkError);
-        // Continue even if checking fails - we'll just show existing achievements
       }
 
       // 3. Refresh if new achievements were added

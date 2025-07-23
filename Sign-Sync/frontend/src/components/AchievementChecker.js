@@ -2,6 +2,9 @@ import AchievementsManager from "../components/AchievementsManager";
 
 export default class AchievementChecker {
   static async checkAchievements(userID, totalAchievements) {
+
+    let newAchievements = [];
+
     try {
       if (!AchievementsManager.userID) {
         await AchievementsManager.initialize();
@@ -64,10 +67,6 @@ export default class AchievementChecker {
       }
 
       // Update if new achievements found
-      if (newAchievements.length > 0) {
-        await this.updateAchievementsAPI(userID, [...currentAchievements, ...newAchievements]);
-      }
-
       if (newAchievements.length > 0) {
         // Use manager to update instead of direct API call
         const success = await AchievementsManager.updateAchievements(

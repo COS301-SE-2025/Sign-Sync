@@ -46,10 +46,10 @@ class AchievementsManager {
 
     /**
      * Updates achievements on the server and locally
-     * @param {Array} newAchievements Updated array of achievements
+     * @param {Array} newAchievementsArray Updated array of achievements
      * @returns {Promise<boolean>} Returns true if update was successful
      */
-    static async updateAchievements(newAchievements) {
+    static async updateAchievements(newAchievementsArray) {
     if (!this.userID) {
       console.error("No user ID available");
       return false;
@@ -59,13 +59,13 @@ class AchievementsManager {
       const response = await fetch(`/userApi/achievements/${this.userID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ achievements: newAchievements })
+        body: JSON.stringify({ newAchievements: newAchievementsArray })
       });
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       
       const data = await response.json();
-      this.achievements = data.achievements || newAchievements;
+      this.achievements = data.achievements || newAchievementsArray;
       return true;
     } catch (error) {
       console.error("Update failed:", error);
@@ -75,16 +75,16 @@ class AchievementsManager {
 
     /**
      * Adds a new achievement to the user's achievements
-     * @param {Object} achievement The achievement to add
+     * @param {Object} newAchievementsArray The achievement to add
      * @returns {Promise<boolean>} Returns true if addition was successful
      */
-    static async addAchievement(achievement) {
-        if (!achievement || typeof achievement !== 'object') {
+    static async addAchievement(newAchievementsArray) {
+        if (!newAchievementsArray || typeof newAchievementsArray !== 'object') {
             console.error("Invalid achievement object");
             return false;
         }
 
-        const newAchievements = [...this.achievements, achievement];
+        const newAchievements = [...this.achievements, newAchievementsArray];
         return await this.updateAchievements(newAchievements);
     }
 }

@@ -235,13 +235,13 @@ router.get('/achievements/:userID', async (req, res) => {
  */
 router.put('/achievements/:userID', async (req, res) => {
     const { userID } = req.params;
-    const { achievements } = req.body;
+    const { newAchievements } = req.body;
 
     try {
         // Update in database
         const result = await req.app.locals.userCollection.updateOne(
             { userID: parseInt(userID) },
-            { $set: { achievements } }  // Correct field name
+            { $set: { achievements: newAchievements } }  // Correct field name
         );
 
         if (result.matchedCount === 0) {
