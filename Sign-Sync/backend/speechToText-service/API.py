@@ -47,6 +47,7 @@ from vosk import Model, KaldiRecognizer
 import subprocess
 import json
 import os
+import sys
 
 app = FastAPI()
 
@@ -59,6 +60,15 @@ app.add_middleware(
 )
 
 model = Model("models/vosk-model-small-en-us-0.15")
+
+#Detect if running on Windows or not
+if sys.platform == "win32":
+    #Windows: use local ffmpeg.exe relative path
+    ffmpeg_path = os.path.join(os.path.dirname(__file__), "ffmpeg", "ffmpeg.exe")
+else:
+    #Linux (Docker): ffmpeg is installed globally
+    ffmpeg_path = "ffmpeg"
+
 
 @app.post("/api/upload-audio")
 async def upload_audio(file: UploadFile = File(...)):
@@ -75,7 +85,7 @@ async def upload_audio(file: UploadFile = File(...)):
     #     "-ac", "1", "-ar", "16000", "-f", "s16le", raw_path
     # ], check=True)
 
-    ffmpeg_path = os.path.join(os.path.dirname(__file__), "ffmpeg", "ffmpeg.exe")
+    #ffmpeg_path = os.path.join(os.path.dirname(__file__), "ffmpeg", "ffmpeg.exe")
 
     subprocess.run([
         ffmpeg_path, "-y", "-i", input_path,
