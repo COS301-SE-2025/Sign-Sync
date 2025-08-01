@@ -1,6 +1,9 @@
+# Frontend dockerignore
+
+# Ignore node modules and build artifacts
 node_modules
+build
 dist
-frontend/dist
-npm-debug.log
-Dockerfile
-.dockerignore
+*.log
+.cache
+.git
