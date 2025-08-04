@@ -32,8 +32,17 @@ jobs:
 
       - name: Run Python tests
         run: |
-          if [ -f "tests/" ]; then
-            pytest tests/
+          if [ -f "Sign-Sync/__tests__" ]; then
+            pytest Sign-Sync/__tests__
           else
             echo "No tests directory found. Skipping Python tests."
           fi
+
+      - name: Install node dependencies
+        run: npm install
+        working-directory: ./Sign-Sync
+
+      - name: Run Rejex tests
+        run: npm test
+        working-directory: ./Sign-Sync
+        timeout-minutes: 1
