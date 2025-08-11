@@ -2,8 +2,8 @@ class PreferenceManager
 {
     static preferences = {
         displayMode: 'Light Mode',
-        //preferredAvatar: 'Default',
-        fontSize: 'Medium',
+        preferredAvatar: 'Zac',
+        fontSize: 'Medium'
     };
 
     static async initialize() 

@@ -17,6 +17,7 @@ class SettingsPage extends React.Component
             displayMode: prefs.displayMode || 'Light Mode',
             fontSize: prefs.fontSize || 'Medium',
             email: '',
+            preferredAvatar : prefs.preferredAvatar || 'Zac'
         };
     }
 
@@ -47,16 +48,15 @@ class SettingsPage extends React.Component
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const { displayMode, fontSize } = this.state;
+        const { displayMode, fontSize, preferredAvatar } = this.state;
         
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, fontSize })
+                body: JSON.stringify({ displayMode, fontSize, preferredAvatar})
             });
-
             if(response.ok) 
             {
                 alert("Preferences saved successfully.");
@@ -150,9 +150,9 @@ class SettingsPage extends React.Component
 
                             <SelectField
                                 label="Preferred Avatar"
-                                //value={this.state.preferredAvatar}
+                                value={this.state.preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
-                                options={["Default", "Custom1", "Custom2"]}
+                                options={["Zac", "Jenny"]}
                             />
 
                             <SliderField
