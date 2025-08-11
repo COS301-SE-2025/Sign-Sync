@@ -22,7 +22,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
             console.warn("Text-to-Speech not supported in this browser.");
             return;
         }
-
+        
         if (!text || text === "No hand detected") return;
 
         window.speechSynthesis.cancel();
@@ -172,8 +172,20 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
     }, [gestureMode]);
 
     const changeSound = () => {
-        setSoundOn(sound => !sound);
+        // setSoundOn(sound => !sound);
+
+        if (window.speechSynthesis.speaking)
+        {
+            window.speechSynthesis.cancel();
+
+            setSoundOn(false);
+        }
+        else
+        {
+            speakText(prediction);
+        }
     }
+
     const changeGestureMode = () => {
         setGestureMode(gestureMode => !gestureMode);
     }
@@ -187,7 +199,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
                 {!gestureModeFixed && (<button onClick={changeGestureMode} className="bg-gray-300 p-3.5 border-2 border-black"><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
                 
                 <h1 className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] ">{prediction}</h1>
-                <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
+                <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn ? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
             </div>
         </div>
     );
