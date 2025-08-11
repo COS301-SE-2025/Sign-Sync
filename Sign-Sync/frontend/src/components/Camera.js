@@ -16,6 +16,29 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
     // const [gestureMode, setGestureMode] = useState(true); /////////////////////////////////////////////
     const [gestureMode, setGestureMode] = useState(defaultGestureMode);
 
+    const speakText = (text) => {
+        if (!("speechSynthesis" in window)) 
+        {
+            console.warn("Text-to-Speech not supported in this browser.");
+            return;
+        }
+
+        if (!text || text === "No hand detected") return;
+
+        window.speechSynthesis.cancel();
+
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = "en-US";
+        utter.rate = 1;
+        utter.pitch = 1;
+
+        utter.onstart = () => setSoundOn(true);
+        utter.onend = () => setSoundOn(false);
+        utter.onerror = () => setSoundOn(false);
+
+        window.speechSynthesis.speak(utter);
+    };
+
     useEffect(() => {
         let handLandmarker;
         let animationFrameId;
