@@ -150,7 +150,7 @@ class SettingsPage extends React.Component
 
                             <SelectField
                                 label="Preferred Avatar"
-                                value={this.state.preferredAvatar}
+                                value={preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
                                 options={["Zac", "Jenny"]}
                             />
@@ -160,19 +160,24 @@ class SettingsPage extends React.Component
                                 rightLabel="Large"
                                 description="Font Size"
                                 value={fontSize}
+                                OPTIONS={["Small", "Medium", "Large"]}
                                 onChange={(value) => this.handleChange("fontSize", value)}
                             />
 
                             <SliderField
-                                leftLabel="Speed"
-                                rightLabel="Accuracy"
-                                description="Performance of Application"
+                                leftLabel="Slow"
+                                rightLabel="Fast"
+                                description="Animation Speed"
+                                value={animationSpeed}
+                                OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
+                                onChange={(value) => this.handleChange("animationSpeed", value)}
                             />
 
                             <SliderField
                                 leftLabel="Slow"
                                 rightLabel="Fast"
                                 description="Speed of AI Speech"
+                                OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
                             />
 
                            <div className="mt-10 flex justify-between">
