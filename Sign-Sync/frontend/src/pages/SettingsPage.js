@@ -175,8 +175,8 @@ class SettingsPage extends React.Component
                             />
 
                             <SliderField
-                                leftLabel="Slow"
-                                rightLabel="Fast"
+                                leftLabel="Very Slow"
+                                rightLabel="Very Fast"
                                 description="Speed of AI Speech"
                                 OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
                             />
