@@ -17,6 +17,8 @@ class SettingsPage extends React.Component
             displayMode: prefs.displayMode || 'Light Mode',
             fontSize: prefs.fontSize || 'Medium',
             email: '',
+            preferredAvatar : prefs.preferredAvatar || 'Zac',
+            animationSpeed: prefs.animationSpeed || 1,
         };
     }
 
@@ -47,16 +49,15 @@ class SettingsPage extends React.Component
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const { displayMode, fontSize } = this.state;
+        const { displayMode, fontSize, preferredAvatar, animationSpeed } = this.state;
         
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, fontSize })
+                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed})
             });
-
             if(response.ok) 
             {
                 alert("Preferences saved successfully.");
@@ -125,7 +126,7 @@ class SettingsPage extends React.Component
 
     render() 
     {
-        const {displayMode, fontSize, email } = this.state;
+        const {displayMode, fontSize, email, preferredAvatar, animationSpeed} = this.state;
 
         return (
             <section className="flex h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
@@ -150,9 +151,9 @@ class SettingsPage extends React.Component
 
                             <SelectField
                                 label="Preferred Avatar"
-                                //value={this.state.preferredAvatar}
+                                value={preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
-                                options={["Default", "Custom1", "Custom2"]}
+                                options={["Zac", "Jenny"]}
                             />
 
                             <SliderField
@@ -160,19 +161,24 @@ class SettingsPage extends React.Component
                                 rightLabel="Large"
                                 description="Font Size"
                                 value={fontSize}
+                                OPTIONS={["Small", "Medium", "Large"]}
                                 onChange={(value) => this.handleChange("fontSize", value)}
-                            />
-
-                            <SliderField
-                                leftLabel="Speed"
-                                rightLabel="Accuracy"
-                                description="Performance of Application"
                             />
 
                             <SliderField
                                 leftLabel="Slow"
                                 rightLabel="Fast"
+                                description="Animation Speed"
+                                value={animationSpeed}
+                                OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
+                                onChange={(value) => this.handleChange("animationSpeed", value)}
+                            />
+
+                            <SliderField
+                                leftLabel="Very Slow"
+                                rightLabel="Very Fast"
                                 description="Speed of AI Speech"
+                                OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
                             />
 
                            <div className="mt-10 flex justify-between">
