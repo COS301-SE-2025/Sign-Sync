@@ -17,7 +17,8 @@ class SettingsPage extends React.Component
             displayMode: prefs.displayMode || 'Light Mode',
             fontSize: prefs.fontSize || 'Medium',
             email: '',
-            preferredAvatar : prefs.preferredAvatar || 'Zac'
+            preferredAvatar : prefs.preferredAvatar || 'Zac',
+            animationSpeed: prefs.animationSpeed || 1,
         };
     }
 
@@ -48,14 +49,14 @@ class SettingsPage extends React.Component
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const { displayMode, fontSize, preferredAvatar } = this.state;
+        const { displayMode, fontSize, preferredAvatar, animationSpeed } = this.state;
         
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, fontSize, preferredAvatar})
+                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed})
             });
             if(response.ok) 
             {
@@ -125,7 +126,7 @@ class SettingsPage extends React.Component
 
     render() 
     {
-        const {displayMode, fontSize, email } = this.state;
+        const {displayMode, fontSize, email, preferredAvatar, animationSpeed} = this.state;
 
         return (
             <section className="flex h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">

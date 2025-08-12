@@ -4,6 +4,7 @@ import { useGLTF, useAnimations, Text } from '@react-three/drei';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 import PreferenceManager from "./PreferenceManager";
 import * as THREE from "three";
+import preferenceManager from "./PreferenceManager";
 
 function Avatar({signs}) {
     const avatarReference = useRef();
@@ -12,10 +13,12 @@ function Avatar({signs}) {
     const { camera } = useThree();
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
-    const animationSpeed = 1.0  ; //User preference will set this value
+    const animationSpeed = PreferenceManager.getPreferences().animationSpeed;
     const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Angry":[0,0.75],"Surprise":[0.5,0]};
     const emotionsRef = useRef(null);
 
+    const speeds = {"Very Slow": 0.75,"Slow":1,"Normal":1.5,"Fast":2.5,"Very Fast":5};
+    console.log("Animation Speed: ", speeds[animationSpeed]);
     useEffect(() => {
         setAvatarType(PreferenceManager.getPreferences().preferredAvatar);
         emotionsRef.current = "Neutral";
@@ -39,7 +42,7 @@ function Avatar({signs}) {
                 if (animationIndex[0] !== null) {
                     animationIndex[1].fadeIn(0.2).play();
                     animationIndex[1].crossFadeFrom(animationIndex[0], 0.2, false);
-                    animationIndex[1].timeScale = animationSpeed;
+                    animationIndex[1].timeScale = speeds[animationSpeed];
                 }
                 animationIndex[0] = animationIndex[1];
                 if (signs[i].includes("Pronoun-")) {
@@ -47,7 +50,7 @@ function Avatar({signs}) {
                 } else {
                     setTranslatedWord(signs[i]);
                 }
-                await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration / animationSpeed) * 1000));
+                await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration / speeds[animationSpeed]) * 1000));
             }
             if (animationIndex[0] !== null) {
                 animationIndex[0].fadeOut(0.5).stop();

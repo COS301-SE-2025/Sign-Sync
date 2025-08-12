@@ -3,6 +3,7 @@ class PreferenceManager
     static preferences = {
         displayMode: 'Light Mode',
         preferredAvatar: 'Zac',
+        animationSpeed: 1,
         fontSize: 'Medium'
     };
 
