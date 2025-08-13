@@ -81,7 +81,7 @@ class PractiseAlphabetPage extends React.Component
     const isLastLetter = currentIndex === alphabet.length - 1;
 
     return (
-      <div className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"} flex h-screen`}>
+      <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
         <div className="w-64 flex-shrink-0">
             <SideNavbar />
         </div>
@@ -91,19 +91,20 @@ class PractiseAlphabetPage extends React.Component
             {!showCongratulations ? (
                 <>
                 <header className="text-center space-y-2">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold">Practise the Alphabet</h1>
-                    <p className="text-lg sm:text-xl">
+                    <h1 className="text-5xl font-extrabold">Practise the Alphabet</h1>
+                    <p className="text-3xl">
                         Please make the sign for: <span className="text-indigo-600 font-bold">{currentLetter.toUpperCase()}</span>
                     </p>
                     </header>
 
                 <section className="flex justify-center w-full">
-                    <div className="w-[90%] sm:w-[70%] md:w-[60%] max-w-md aspect-square rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
+                    <div className="w-auto rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
                         <Camera
                           defaultGestureMode={false}
                           gestureModeFixed={true}
                           onPrediction={this.handlePrediction}
-                          className="w-full h-full object-cover"
+                          width={700}
+                          height={450}
                         />
                     </div>
                     </section>

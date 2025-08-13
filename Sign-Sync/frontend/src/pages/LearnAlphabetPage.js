@@ -80,7 +80,6 @@ class LearnAlphabetPage extends React.Component
                 </div>
 
                 <div className="flex-1 h-screen overflow-y-auto">
-                    {/* <main className="flex flex-col items-center w-full max-w-4xl mx-auto p-6 sm:p-8 md:p-12 space-y-12"> */}
                     <main className="flex flex-col items-center w-full p-6 sm:p-8 md:p-12 space-y-12">
                         {!showCongratulations ? (
                             <>
@@ -106,7 +105,7 @@ class LearnAlphabetPage extends React.Component
                                             gestureModeFixed={true}
                                             onPrediction={this.handlePrediction}
                                             width={500}
-                                            height={450}
+                                            height={400}
                                         />
                                     </div>
                                 </section>

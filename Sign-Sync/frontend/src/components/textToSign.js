@@ -80,7 +80,7 @@ class TextToSign extends React.Component
         const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
         //decide avatar size based on compact mode
-        const avatarHeight = this.props.compact ? 450 : 600;
+        const avatarHeight = this.props.compact ? 400 : 600;
         const avatarWidth = this.props.compact ? 500 : 800;
         
         return (
