@@ -90,7 +90,7 @@ function Avatar({signs}) {
     </>;
 }
 
-export default function AvatarViewport({input,trigger}) {
+export default function AvatarViewport({input,trigger, height='65 vh', width='130vh'}) {
     const [signs,setSigns] = useState([]);
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
@@ -133,7 +133,7 @@ export default function AvatarViewport({input,trigger}) {
     }, [input,trigger]);
 
     return (
-        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '65vh',width:'130vh', background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
+        <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: height, width: width, background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
             <Avatar signs={signs}/>
             <directionalLight color="white" position={[5,10,7.5]} intensity={1}/>
             <ambientLight color="white" intensity={0.75}/>

@@ -79,11 +79,15 @@ class TextToSign extends React.Component
 
         const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
+        //decide avatar size based on compact mode
+        const avatarHeight = this.props.compact ? "40vh" : "65vh";
+        const avatarWidth = this.props.compact ? "60vh" : "130vh";
+        
         return (
 
             <div className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}>
                 <div className={`${isDarkMode ? "bg-gray-800" : "bg-white"} p-2 rounded-lg mb-2 items-center mx-auto`}>
-                    <AvatarViewport input={this.state.textToBeSent} trigger={this.state.timestamp}/>
+                    <AvatarViewport input={this.state.textToBeSent} trigger={this.state.timestamp} height={avatarHeight} width={avatarWidth}/>
                 </div>
                 <div className={`flex items-center border rounded-lg px-4 py-2 ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-black"}`}>
                     <button onClick={this.changeMic} className="bg-gray-300 p-3.5 border-2 border-black"><img src={mic? MicOn : MicOff} className="w-8 h-8" alt={"Speaker"}/></button>

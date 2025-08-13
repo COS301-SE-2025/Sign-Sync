@@ -92,7 +92,7 @@ class LearnAlphabetPage extends React.Component
                                 </header>
 
                                 <section className="w-full flex flex-col items-center space-y-4">
-                                    <TextToSign key={currentLetter} sentence={currentLetter}/>
+                                    <TextToSign key={currentLetter} sentence={currentLetter} compact/>
                                 </section>
 
                                 <section className="w-full flex justify-center">
