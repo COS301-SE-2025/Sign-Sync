@@ -91,18 +91,23 @@ class LearnAlphabetPage extends React.Component
                                     </p>
                                 </header>
 
-                                <section className="w-full flex flex-col items-center space-y-4">
-                                    <TextToSign key={currentLetter} sentence={currentLetter} compact/>
-                                </section>
+                                <section className="w-full flex items-center justify-center space-x-6">
+                                    
+                                    {/* avatar side */}
+                                    <div className="flex-1 flex justify-center border-r border-gray-400 pr-6">
+                                        <TextToSign key={currentLetter} sentence={currentLetter} compact />
+                                    </div>
 
-                                <section className="w-full flex justify-center">
-                                    <div className="w-[90%] sm:w-[70%] md:w-[60%] max-w-md aspect-square rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
-                                        <Camera
-                                            defaultGestureMode={false}
-                                            gestureModeFixed={true}
-                                            onPrediction={this.handlePrediction}
-                                            className="w-full h-full object-cover"
-                                        />
+                                    {/* camera side */}
+                                    <div className="flex-1 flex justify-center pl-6">
+                                        <div className="w-[90%] sm:w-[70%] md:w-[60%] max-w-md aspect-square rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
+                                            <Camera
+                                                defaultGestureMode={false}
+                                                gestureModeFixed={true}
+                                                onPrediction={this.handlePrediction}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
                                     </div>
                                 </section>
 
