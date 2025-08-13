@@ -80,34 +80,34 @@ class LearnAlphabetPage extends React.Component
                 </div>
 
                 <div className="flex-1 h-screen overflow-y-auto">
-                    <main className="flex flex-col items-center w-full max-w-4xl mx-auto p-6 sm:p-8 md:p-12 space-y-12">
+                    {/* <main className="flex flex-col items-center w-full max-w-4xl mx-auto p-6 sm:p-8 md:p-12 space-y-12"> */}
+                    <main className="flex flex-col items-center w-full p-6 sm:p-8 md:p-12 space-y-12">
                         {!showCongratulations ? (
                             <>
                                 <header className="text-center space-y-2">
-                                    <h1 className="text-3xl font-extrabold">Learn the Alphabet</h1>
-                                    <p className="text-lg">
+                                    <h1 className="text-5xl font-extrabold">Learn the Alphabet</h1>
+                                    <p className="text-3xl">
                                         Current letter:{" "}
                                         <span className="text-indigo-600 font-bold">{currentLetter.toUpperCase()}</span>
                                     </p>
                                 </header>
 
-                                <section className="w-full flex items-center justify-center space-x-6">
+                                <section className="w-full flex justify-center items-center space-x-6">
                                     
                                     {/* avatar side */}
-                                    <div className="flex-1 flex justify-center border-r border-gray-400 pr-6">
+                                    <div className="flex-none border-r border-gray-400 pr-10">
                                         <TextToSign key={currentLetter} sentence={currentLetter} compact />
                                     </div>
 
                                     {/* camera side */}
-                                    <div className="flex-1 flex justify-center pl-6">
-                                        <div className="w-[90%] sm:w-[70%] md:w-[60%] max-w-md aspect-square rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
-                                            <Camera
-                                                defaultGestureMode={false}
-                                                gestureModeFixed={true}
-                                                onPrediction={this.handlePrediction}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
+                                    <div className="flex-none" style={{ width: '500px' }}>
+                                        <Camera
+                                            defaultGestureMode={false}
+                                            gestureModeFixed={true}
+                                            onPrediction={this.handlePrediction}
+                                            width={500}
+                                            height={450}
+                                        />
                                     </div>
                                 </section>
 

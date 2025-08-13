@@ -8,7 +8,7 @@ import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
 import {temp} from "three/src/Three.TSL";
 
-const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction} ) => {
+const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction, width=700, height=600} ) => {
     const videoRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [prediction, setPrediction] = useState(null);
@@ -157,7 +157,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
     return (
         <div>
             <div className="bg-gray-200 p-2 rounded-lg mb-2">
-                <video ref={videoRef} autoPlay playsInline width="640" height="400" />
+                <video ref={videoRef} autoPlay playsInline className="object-cover" style={{maxWidth: `${width}px`, height: `${height}px`, width: '100%'}}/>
             </div>
             <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
                 
