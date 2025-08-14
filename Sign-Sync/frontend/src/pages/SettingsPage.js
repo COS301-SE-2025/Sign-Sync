@@ -135,7 +135,7 @@ class SettingsPage extends React.Component
                 </div>
 
                 {/* Right: Main Settings */}
-                <div className="flex-1 overflow-y-auto flex justify-center items-start px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
+                <div className="flex-1 overflow-y-auto flex justify-center items-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
                     <div className="w-full max-w-lg bg-white dark:bg-gray-800 p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300">
                         
                         <SettingsRow title="Email" value={email} className="mt-4" />
@@ -161,18 +161,6 @@ class SettingsPage extends React.Component
                                 description="Font Size"
                                 value={fontSize}
                                 onChange={(value) => this.handleChange("fontSize", value)}
-                            />
-
-                            <SliderField
-                                leftLabel="Speed"
-                                rightLabel="Accuracy"
-                                description="Performance of Application"
-                            />
-
-                            <SliderField
-                                leftLabel="Slow"
-                                rightLabel="Fast"
-                                description="Speed of AI Speech"
                             />
 
                            <div className="mt-10 flex justify-between">
