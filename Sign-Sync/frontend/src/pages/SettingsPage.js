@@ -139,7 +139,7 @@ class SettingsPage extends React.Component
                 </div>
 
                 {/* Right: Main Settings */}
-                <div className="flex-1 overflow-y-auto flex justify-center items-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
+                <div className="flex-1 overflow-y-auto relative flex justify-center items-center px-20 pt-14 pb-14 max-md:px-5 max-md:pt-12">
                     
                     
                     {/* Blurred main content when no user */}

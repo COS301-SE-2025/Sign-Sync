@@ -100,9 +100,9 @@ class PractiseAlphabetPage extends React.Component
             <SideNavbar />
         </div>
       
-        {/* Blur when not logged in */}
-        <div className="flex-1 h-screen overflow-y-auto">
+        <div className="flex-1 h-screen overflow-y-auto relative">
             
+            {/* Blur when not logged in */}
             <div className={!this.state.user ? "blur-sm" : ""}>
               <main className="flex flex-col flex-1 items-center w-full max-w-4xl mx-auto p-6 sm:p-8 md:p-12 space-y-8">
                 {!showCongratulations ? (
