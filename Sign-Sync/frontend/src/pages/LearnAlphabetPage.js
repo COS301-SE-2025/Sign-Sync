@@ -132,7 +132,7 @@ class LearnAlphabetPage extends React.Component
 
                                     <section className="flex flex-col items-center space-y-4">
                                         {success && (
-                                            <p className="text-green-500 font-semibold text-lg">✔ Well Done!</p>
+                                            <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
                                         )}
 
                                         <button
