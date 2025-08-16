@@ -85,8 +85,8 @@ class TextToSign extends React.Component
         }
 
         //decide avatar size based on compact mode
-        const avatarHeight = this.props.compact ? 400 : 600;
-        const avatarWidth = this.props.compact ? 500 : 800;
+        const avatarWidth = this.props.compact ? 500 : 700;
+        const avatarHeight = this.props.compact ? 400 : 500;
         
         return (
             <div className= 'p-2 rounded-lg' style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>

@@ -121,7 +121,7 @@ class PractiseAlphabetPage extends React.Component
                               gestureModeFixed={true}
                               onPrediction={this.handlePrediction}
                               width={700}
-                              height={450}
+                              height={400}
                             />
                         </div>
                         </section>

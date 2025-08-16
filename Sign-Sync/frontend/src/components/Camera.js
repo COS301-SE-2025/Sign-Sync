@@ -10,7 +10,7 @@ import {temp} from "three/src/Three.TSL";
 
 import PreferenceManager from "./PreferenceManager";
 
-const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction, width=700, height=600} ) => {
+const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction, width=700, height=500} ) => {
     const videoRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [prediction, setPrediction] = useState(null);
