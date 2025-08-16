@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 class LoginPage extends React.Component 
 {
@@ -70,21 +71,25 @@ class LoginPage extends React.Component
                 
                 localStorage.setItem('user', JSON.stringify(data.user));
 
-                alert("Login successful!, redirecting to Translator page...");
+                toast.success("Login successful! Redirecting to Translator page...");
 
-                window.location.href = '/translator';
+                setTimeout(() => { window.location.href = '/translator'; }, 1200);
             }
             else
             {
                 const errorData = await response.json();
-                alert(`Login failed: ${errorData.message}`);
+
+                toast.error(`Login failed: ${errorData.message}`);
+
                 console.error("Login error:", errorData);
             }
         }
         catch(error)
         {
             console.error("Error during Login:", error);
-            alert("An error occurred during Login. Please try again.");
+
+            toast.error("An error occurred during Login. Please try again.");
+
         }
     };
 
