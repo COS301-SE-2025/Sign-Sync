@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 class RegistrationPage extends React.Component 
 {
@@ -78,21 +79,21 @@ class RegistrationPage extends React.Component
             {
                 await response.json();
                 
-                alert("Registration successful!, redirecting to login page...");
+                toast.success("Registration successful!, redirecting to login page...");
 
-                window.location.href = '/login';
+                setTimeout(() => { window.location.href = '/login' }, 1200);
             }
             else
             {
                 const errorData = await response.json();
-                alert(`Registration failed: ${errorData.message}`);
+                toast.error(`Registration failed: ${errorData.message}`);
                 console.error("Registration error:", errorData);
             }
         }
         catch(error)
         {
             console.error("Error during registration:", error);
-            alert("An error occurred during registration. Please try again.");
+            toast.error("An error occurred during registration. Please try again.");
         }
     };
 
