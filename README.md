@@ -68,9 +68,9 @@ This repository follows a structured branching strategy:
 - `main` - The stable production-ready branch
 - `develop` - Integration branch for ongoing development work
 - `develop/frontend/` - Integration branch for frontend-specific features.
-- `develop/frontend/feature/*` - Short-lived branches for individual frontend features.
+- `develop/frontend/feature` - Short-lived branches for individual frontend features.
 - `develop/backend/` - Integration branch for backend-specific features.
-- `develop/backend/feature/*` - Short-lived branches for individual backend features.
+- `develop/backend/feature` - Short-lived branches for individual backend features.
 - `release/*` - Temporary branches for final testing before production.
 - `hotfix/*` - Emergency branches for critical production bug fixes.
 
