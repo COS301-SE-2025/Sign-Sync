@@ -12,7 +12,8 @@ class PractiseAlphabetPage extends React.Component
     this.initialState = {
       currentIndex: 0,
       //alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
-      alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"],
+      // alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"],
+      alphabet: ["a"],
       success: false,
       completedLetters: new Set(),
       showCongratulations: false,
@@ -84,7 +85,10 @@ class PractiseAlphabetPage extends React.Component
 
   handleReset = () => 
   {
-    this.setState({ ...this.initialState });
+    this.setState((prevState) => ({
+        ...this.initialState,
+        user: prevState.user,
+    }));
   };
 
   render() 
@@ -95,7 +99,9 @@ class PractiseAlphabetPage extends React.Component
     const isLastLetter = currentIndex === alphabet.length - 1;
 
     return (
-      <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
+      <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
+                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
+                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
         <div className="w-64 flex-shrink-0">
             <SideNavbar />
         </div>
@@ -108,9 +114,9 @@ class PractiseAlphabetPage extends React.Component
                 {!showCongratulations ? (
                     <>
                     <header className="text-center space-y-2">
-                        <h1 className="text-5xl font-extrabold">Practise the Alphabet</h1>
-                        <p className="text-3xl">
-                            Please make the sign for: <span className="text-indigo-600 font-bold">{currentLetter.toUpperCase()}</span>
+                        <h1 className="text-5xl font-extrabold text-white">Practise the Alphabet</h1>
+                        <p className="text-3xl text-white">
+                            Please make the sign for: <span className="text-red-600 font-bold">{currentLetter.toUpperCase()}</span>
                         </p>
                         </header>
 
@@ -169,17 +175,20 @@ class PractiseAlphabetPage extends React.Component
                     </section>
                     </>
                 ) : (
-                    <section className="text-center space-y-6">
-                    <h2 className="text-4xl font-bold text-green-600">
-                        🎉 Congratulations! You have signed all the letters correctly! 🎉
-                    </h2>
-                    <button
-                        onClick={this.handleReset}
-                        className="text-indigo-600 underline text-xl hover:text-indigo-800 transition"
-                    >
-                        Back
-                    </button>
-                    </section>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+                      <section className="flex flex-col items-center justify-center space-y-6 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg max-w-lg text-center">
+                        <h2 className="text-4xl font-bold text-green-600">
+                          🎉 Congratulations! You have signed all the letters correctly! 🎉
+                        </h2>
+
+                        <button
+                          onClick={this.handleReset}
+                          className="px-6 py-3 bg-indigo-600 text-white rounded-lg text-xl font-semibold hover:bg-indigo-700 transition-colors shadow-md"
+                        >
+                          Back
+                        </button>
+                      </section>
+                    </div>
                 )}
               </main>
             </div>

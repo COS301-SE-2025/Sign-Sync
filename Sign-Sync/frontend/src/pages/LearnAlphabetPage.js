@@ -13,7 +13,8 @@ class LearnAlphabetPage extends React.Component
         this.initialState = {
             currentIndex: 0,
             // alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
-            alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"],
+            //alphabet: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"],
+            alphabet: ["a"],
             success: false,
             completedLetters: new Set(),
             showCongratulations: false,
@@ -77,7 +78,10 @@ class LearnAlphabetPage extends React.Component
 
     handleReset = () => 
     {
-        this.setState({ ...this.initialState });
+        this.setState((prevState) => ({
+            ...this.initialState,
+            user: prevState.user,
+        }));
     };
 
     render() 
@@ -153,17 +157,20 @@ class LearnAlphabetPage extends React.Component
                                     </section>
                                 </>
                             ) : (
-                                <section className="text-center space-y-6">
-                                    <h2 className="text-4xl font-bold text-green-600">
-                                        🎉 Congratulations! You have signed all the letters correctly! 🎉
-                                    </h2>
-                                    <button
-                                        onClick={this.handleReset}
-                                        className="text-indigo-600 underline text-xl hover:text-indigo-800 transition"
-                                    >
-                                        Start Again
-                                    </button>
-                                </section>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+                                    <section className="flex flex-col items-center justify-center space-y-6 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg max-w-lg text-center">
+                                        <h2 className="text-4xl font-bold text-green-600">
+                                            🎉 Congratulations! You have signed all the letters correctly! 🎉
+                                        </h2>
+
+                                        <button
+                                            onClick={this.handleReset}
+                                            className="px-6 py-3 bg-indigo-600 text-white rounded-lg text-xl font-semibold hover:bg-indigo-700 transition-colors shadow-md"
+                                        >
+                                            Start Again
+                                        </button>
+                                    </section>
+                                </div>
                             )}
                         </main>
                     </div>
