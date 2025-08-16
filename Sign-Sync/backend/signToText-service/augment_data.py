@@ -160,3 +160,50 @@ def apply_hand_occlusion(X_seq):
     out[t0:t1, j_start:j_end, :C_XYZ] = 0.0
     out[t0:t1, j_start:j_end, 3]      = 0.0
     return out
+
+def augment_one(X_seq):
+    x = X_seq
+    x = random_time_warp(x)
+    x = random_frame_dropout_resample(x)
+    x = random_jitter_xyz(x)
+    x = random_small_z_rotation(x)
+    if rng.random() < OCCLUSION_PROB:
+        x = apply_hand_occlusion(x)
+    return x.astype(np.float32)
+
+
+def main():
+    X, y, signers, paths = load_train()
+    N, T, j, c = X.shape
+    assert j == J and c == C, f"Expected J={J}, C={C}. Got {X.shape}"
+
+    if AUG_FACTOR <= 0:
+        print("[INFO] AUG_FACTOR <= 0; just copying originals to OUT_PATH")
+        save_out(X, y, signers, paths)
+        return
+
+    aug_X_list = []
+    aug_y_list = []
+    aug_signers = []
+    aug_paths = []
+
+    print(f"Augmenting {N} samples with factor {AUG_FACTOR}...")
+    for k in range(AUG_FACTOR):
+        X_aug_k = np.empty_like(X)
+        for i in range(N):
+            X_aug_k[i] = augment_one(X[i])
+        aug_X_list.append(X_aug_k)
+        aug_y_list.append(y.copy())
+        # mark provenance (optional): append suffix to paths to indicate augmentation
+        aug_signers.append(signers.copy())
+        aug_paths.append(np.array([f"{p}::aug{k+1}" for p in paths], dtype=object))
+
+    X_aug = np.concatenate([X] + aug_X_list, axis=0)
+    y_aug = np.concatenate([y] + aug_y_list, axis=0)
+    signers_aug = np.concatenate([signers] + aug_signers, axis=0)
+    paths_aug = np.concatenate([paths] + aug_paths, axis=0)
+
+    save_out(X_aug, y_aug, signers_aug, paths_aug)
+
+if __name__ == "__main__":
+    main()
