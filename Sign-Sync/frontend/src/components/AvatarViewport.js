@@ -4,6 +4,7 @@ import { useGLTF, useAnimations, Text } from '@react-three/drei';
 import TranslatorAvatar from '../assets/3DModels/Avatar.glb';
 import PreferenceManager from "./PreferenceManager";
 import * as THREE from "three";
+import { toast } from "react-toastify";
 
 function Avatar({signs}) {
     const avatarReference = useRef();
@@ -115,13 +116,13 @@ export default function AvatarViewport({input,trigger, height, width}) {
                         }
                     } else {
                         const errorData = await response.json();
-                        alert(`Translation failed: ${errorData.message}`);
+                        toast.error(`Translation failed: ${errorData.message}`);
                         console.error("Translation error:", errorData);
                     }
                 }catch(error)
                 {
                     console.error("Error during Translation:", error);
-                    alert("An error occurred during Translation. Please try again.");
+                    toast.error("An error occurred during Translation. Please try again.");
                 }
             }
             setSigns(signs);

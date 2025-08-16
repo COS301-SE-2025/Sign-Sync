@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { FaChevronDown } from "react-icons/fa";
 //import topBtn from "../assets/sideNav-topButton.png";
@@ -36,9 +37,9 @@ class SideNavbar extends React.Component
     localStorage.removeItem('user');
     this.setState({ isLoggedIn: false });
 
-    alert("Logout successful!, redirecting to Splash page...");
+    toast.success("Logout successful!, redirecting to Splash page...");
 
-    window.location.href = '/';
+    setTimeout(() => { window.location.href = '/' }, 1200);
   }
 
   toggleEducation = () =>

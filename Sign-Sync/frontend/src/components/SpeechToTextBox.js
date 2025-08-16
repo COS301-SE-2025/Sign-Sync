@@ -70,6 +70,7 @@
 
 
 import React, { useState, useRef } from 'react';
+import { toast } from "react-toastify";
 
 import PreferenceManager from './PreferenceManager';
 
@@ -117,7 +118,7 @@ const SpeechToTextBox = ({onSpeechInput}) => {
       setRecording(true);
     } catch (err) {
       console.error('Microphone error:', err);
-      alert('Please allow microphone access.');
+      toast.error('Please allow microphone access.');
     }
   };
 
