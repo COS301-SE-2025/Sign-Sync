@@ -181,3 +181,73 @@ def apply_norm(X, mean, std, n_xyz_channels=3):
     Y = X.copy()
     Y[..., :n_xyz_channels] = (Y[..., :n_xyz_channels] - mean) / std
     return Y
+
+def load_split(csv_path):
+    rows = load_csv(csv_path)
+    paths = [str((DATA_DIR / p).as_posix()) for p, _, _ in rows]
+    labels = [lab for _, lab, _ in rows]
+    signers = [sg for _, _, sg in rows]
+    return paths, labels, signers
+
+def process_split(paths, labels, label_map):
+    Xs, ys, keep_paths = [], [], []
+    for p, lab in zip(paths, labels):
+        try:
+            X = process_clip(p)   # [T,J,C]
+            Xs.append(X)
+            ys.append(label_map[lab])
+            keep_paths.append(p)
+        except Exception as e:
+            print(f"[WARN] Skipping {p}: {e}", file=sys.stderr)
+    Xs = np.stack(Xs, axis=0) if Xs else np.zeros((0, T, len(POSE_KEEP)+21+21, 4 if ADD_MASK_CHANNEL else 3), dtype=np.float32)
+    ys = np.array(ys, dtype=np.int64)
+    return Xs, ys, keep_paths
+
+def save_split(fname, X, y, signers, paths):
+    np.savez_compressed(fname, X=X.astype(np.float32), y=y, signers=np.array(signers), paths=np.array(paths))
+
+def main():
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Load splits
+    train_paths, train_labels, train_signers = load_split(SPLITS_DIR / "train.csv")
+    val_paths,   val_labels,   val_signers   = load_split(SPLITS_DIR / "val.csv")
+    test_paths,  test_labels,  test_signers  = load_split(SPLITS_DIR / "test.csv")
+
+    # Build label map from ALL labels (order is sorted)
+    label_map = build_label_map(train_labels + val_labels + test_labels)
+
+    # Process splits (raw normalization: center/scale/rotate only)
+    print("Processing train...")
+    Xtr, ytr, keep_train_paths = process_split(train_paths, train_labels, label_map)
+    print("Processing val...")
+    Xva, yva, keep_val_paths   = process_split(val_paths,   val_labels,   label_map)
+    print("Processing test...")
+    Xte, yte, keep_test_paths  = process_split(test_paths,  test_labels,  label_map)
+
+    # Compute mean/std on TRAIN only (XYZ channels)
+    mean, std = compute_mean_std(Xtr, n_xyz_channels=3)
+
+    # Apply normalization to all splits
+    Xtr_n = apply_norm(Xtr, mean, std, n_xyz_channels=3)
+    Xva_n = apply_norm(Xva, mean, std, n_xyz_channels=3)
+    Xte_n = apply_norm(Xte, mean, std, n_xyz_channels=3)
+
+    # Save outputs
+    with open(OUT_DIR / "label_map.json", "w") as f:
+        json.dump(label_map, f, indent=2)
+
+    np.savez_compressed(OUT_DIR / "normalization_params.npz", mean=mean, std=std,
+                        config=np.array([T, len(POSE_KEEP)+21+21, 4 if ADD_MASK_CHANNEL else 3]))
+
+    save_split(OUT_DIR / "train.npz", Xtr_n, ytr, train_signers, keep_train_paths)
+    save_split(OUT_DIR / "val.npz",   Xva_n, yva, val_signers,   keep_val_paths)
+    save_split(OUT_DIR / "test.npz",  Xte_n, yte, test_signers,  keep_test_paths)
+
+    print("✅ Done!")
+    print(f"Saved: {OUT_DIR/'train.npz'}, {OUT_DIR/'val.npz'}, {OUT_DIR/'test.npz'}")
+    print(f"Also wrote: {OUT_DIR/'label_map.json'}, {OUT_DIR/'normalization_params.npz'}")
+    print(f"Shapes: train {Xtr_n.shape}, val {Xva_n.shape}, test {Xte_n.shape}")
+
+if __name__ == "__main__":
+    main()
