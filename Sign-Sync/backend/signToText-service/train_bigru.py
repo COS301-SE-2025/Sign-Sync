@@ -138,3 +138,75 @@ def evaluate(model, dl, criterion):
     acc = accuracy_score(gts, preds) if preds.size else 0.0
     f1  = f1_score(gts, preds, average="macro") if preds.size else 0.0
     return total_loss / max(1, total_n), acc, f1, preds, gts
+
+def main():
+    print(f"Device: {DEVICE}")
+    train_dl, val_dl, meta, ytr = to_loaders(TRAIN_PATH, VAL_PATH, BATCH_SIZE)
+    num_classes = meta["num_classes"]
+    input_dim = meta["F"]
+
+    print(f"Input: T={meta['T']}  J={meta['J']}  C={meta['C']}  F={input_dim}  classes={num_classes}")
+
+    model = BiGRUClassifier(
+        input_dim=input_dim,
+        hidden=GRU_HIDDEN,
+        layers=GRU_LAYERS,
+        num_classes=num_classes,
+        dropout=DROPOUT,
+    ).to(DEVICE)
+
+    # weighted CE for class imbalance
+    weights = class_weights_from_labels(ytr)
+    criterion = nn.CrossEntropyLoss(weight=weights)
+    opt = torch.optim.AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
+
+    best_val = float("inf")
+    best_epoch = -1
+    ckpt_path = CKPT_DIR / "bigru_best.pt"
+    patience = PATIENCE
+    for epoch in range(1, EPOCHS + 1):
+        t0 = time.time()
+        tr_loss = train_one_epoch(model, train_dl, criterion, opt)
+        va_loss, va_acc, va_f1, _, _ = evaluate(model, val_dl, criterion)
+        dt = time.time() - t0
+        print(f"Epoch {epoch:02d} | train_loss={tr_loss:.4f}  val_loss={va_loss:.4f}  val_acc={va_acc:.4f}  val_f1={va_f1:.4f}  ({dt:.1f}s)")
+
+        if va_loss + 1e-6 < best_val:
+            best_val = va_loss
+            best_epoch = epoch
+            torch.save({"model": model.state_dict(), "meta": meta}, ckpt_path)
+            patience = PATIENCE
+            print(f"  ↳ new best, saved to {ckpt_path}")
+        else:
+            patience -= 1
+            if patience == 0:
+                print(f"Early stopping at epoch {epoch} (best epoch {best_epoch}, val_loss={best_val:.4f})")
+                break
+
+    # ---------- Final test ----------
+    # reload best
+    ckpt = torch.load(ckpt_path, map_location=DEVICE)
+    model.load_state_dict(ckpt["model"])
+
+    # test loader (reuse preprocessing)
+    Xte, yte = load_npz_dataset(TEST_PATH)
+    if not USE_MASK:
+        Xte = Xte[..., :3]
+    Nte, T, J, C = Xte.shape
+    Xte = Xte.reshape(Nte, T, J*C)
+    test_dl = DataLoader(TensorDataset(torch.from_numpy(Xte), torch.from_numpy(yte)), batch_size=BATCH_SIZE, shuffle=False)
+
+    test_loss, test_acc, test_f1, preds, gts = evaluate(model, test_dl, criterion)
+    print("\n=== TEST RESULTS ===")
+    print(f"loss={test_loss:.4f}  acc={test_acc:.4f}  macro-F1={test_f1:.4f}")
+
+    # human-readable label names
+    with open(LABEL_MAP, "r") as f:
+        label_map = json.load(f)
+    id2lab = {v: k for k, v in label_map.items()}
+    target_names = [id2lab[i] for i in range(len(id2lab))]
+    print("\nPer-class report (macro avg at bottom):")
+    print(classification_report(gts, preds, target_names=target_names, digits=3))
+
+if __name__ == "__main__":
+    main()
