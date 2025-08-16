@@ -4,6 +4,7 @@ import SettingsRow from "../components/SettingsRow";
 import SelectField from "../components/SelectField";
 import SliderField from "../components/SliderField";
 import PreferenceManager from "../components/PreferenceManager";
+import { toast } from "react-toastify";
 
 class SettingsPage extends React.Component 
 {
@@ -62,19 +63,19 @@ class SettingsPage extends React.Component
 
             if(response.ok) 
             {
-                alert("Preferences saved successfully.");
+                toast.success("Preferences saved successfully.");
             } 
             else 
             {
                 const data = await response.json();
 
-                alert("Failed to save preferences: " + data.message);
+                toast.error("Failed to save preferences: " + data.message);
             }
         } 
         catch(error) 
         {
             console.error("Error saving preferences:", error);
-            alert("An error occurred while saving.");
+            toast.error("An error occurred while saving.");
         }
     };
 
@@ -93,9 +94,36 @@ class SettingsPage extends React.Component
         }
     };
 
+    toastConfirm = (message) => 
+    {
+        return new Promise((resolve) => 
+        {
+            const id = toast.info(
+                <div>
+                    {message}
+                    <div className="mt-2 flex justify-end gap-2">
+                        <button
+                            onClick={() => { toast.dismiss(id); resolve(true); }}
+                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                        >
+                            Yes
+                        </button>
+                        <button
+                            onClick={() => { toast.dismiss(id); resolve(false); }}
+                            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
+                        >
+                            No
+                        </button>
+                    </div>
+                </div>,
+                { autoClose: false, closeOnClick: false, draggable: false }
+            );
+        });
+    };
+
     handleDeleteAccount = async () => 
     {
-        const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+        const confirmed = await this.toastConfirm("Are you sure you want to delete your account? This action cannot be undone.");
 
         if(!confirmed) return;
 
@@ -110,18 +138,20 @@ class SettingsPage extends React.Component
             if(response.ok) 
             {
                 localStorage.removeItem('user');
-                window.location.href = '/';
+                toast.success("Account deleted successfully, redirecting to splash Page");
+                
+                setTimeout(() => { window.location.href = '/' }, 1200);
             } 
             else 
             {
                 const data = await response.json();
-                alert("Failed to delete account: " + data.message);
+                toast.error("Failed to delete account: " + data.message);
             }
         } 
         catch(error) 
         {
             console.error("Error deleting account:", error);
-            alert("An error occurred while deleting the account.");
+            toast.error("An error occurred while deleting the account.");
         }
     };
 
@@ -132,7 +162,6 @@ class SettingsPage extends React.Component
         const isDarkMode = displayMode === "Dark Mode";
 
         return (
-            // <section className="flex h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
             <section className="flex h-screen dark:bg-gray-900 text-black dark:text-white transition-colors duration-300" style={{ background: isDarkMode 
                                                                                                                                     ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
                                                                                                                                     : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
