@@ -86,3 +86,77 @@ else:
 pose_buf   = []
 left_buf   = []
 right_buf  = []
+
+with mp_holistic.Holistic(model_complexity=1) as holistic:
+    while True:
+        ok, frame = cap.read()
+        if not ok:
+            break
+
+        frame = cv2.flip(frame, 1)
+        rgb   = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = holistic.process(rgb)
+        vis   = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+
+        mp_draw.draw_landmarks(vis, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS)
+        mp_draw.draw_landmarks(vis, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
+        mp_draw.draw_landmarks(vis, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
+            break
+
+        fname_preview = f"sample_{sample_id:03d}{SIGNER_TAG}.npz"
+        if state == IDLE:
+            cv2.putText(vis, f"Word: {WORD_LABEL}   Next: {fname_preview}",
+                        (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
+            cv2.putText(vis, "Press 's' to start  (3..2..1 then auto record)",
+                        (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+            if key == ord('s'):
+                pose_buf, left_buf, right_buf = [], [], []
+                prep_start = time.time()
+                state = PREP
+
+        elif state == PREP:
+            secs_left =  PREP_SECONDS - (time.time() - prep_start)
+            if secs_left <= 0:
+                rec_start = time.time()
+                state = RECORD
+                print(f"[{WORD_LABEL}] Recording {fname_preview} ...")
+            else:
+                draw_countdown(vis, secs_left)
+                cv2.putText(vis, "Get into position", (20, 35),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2)
+
+        elif state == RECORD:
+            # collect raw landmarks each frame
+            pose_arr  = pose_to_array(results.pose_landmarks, include_visibility=True)  # (33,4)
+            left_arr  = hand_to_array(results.left_hand_landmarks)                      # (21,3)
+            right_arr = hand_to_array(results.right_hand_landmarks)                     # (21,3)
+
+            pose_buf.append(pose_arr)
+            left_buf.append(left_arr)
+            right_buf.append(right_arr)
+
+            elapsed = time.time() - rec_start
+            draw_progress(vis, elapsed, RECORD_SECONDS)
+            cv2.putText(vis, "Recording...", (20, 35),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
+
+            if elapsed >= RECORD_SECONDS:
+                out_path = word_dir / fname_preview
+                np.savez_compressed(
+                    out_path,
+                    pose_xyzw=np.stack(pose_buf, axis=0),   # [T,33,4]
+                    left_xyz=np.stack(left_buf, axis=0),    # [T,21,3]
+                    right_xyz=np.stack(right_buf, axis=0)   # [T,21,3]
+                )
+                print(f"Saved {out_path}")
+
+                sample_id = next_available_at_or_after(word_dir, sample_id + 1)
+                state = IDLE
+
+        cv2.imshow("Record RAW Word Samples (Countdown + Auto Stop)", vis)
+
+cap.release()
+cv2.destroyAllWindows()
