@@ -9,6 +9,7 @@ import letterIcon from "../assets/Letters.png";
 import {temp} from "three/src/Three.TSL";
 
 import PreferenceManager from "./PreferenceManager";
+import preferenceManager from "./PreferenceManager";
 
 const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction, width=700, height=500} ) => {
     const videoRef = useRef(null);
@@ -27,14 +28,16 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
         }
         
         if (!text || text === "No hand detected") return;
-
+        const speeds = {"Slow":0.5,"Normal":1,"Fast":2};
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = "en-US";
-        utter.rate = 0.75;
+        utter.rate = speeds[preferenceManager.getPreferences().speechSpeed];
         utter.pitch = 0.7;
 
-        const voice =  window.speechSynthesis.getVoices().find(voice => voice.name.includes("Ryan"));
+        const voice =  window.speechSynthesis.getVoices().find(voice =>
+            voice.name.includes(PreferenceManager.getPreferences().speechVoice));
+
         if(voice) {
             utter.voice = voice;
         }
