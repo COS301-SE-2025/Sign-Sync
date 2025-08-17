@@ -31,7 +31,8 @@ import Achievements from "./pages/AchievementsPage";
 import LearnAlphabet from "./pages/LearnAlphabetPage";
 import PractiseAlphabet from "./pages/PractiseAlphabetPage";
 
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; //import toastify styles
 
 class app extends React.Component 
 {
@@ -70,6 +71,17 @@ class app extends React.Component
           <Route path="/learn-Alphabet" element={<LearnAlphabet/>} />
           <Route path="/practise-Alphabet" element={<PractiseAlphabet />} />
         </Routes>
+
+        <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            pauseOnHover
+            draggable
+        />
+
       </BrowserRouter>
     );
   }
