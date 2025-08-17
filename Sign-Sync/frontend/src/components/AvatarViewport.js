@@ -20,7 +20,6 @@ function Avatar({signs}) {
     const emotionsRef = useRef(null);
 
     const speeds = {"Very Slow": 0.75,"Slow":1,"Normal":1.5,"Fast":2.5,"Very Fast":5};
-    console.log("Animation Speed: ", speeds[animationSpeed]);
     useEffect(() => {
         setAvatarType(PreferenceManager.getPreferences().preferredAvatar);
         emotionsRef.current = "Neutral";
