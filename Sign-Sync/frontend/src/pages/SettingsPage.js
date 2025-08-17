@@ -22,6 +22,7 @@ class SettingsPage extends React.Component
             preferredAvatar : prefs.preferredAvatar || 'Zac',
             animationSpeed: prefs.animationSpeed || 1,
             speechSpeed: prefs.speechSpeed || 1,
+            speechVoice: prefs.speechVoice || 'George',
         };
     }
 
@@ -54,14 +55,14 @@ class SettingsPage extends React.Component
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const { displayMode, fontSize, preferredAvatar, animationSpeed, speechSpeed } = this.state;
+        const { displayMode, fontSize, preferredAvatar, animationSpeed, speechSpeed, speechVoice } = this.state;
         
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed, speechSpeed})
+                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed, speechSpeed, speechVoice})
             });
             if(response.ok) 
             {
@@ -161,7 +162,7 @@ class SettingsPage extends React.Component
     render() 
     {
         const isDarkMode = displayMode === "Dark Mode";
-        const {displayMode, fontSize, email, preferredAvatar, animationSpeed, speechSpeed, user} = this.state;
+        const {displayMode, fontSize, email, preferredAvatar, animationSpeed, speechSpeed, speechVoice, user} = this.state;
 
         return (
             <section className="flex h-screen dark:bg-gray-900 text-black dark:text-white transition-colors duration-300" style={{ background: isDarkMode 
@@ -213,6 +214,13 @@ class SettingsPage extends React.Component
                                 value={animationSpeed}
                                 OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
                                 onChange={(value) => this.handleChange("animationSpeed", value)}
+                            />
+
+                            <SelectField
+                                label="Preferred Voice"
+                                value={speechVoice}
+                                onChange={(value) => this.handleChange("speechVoice", value)}
+                                options={["George", "Hazel","David","Jenny","Mark","Zira"]}
                             />
 
                             <SliderField
