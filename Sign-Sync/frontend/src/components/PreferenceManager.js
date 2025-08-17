@@ -4,7 +4,9 @@ class PreferenceManager
         displayMode: 'Light Mode',
         preferredAvatar: 'Zac',
         animationSpeed: 'Normal',
-        fontSize: 'Medium'
+        fontSize: 'Medium',
+        speechSpeed: 1,
+        speechVoice: 'George'
     };
 
     static async initialize() 

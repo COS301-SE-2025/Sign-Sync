@@ -220,7 +220,7 @@ class SettingsPage extends React.Component
                                 label="Preferred Voice"
                                 value={speechVoice}
                                 onChange={(value) => this.handleChange("speechVoice", value)}
-                                options={["George", "Hazel","David","Jenny","Mark","Zira"]}
+                                options={["George", "Hazel","Susan"]}
                             />
 
                             <SliderField
