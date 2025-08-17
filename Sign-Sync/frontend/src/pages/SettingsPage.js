@@ -18,7 +18,9 @@ class SettingsPage extends React.Component
             displayMode: prefs.displayMode || 'Light Mode',
             fontSize: prefs.fontSize || 'Medium',
             email: '',
-            user: null
+            user: null,
+            preferredAvatar : prefs.preferredAvatar || 'Zac',
+            animationSpeed: prefs.animationSpeed || 1,
         };
     }
 
@@ -51,16 +53,15 @@ class SettingsPage extends React.Component
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const { displayMode, fontSize } = this.state;
+        const { displayMode, fontSize, preferredAvatar, animationSpeed } = this.state;
         
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, fontSize })
+                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed})
             });
-
             if(response.ok) 
             {
                 toast.success("Preferences saved successfully.");
@@ -158,8 +159,8 @@ class SettingsPage extends React.Component
 
     render() 
     {
-        const {displayMode, fontSize, email, user} = this.state;
         const isDarkMode = displayMode === "Dark Mode";
+        const {displayMode, fontSize, email, preferredAvatar, animationSpeed, user} = this.state;
 
         return (
             <section className="flex h-screen dark:bg-gray-900 text-black dark:text-white transition-colors duration-300" style={{ background: isDarkMode 
@@ -178,48 +179,59 @@ class SettingsPage extends React.Component
                     <div className={!user ? "blur-sm" : ""}>
                         <div className="w-full max-w-lg bg-white dark:bg-gray-800 p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300">
                         
-                            <SettingsRow title="Email:" value={email} className="mt-4" />
+                        <SettingsRow title="Email" value={email} className="mt-4" />
 
-                            <div className="mt-12 space-y-7">
-                                <SelectField
-                                    label="Display mode"
-                                    value={displayMode}
-                                    onChange={(value) => this.handleChange("displayMode", value)}
-                                    options={["Light Mode", "Dark Mode"]}
-                                />
+                        <div className="mt-12 space-y-7">
+                            <SelectField
+                                label="Display mode"
+                                value={displayMode}
+                                onChange={(value) => this.handleChange("displayMode", value)}
+                                options={["Light Mode", "Dark Mode"]}
+                            />
 
-                                <SelectField
-                                    label="Preferred Avatar"
-                                    //value={this.state.preferredAvatar}
-                                    onChange={(value) => this.handleChange("preferredAvatar", value)}
-                                    options={["Default", "Custom1", "Custom2"]}
-                                />
+                            <SelectField
+                                label="Preferred Avatar"
+                                value={preferredAvatar}
+                                onChange={(value) => this.handleChange("preferredAvatar", value)}
+                                options={["Zac", "Jenny"]}
+                            />
 
-                                <SliderField
-                                    leftLabel="Small"
-                                    rightLabel="Large"
-                                    description="Font Size"
-                                    value={fontSize}
-                                    onChange={(value) => this.handleChange("fontSize", value)}
-                                />
+                            <SliderField
+                                leftLabel="Small"
+                                rightLabel="Large"
+                                description="Font Size"
+                                value={fontSize}
+                                onChange={(value) => this.handleChange("fontSize", value)}
+                            />
 
-                            <div className="mt-10 flex justify-between">
-                                    <button
-                                        onClick={this.handleSavePreferences}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
-                                    >
-                                        Save Preferences
-                                    </button>
+                            <SliderField
+                                leftLabel="Slow"
+                                rightLabel="Fast"
+                                description="Animation Speed"
+                                value={animationSpeed}
+                                OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
+                                onChange={(value) => this.handleChange("animationSpeed", value)}
+                            />
 
-                                    <button
-                                        onClick={this.handleDeleteAccount}
-                                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-all duration-200"
-                                    >
-                                        Delete Account
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                           
+
+                           <div className="mt-10 flex justify-between">
+                                <button
+                                    onClick={this.handleSavePreferences}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
+                                >
+                                    Save Preferences
+                                </button>
+                                
+                                <button
+                                     onClick={this.handleDeleteAccount}
+                                     className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-all duration-200"
+                                >
+                                     Delete Account
+                                </button>
+                           </div>
+                         </div>
+                      </div>
                     </div>
 
                     {/* Login required overlay */}
