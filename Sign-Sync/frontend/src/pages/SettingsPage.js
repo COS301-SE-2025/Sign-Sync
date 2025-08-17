@@ -21,6 +21,7 @@ class SettingsPage extends React.Component
             user: null,
             preferredAvatar : prefs.preferredAvatar || 'Zac',
             animationSpeed: prefs.animationSpeed || 1,
+            speechSpeed: prefs.speechSpeed || 1,
         };
     }
 
@@ -53,14 +54,14 @@ class SettingsPage extends React.Component
     {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const { displayMode, fontSize, preferredAvatar, animationSpeed } = this.state;
+        const { displayMode, fontSize, preferredAvatar, animationSpeed, speechSpeed } = this.state;
         
         try 
         {
             const response = await fetch(`/userApi/preferences/${user.userID}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed})
+                body: JSON.stringify({ displayMode, fontSize, preferredAvatar, animationSpeed, speechSpeed})
             });
             if(response.ok) 
             {
@@ -160,7 +161,7 @@ class SettingsPage extends React.Component
     render() 
     {
         const isDarkMode = displayMode === "Dark Mode";
-        const {displayMode, fontSize, email, preferredAvatar, animationSpeed, user} = this.state;
+        const {displayMode, fontSize, email, preferredAvatar, animationSpeed, speechSpeed, user} = this.state;
 
         return (
             <section className="flex h-screen dark:bg-gray-900 text-black dark:text-white transition-colors duration-300" style={{ background: isDarkMode 
@@ -212,6 +213,15 @@ class SettingsPage extends React.Component
                                 value={animationSpeed}
                                 OPTIONS={["Very Slow", "Slow","Normal","Fast","Very Fast"]}
                                 onChange={(value) => this.handleChange("animationSpeed", value)}
+                            />
+
+                            <SliderField
+                                leftLabel="Slow"
+                                rightLabel="Fast"
+                                description="Speech Speed"
+                                value={speechSpeed}
+                                OPTIONS={["Slow","Normal","Fast"]}
+                                onChange={(value) => this.handleChange("speechSpeed", value)}
                             />
 
                            
