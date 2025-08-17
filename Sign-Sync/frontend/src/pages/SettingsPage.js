@@ -201,6 +201,7 @@ class SettingsPage extends React.Component
                                 rightLabel="Large"
                                 description="Font Size"
                                 value={fontSize}
+                                OPTIONS={["Small", "Medium","Large"]}
                                 onChange={(value) => this.handleChange("fontSize", value)}
                             />
 
