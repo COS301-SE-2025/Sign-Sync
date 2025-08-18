@@ -11,7 +11,7 @@ VERB_PREP = {
 }
 
 
-PLACES = {"store","school","home","office","park","university","hospital","bank","shop","supermarket"}
+PLACES = {"store","school","home","office","park","university","hospital","bank","shop","supermarket", "city"}
 
 VOWELS = set("aeiou")
 
@@ -67,3 +67,22 @@ def gloss_to_english(text: str) -> str:
             parts.append(obj)
         parts.extend(rest)
         return tidy(parts)
+    
+    ## TOPIC VERB
+    if len(toks) == 2 and toks[1] in VERB_PREP:
+        obj, verb = toks
+        prep = VERB_PREP.get(verb)
+        parts = ["i", verb]
+        if obj in PLACES and prep:
+            art = article_for(obj)
+            if prep != "—":
+                parts.append(prep)
+            if art:
+                parts.append(art)
+            parts.append(obj)
+        else:
+            parts.append(obj)
+        return tidy(parts)
+
+    # Fall back
+    return tidy(toks)
