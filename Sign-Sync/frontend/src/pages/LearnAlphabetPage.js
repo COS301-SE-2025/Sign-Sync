@@ -3,6 +3,8 @@ import SideNavbar from "../components/sideNavbar";
 import Camera from "../components/Camera";
 import TextToSign from "../components/textToSign";
 import PreferenceManager from "../components/PreferenceManager";
+import { setSessionData } from "../components/SessionManager";
+import AchievementChecker from "../components/AchievementChecker";
 
 class LearnAlphabetPage extends React.Component 
 {
@@ -17,6 +19,7 @@ class LearnAlphabetPage extends React.Component
             success: false,
             completedLetters: new Set(),
             showCongratulations: false,
+            hasSignedFirstLetter: false,
             user: null
         };
 

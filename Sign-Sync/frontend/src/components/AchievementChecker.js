@@ -1,4 +1,5 @@
 import AchievementsManager from "../components/AchievementsManager";
+import { getSessionData } from "./SessionManager";
 
 export default class AchievementChecker {
   static async checkAchievements(userID, totalAchievements) {
@@ -19,9 +20,8 @@ export default class AchievementChecker {
       // }
 
       // First Alphabet Achievement
-      if (!currentAchievements.includes(2)) {
-        const hasFirstAlphabet = await this.checkFirstAlphabet(userID);
-        if (hasFirstAlphabet) newAchievements.push(2);
+      if (!currentAchievements.includes(3) && session?.hasSignedFirstLetter) {
+        newAchievements.push(3);
       }
 
       // First Letter Achievement
@@ -37,9 +37,8 @@ export default class AchievementChecker {
       }
 
       // Learned The Alphabet Achievement
-      if (!currentAchievements.includes(5)) {
-        const knowsAlphabet = await this.checkAlphabetComplete(userID);
-        if (knowsAlphabet) newAchievements.push(5);
+      if (!currentAchievements.includes(5) && session?.hasCompletedAlphabet) {
+        newAchievements.push(5);
       }
 
       // Silver Achievement (50% completion)
