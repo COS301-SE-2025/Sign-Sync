@@ -19,6 +19,8 @@
   "author": "Apollo Projects",
   "license": "ISC",
   "dependencies": {
+    "@mediapipe/drawing_utils": "^0.3.1675466124",
+    "@mediapipe/holistic": "^0.5.1675471629",
     "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",

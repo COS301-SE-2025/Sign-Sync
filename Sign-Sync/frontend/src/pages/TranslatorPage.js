@@ -1,9 +1,10 @@
 import React from "react";
-import Camera from "../components/Camera";
+// import Camera from "../components/Camera";
 import SideNavbar from "../components/sideNavbar";
 import TextToSign from "../components/textToSign";
 import Swap from "../assets/Swap-icon.png"
 import PreferenceManager from "../components/PreferenceManager";
+import TranslatorCamera from "../components/TranslatorCamera";
 
 class TranslatorPage extends React.Component
 {
@@ -24,7 +25,7 @@ class TranslatorPage extends React.Component
         let translatorType = this.state.type;
         if(translatorType === "SignText"){
             translatorMode = <div>
-                <Camera/>
+                <TranslatorCamera/>
             </div>
         }else{
             translatorMode = <div>
