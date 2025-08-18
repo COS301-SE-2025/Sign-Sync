@@ -7,7 +7,15 @@ const PhoneSupport = () => {
   const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
   return (
-    <section className={`flex h-screen overflow-hidden ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"}`}>
+    // <section className={`flex h-screen overflow-hidden ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"}`}>
+    <section
+      className={`flex h-screen overflow-hidden ${isDarkMode ? "text-white" : "text-black"}`}
+      style={{
+        background: isDarkMode
+          ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
+          : "linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)",
+      }}
+    >
       <div>
         <SideNavbar />
       </div>

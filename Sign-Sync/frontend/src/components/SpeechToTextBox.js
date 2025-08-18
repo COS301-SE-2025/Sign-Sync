@@ -70,6 +70,7 @@
 
 
 import React, { useState, useRef } from 'react';
+import { toast } from "react-toastify";
 
 import PreferenceManager from './PreferenceManager';
 
@@ -117,7 +118,7 @@ const SpeechToTextBox = ({onSpeechInput}) => {
       setRecording(true);
     } catch (err) {
       console.error('Microphone error:', err);
-      alert('Please allow microphone access.');
+      toast.error('Please allow microphone access.');
     }
   };
 
@@ -145,7 +146,7 @@ const SpeechToTextBox = ({onSpeechInput}) => {
           placeholder="Speech will appear here..."
         />
         <button
-          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 border-2 border-black ${recording ? 'bg-[#FFFFFD]' : 'bg-[#801E20]'} ${isDarkMode ? "text-black" : "text-white"}`}>
+          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 border-2 border-black ${recording ? (isDarkMode ? 'bg-[#36454f] text-white' : 'bg-[#801E20] text-white') : (isDarkMode ? 'bg-[#801E20] text-black' : 'bg-[#36454f] text-white')}`}>
           {recording ? 'Stop' : 'Speak 🎙️'}
         </button>
       </div>
