@@ -1,0 +1,598 @@
+{
+  "lowercase": true,
+  "root": {
+    "terminal": false,
+    "next_counts": {
+      "they": 24,
+      "i": 19,
+      "we": 18,
+      "you": 21,
+      "tomorrow": 2,
+      "morning": 1,
+      "where": 3,
+      "what": 3,
+      "today": 1,
+      "afternoon": 2,
+      "how": 2,
+      "yesterday": 1,
+      "why": 1,
+      "night": 1,
+      "when": 1
+    },
+    "children": {
+      "they": {
+        "terminal": false,
+        "next_counts": {
+          "come": 3,
+          "know": 4,
+          "like": 4,
+          "play": 1,
+          "want": 3,
+          "go": 2,
+          "work": 2,
+          "see": 3,
+          "learn": 1,
+          "help": 1
+        },
+        "children": {
+          "come": {
+            "terminal": false,
+            "next_counts": { "store": 2, "home": 1 },
+            "children": {
+              "store": { "terminal": true, "next_counts": {}, "children": {} },
+              "home": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "know": { "terminal": true, "next_counts": {}, "children": {} },
+          "like": { "terminal": true, "next_counts": {}, "children": {} },
+          "play": {
+            "terminal": false,
+            "next_counts": { "work": 1 },
+            "children": {
+              "work": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "want": {
+            "terminal": false,
+            "next_counts": { "food": 1, "car": 1, "book": 1 },
+            "children": {
+              "food": { "terminal": true, "next_counts": {}, "children": {} },
+              "car": { "terminal": true, "next_counts": {}, "children": {} },
+              "book": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "go": {
+            "terminal": false,
+            "next_counts": { "work": 1, "home": 1 },
+            "children": {
+              "work": { "terminal": true, "next_counts": {}, "children": {} },
+              "home": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "work": { "terminal": true, "next_counts": {}, "children": {} },
+          "see": {
+            "terminal": false,
+            "next_counts": { "family": 1, "people": 1, "phone": 1 },
+            "children": {
+              "family": { "terminal": true, "next_counts": {}, "children": {} },
+              "people": { "terminal": true, "next_counts": {}, "children": {} },
+              "phone": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "learn": {
+            "terminal": false,
+            "next_counts": { "ball": 1 },
+            "children": {
+              "ball": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "help": {
+            "terminal": false,
+            "next_counts": { "family": 1 },
+            "children": {
+              "family": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "i": {
+        "terminal": false,
+        "next_counts": {
+          "come": 2,
+          "know": 2,
+          "go": 2,
+          "learn": 3,
+          "need": 2,
+          "like": 3,
+          "want": 1,
+          "help": 1,
+          "see": 2,
+          "eat": 1
+        },
+        "children": {
+          "come": {
+            "terminal": false,
+            "next_counts": { "home": 2 },
+            "children": {
+              "home": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "know": { "terminal": true, "next_counts": {}, "children": {} },
+          "go": {
+            "terminal": false,
+            "next_counts": { "work": 1, "home": 1 },
+            "children": {
+              "work": { "terminal": true, "next_counts": {}, "children": {} },
+              "home": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "learn": {
+            "terminal": false,
+            "next_counts": { "work": 1, "food": 2 },
+            "children": {
+              "work": { "terminal": true, "next_counts": {}, "children": {} },
+              "food": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "need": {
+            "terminal": false,
+            "next_counts": { "food": 1, "phone": 1 },
+            "children": {
+              "food": { "terminal": true, "next_counts": {}, "children": {} },
+              "phone": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "like": { "terminal": true, "next_counts": {}, "children": {} },
+          "want": {
+            "terminal": false,
+            "next_counts": { "food": 1 },
+            "children": {
+              "food": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "help": {
+            "terminal": false,
+            "next_counts": { "people": 1 },
+            "children": {
+              "people": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "see": {
+            "terminal": false,
+            "next_counts": { "family": 1, "people": 1 },
+            "children": {
+              "family": { "terminal": true, "next_counts": {}, "children": {} },
+              "people": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "eat": {
+            "terminal": false,
+            "next_counts": { "food": 1 },
+            "children": {
+              "food": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "we": {
+        "terminal": false,
+        "next_counts": {
+          "like": 3,
+          "work": 2,
+          "play": 1,
+          "help": 2,
+          "know": 4,
+          "need": 1,
+          "see": 2,
+          "come": 1,
+          "want": 1,
+          "go": 1
+        },
+        "children": {
+          "like": { "terminal": true, "next_counts": {}, "children": {} },
+          "work": { "terminal": true, "next_counts": {}, "children": {} },
+          "play": {
+            "terminal": false,
+            "next_counts": { "phone": 1 },
+            "children": {
+              "phone": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "help": {
+            "terminal": false,
+            "next_counts": { "family": 1, "friend": 1 },
+            "children": {
+              "family": { "terminal": true, "next_counts": {}, "children": {} },
+              "friend": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "know": { "terminal": true, "next_counts": {}, "children": {} },
+          "need": {
+            "terminal": false,
+            "next_counts": { "food": 1 },
+            "children": {
+              "food": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "see": {
+            "terminal": false,
+            "next_counts": { "people": 1, "friend": 1 },
+            "children": {
+              "people": { "terminal": true, "next_counts": {}, "children": {} },
+              "friend": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "come": {
+            "terminal": false,
+            "next_counts": { "school": 1 },
+            "children": {
+              "school": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "want": {
+            "terminal": false,
+            "next_counts": { "phone": 1 },
+            "children": {
+              "phone": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "go": {
+            "terminal": false,
+            "next_counts": { "school": 1 },
+            "children": {
+              "school": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "you": {
+        "terminal": false,
+        "next_counts": {
+          "come": 3,
+          "know": 2,
+          "play": 2,
+          "work": 1,
+          "want": 2,
+          "see": 3,
+          "have": 2,
+          "like": 2,
+          "go": 2,
+          "learn": 1,
+          "eat": 1
+        },
+        "children": {
+          "come": {
+            "terminal": false,
+            "next_counts": { "store": 1, "school": 2 },
+            "children": {
+              "store": { "terminal": true, "next_counts": {}, "children": {} },
+              "school": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "know": { "terminal": true, "next_counts": {}, "children": {} },
+          "play": {
+            "terminal": false,
+            "next_counts": { "ball": 2 },
+            "children": {
+              "ball": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "work": { "terminal": true, "next_counts": {}, "children": {} },
+          "want": {
+            "terminal": false,
+            "next_counts": { "ball": 1, "car": 1 },
+            "children": {
+              "ball": { "terminal": true, "next_counts": {}, "children": {} },
+              "car": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "see": {
+            "terminal": false,
+            "next_counts": { "ball": 1, "people": 1, "car": 1 },
+            "children": {
+              "ball": { "terminal": true, "next_counts": {}, "children": {} },
+              "people": { "terminal": true, "next_counts": {}, "children": {} },
+              "car": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "have": {
+            "terminal": false,
+            "next_counts": { "book": 1, "ball": 1 },
+            "children": {
+              "book": { "terminal": true, "next_counts": {}, "children": {} },
+              "ball": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "like": { "terminal": true, "next_counts": {}, "children": {} },
+          "go": {
+            "terminal": false,
+            "next_counts": { "store": 1, "home": 1 },
+            "children": {
+              "store": { "terminal": true, "next_counts": {}, "children": {} },
+              "home": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "learn": {
+            "terminal": false,
+            "next_counts": { "ball": 1 },
+            "children": {
+              "ball": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "eat": {
+            "terminal": false,
+            "next_counts": { "food": 1 },
+            "children": {
+              "food": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "tomorrow": {
+        "terminal": false,
+        "next_counts": { "we": 1, "you": 1 },
+        "children": {
+          "we": {
+            "terminal": false,
+            "next_counts": { "work": 1 },
+            "children": {
+              "work": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "you": {
+            "terminal": false,
+            "next_counts": { "know": 1 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "morning": {
+        "terminal": false,
+        "next_counts": { "i": 1 },
+        "children": {
+          "i": {
+            "terminal": false,
+            "next_counts": { "learn": 1 },
+            "children": {
+              "learn": {
+                "terminal": false,
+                "next_counts": { "book": 1 },
+                "children": {
+                  "book": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "where": {
+        "terminal": false,
+        "next_counts": { "we": 1, "you": 1, "they": 1 },
+        "children": {
+          "we": {
+            "terminal": false,
+            "next_counts": { "go": 1 },
+            "children": {
+              "go": {
+                "terminal": false,
+                "next_counts": { "store": 1 },
+                "children": {
+                  "store": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "you": {
+            "terminal": false,
+            "next_counts": { "like": 1 },
+            "children": {
+              "like": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          },
+          "they": {
+            "terminal": false,
+            "next_counts": { "go": 1 },
+            "children": {
+              "go": {
+                "terminal": false,
+                "next_counts": { "store": 1 },
+                "children": {
+                  "store": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "what": {
+        "terminal": false,
+        "next_counts": { "we": 1, "you": 1, "i": 1 },
+        "children": {
+          "we": {
+            "terminal": false,
+            "next_counts": { "learn": 1 },
+            "children": {
+              "learn": {
+                "terminal": false,
+                "next_counts": { "work": 1 },
+                "children": {
+                  "work": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "you": {
+            "terminal": false,
+            "next_counts": { "see": 1 },
+            "children": {
+              "see": {
+                "terminal": false,
+                "next_counts": { "book": 1 },
+                "children": {
+                  "book": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "i": {
+            "terminal": false,
+            "next_counts": { "want": 1 },
+            "children": {
+              "want": {
+                "terminal": false,
+                "next_counts": { "book": 1 },
+                "children": {
+                  "book": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "today": {
+        "terminal": false,
+        "next_counts": { "we": 1 },
+        "children": {
+          "we": {
+            "terminal": false,
+            "next_counts": { "have": 1 },
+            "children": {
+              "have": {
+                "terminal": false,
+                "next_counts": { "store": 1 },
+                "children": {
+                  "store": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "afternoon": {
+        "terminal": false,
+        "next_counts": { "you": 1, "we": 1 },
+        "children": {
+          "you": {
+            "terminal": false,
+            "next_counts": { "want": 1 },
+            "children": {
+              "want": {
+                "terminal": false,
+                "next_counts": { "work": 1 },
+                "children": {
+                  "work": {
+                    "terminal": true,
+                    "next_counts": {},
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "we": {
+            "terminal": false,
+            "next_counts": { "know": 1 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "how": {
+        "terminal": false,
+        "next_counts": { "they": 2 },
+        "children": {
+          "they": {
+            "terminal": false,
+            "next_counts": { "know": 2 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "yesterday": {
+        "terminal": false,
+        "next_counts": { "i": 1 },
+        "children": {
+          "i": {
+            "terminal": false,
+            "next_counts": { "know": 1 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "why": {
+        "terminal": false,
+        "next_counts": { "you": 1 },
+        "children": {
+          "you": {
+            "terminal": false,
+            "next_counts": { "know": 1 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "night": {
+        "terminal": false,
+        "next_counts": { "you": 1 },
+        "children": {
+          "you": {
+            "terminal": false,
+            "next_counts": { "know": 1 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      },
+      "when": {
+        "terminal": false,
+        "next_counts": { "they": 1 },
+        "children": {
+          "they": {
+            "terminal": false,
+            "next_counts": { "know": 1 },
+            "children": {
+              "know": { "terminal": true, "next_counts": {}, "children": {} }
+            }
+          }
+        }
+      }
+    }
+  }
+}
