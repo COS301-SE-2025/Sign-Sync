@@ -50,3 +50,20 @@ def gloss_to_english(text: str) -> str:
             parts.append(topic)
         parts.extend(rest)
         return tidy(parts)
+    
+    # PRONOUN VERB TOPIC
+    if len(toks) >= 3 and toks[0] in PRONOUNS:
+        subj, verb, obj, *rest = toks[0], toks[1], toks[2], toks[3:]
+        prep = VERB_PREP.get(verb, None)
+        parts = [subj, verb]
+        if obj in PLACES and prep:
+            art = article_for(obj)
+            if prep != "—":
+                parts.append(prep)
+            if art:
+                parts.append(art)
+            parts.append(obj)
+        else:
+            parts.append(obj)
+        parts.extend(rest)
+        return tidy(parts)
