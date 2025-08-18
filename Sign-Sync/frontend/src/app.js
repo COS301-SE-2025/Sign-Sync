@@ -30,7 +30,8 @@ import Achievements from "./pages/AchievementsPage";
 
 import LearnAlphabet from "./pages/LearnAlphabetPage";
 import PractiseAlphabet from "./pages/PractiseAlphabetPage";
-
+import LearnWords from './pages/LearnWordsPage';
+import PractiseWords from './pages/PractiseWordsPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; //import toastify styles
 
@@ -70,6 +71,8 @@ class app extends React.Component
             
           <Route path="/learn-Alphabet" element={<LearnAlphabet/>} />
           <Route path="/practise-Alphabet" element={<PractiseAlphabet />} />
+          <Route path="/learn-Words" element={<LearnWords/>} />
+          <Route path="/practise-Words" element={<PractiseWords />} />
         </Routes>
 
         <ToastContainer
