@@ -10,7 +10,7 @@ import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
 
 // --- endpoints ---
-const WORDS_API_BASE = "http://localhost:8003"; // words model (WS + REST)
+const WORDS_API_BASE = "http://localhost:8004"; // words model (WS + REST)
 const LETTERS_API_BASE = "http://localhost:8000"; // letters model (REST)
 
 const SEND_INTERVAL_MS = 80;   // words streaming cadence
@@ -115,7 +115,7 @@ const TranslatorCamera = ({ onPrediction }) => {
     }
   };
 
-  // ---------- WORDS MODE (WS to 8003) ----------
+  // ---------- WORDS MODE (WS to 8004) ----------
   const startWordsSession = async () => {
     // create session
     const resp = await fetch(`${WORDS_API_BASE}/v1/session/start`, { method: "POST" });
@@ -124,7 +124,7 @@ const TranslatorCamera = ({ onPrediction }) => {
     sessionIdRef.current = meta.session_id;
 
     // open WS
-    const ws = new WebSocket(`ws://localhost:8003/v1/stream/${meta.session_id}`);
+    const ws = new WebSocket(`ws://localhost:8004/v1/stream/${meta.session_id}`);
     wsRef.current = ws;
 
     ws.onopen = () => { setConnected(true); setStatus("Idle"); };
