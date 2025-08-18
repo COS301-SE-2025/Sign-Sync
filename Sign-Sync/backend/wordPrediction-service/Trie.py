@@ -2,7 +2,7 @@ from collections import Counter
 from typing import List, Tuple, Dict, Any, Iterable, Optional
 
 import json
-import Node
+from Node import Node
 
 # Trie Language Model for word prediction
 class Trie:
@@ -35,7 +35,7 @@ class Trie:
         for line in lines:
             self.add_sentence(line)
 
-    def descend(self, prefix_tokens: List[str]) -> Optional["Node"]:
+    def descend(self, prefix_tokens: List[str]) -> Optional[Node]:
         node = self.root
         for tok in prefix_tokens:
             node = node.children.get(tok)
@@ -43,7 +43,7 @@ class Trie:
                 return None
         return node
     
-    def stream_file(self, path: str, encoding: str = "utf-8") -> Optional["Node"]:
+    def stream_file(self, path: str, encoding: str = "utf-8") -> Optional[Node]:
         with open(path, "r", encoding=encoding) as f:
             self.add_sentences(f)
         return self
@@ -57,11 +57,11 @@ class Trie:
         add_k: float = 0.0, 
     ) -> List[Tuple[str, float]]:
         
-        toks = self._tok(prefix)
+        toks = self.tokenize(prefix)
 
         starts = range(0, len(toks) + 1) if backoff else range(len(toks), len(toks) + 1)
         for s in starts:
-            node = self._descend(toks[s:])
+            node = self.descend(toks[s:])
             if node is None:
                 continue
 
@@ -94,10 +94,13 @@ class Trie:
             json.dump(payload, f, ensure_ascii=False)
 
     @classmethod
-    def load_json(cls, path: str, encoding: str = "utf-8") -> "TrieLM":
-        """Load a trie from a JSON file produced by save_json()."""
+    def load_json(cls, path: str, encoding: str = "utf-8") -> "Trie":
         with open(path, "r", encoding=encoding) as f:
             payload = json.load(f)
         trie = cls(lowercase=payload.get("lowercase", True))
         trie.root = Node.from_dict(payload["root"])
         return trie
+    
+if __name__ == "__main__":
+    loaded_trie = Trie.load_json("trie.json")
+    print(loaded_trie.predict_next("they see"))
