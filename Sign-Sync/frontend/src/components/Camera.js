@@ -122,6 +122,10 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
 
                 const response = await request.json();
                 setPrediction(response.gloss);
+
+                if(onPrediction) {
+                    onPrediction(response.gloss);
+                }
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
             }
