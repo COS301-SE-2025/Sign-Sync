@@ -92,3 +92,12 @@ class Trie:
         payload = {"lowercase": self.lowercase, "root": self.root.to_dict()}
         with open(path, "w", encoding=encoding) as f:
             json.dump(payload, f, ensure_ascii=False)
+
+    @classmethod
+    def load_json(cls, path: str, encoding: str = "utf-8") -> "TrieLM":
+        """Load a trie from a JSON file produced by save_json()."""
+        with open(path, "r", encoding=encoding) as f:
+            payload = json.load(f)
+        trie = cls(lowercase=payload.get("lowercase", True))
+        trie.root = Node.from_dict(payload["root"])
+        return trie
