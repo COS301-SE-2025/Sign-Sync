@@ -25,9 +25,22 @@ class Trie:
         
         node = self.root
         for tok in tokens:
+            node.next_counts[tok] += 1
             if tok not in node.children:
                 node.children[tok] = Node()
             node = node.children[tok]
         node.terminal = True
+
+    def add_sentences(self, lines: List[str]) -> None:
+        for line in lines:
+            self.add_sentence(line)
+
+    def descend(self, prefix_tokens: List[str]) -> Optional["Node"]:
+        node = self.root
+        for tok in prefix_tokens:
+            node = node.children.get(tok)
+            if node is None:
+                return None
+        return node
 
         
