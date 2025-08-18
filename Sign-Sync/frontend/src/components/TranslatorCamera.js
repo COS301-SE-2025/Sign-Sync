@@ -8,6 +8,7 @@ import SoundOnIcon from "../assets/SoundOn.png";
 import SoundOffIcon from "../assets/SoundOff.png";
 import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
+import PreferenceManager from "../components/PreferenceManager"; // <-- add this
 
 // --- endpoints ---
 const WORDS_API_BASE = "http://localhost:8004"; // words model (WS + REST)
@@ -31,6 +32,30 @@ const lastWord = (text) => {
 };
 
 const TranslatorCamera = ({ onPrediction }) => {
+  // ---- THEME ----
+  const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
+  // neutrals
+  const panelCls = isDarkMode ? "bg-[#0e1a28]/60 border border-white/10" : "bg-gray-200";
+  const softPanelCls = isDarkMode ? "bg-[#0e1a28]/60 border border-white/10" : "bg-gray-200";
+  const cardCls = isDarkMode ? "bg-[#0e1a28]/60 border border-white/10" : "bg-gray-200";
+  const textMutedCls = isDarkMode ? "text-gray-300" : "text-gray-700";
+  const boxCls = isDarkMode ? "bg-white/5 border border-white/10" : "bg-white";
+
+  // buttons
+  const btnBase = "px-3 py-2 border-2 rounded transition-colors";
+  const btnNeutral = isDarkMode
+    ? `${btnBase} border-white/20 bg-white/10 hover:bg-white/20`
+    : `${btnBase} border-black bg-gray-300 hover:bg-gray-400`;
+
+  // status pill colors stay semantic; just tweak contrast in dark
+  const pillBase = "px-2 py-1 rounded text-sm select-none";
+  const pillConnected = isDarkMode ? "bg-green-600 text-white" : "bg-green-600 text-white";
+  const pillPaused = isDarkMode ? "bg-yellow-600 text-white" : "bg-yellow-600 text-white";
+  const pillOffline = isDarkMode ? "bg-red-600 text-white" : "bg-red-600 text-white";
+
+  const videoFrameCls = `${panelCls} p-2 rounded-lg mb-2`;
+
   const videoRef = useRef(null);
   const wsRef = useRef(null);
   const poseRef = useRef(null);
@@ -70,8 +95,6 @@ const TranslatorCamera = ({ onPrediction }) => {
     stopSendLoop();
     setPaused(true);
     setStatus("Paused");
-    // optional: if your backend supports it, also notify:
-    // wsRef.current?.send(JSON.stringify({ type: "pause" }));
   };
 
   const resumeWords = () => {
@@ -79,8 +102,6 @@ const TranslatorCamera = ({ onPrediction }) => {
     setPaused(false);
     setStatus("Predicting");
     startSendLoopWords();
-    // optional backend notify:
-    // wsRef.current?.send(JSON.stringify({ type: "resume" }));
   };
 
   const speakText = (text) => {
@@ -99,31 +120,27 @@ const TranslatorCamera = ({ onPrediction }) => {
   const toggleSpeak = () => {
     const text = (sentence || "").replace(/\s+/g, " ").trim();
     if (!text) {
-      // nothing to read
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel();
         setSoundOn(false);
       }
       return;
     }
-
     if (window.speechSynthesis.speaking) {
       window.speechSynthesis.cancel();
       setSoundOn(false);
     } else {
-      speakText(text); // <-- always read the current sentence
+      speakText(text);
     }
   };
 
   // ---------- WORDS MODE (WS to 8004) ----------
   const startWordsSession = async () => {
-    // create session
     const resp = await fetch(`${WORDS_API_BASE}/v1/session/start`, { method: "POST" });
     if (!resp.ok) throw new Error("Failed to start session");
     const meta = await resp.json();
     sessionIdRef.current = meta.session_id;
 
-    // open WS
     const ws = new WebSocket(`ws://localhost:8004/v1/stream/${meta.session_id}`);
     wsRef.current = ws;
 
@@ -158,8 +175,6 @@ const TranslatorCamera = ({ onPrediction }) => {
       } catch { }
     };
 
-    // start send loop
-    // loopTimerRef.current = setInterval(() => tickSendWords(), SEND_INTERVAL_MS);
     setPaused(false);
     startSendLoopWords();
   };
@@ -173,16 +188,14 @@ const TranslatorCamera = ({ onPrediction }) => {
 
     const ts = performance.now();
 
-    // pose 33
     const pRes = pose.detectForVideo(videoEl, ts);
     let pose33 = null;
     if (pRes?.landmarks?.length) {
       const first = pRes.landmarks[0];
       if (first && first.length === 33) pose33 = first.map((lm) => [lm.x, lm.y, lm.z ?? 0, lm.visibility ?? 0]);
     }
-    if (!pose33) return; // keep cadence strict; could also send zeros
+    if (!pose33) return;
 
-    // hands 21/21
     const hRes = hand.detectForVideo(videoEl, ts);
     let left21 = Array.from({ length: 21 }, () => [0, 0, 0]);
     let right21 = Array.from({ length: 21 }, () => [0, 0, 0]);
@@ -213,7 +226,6 @@ const TranslatorCamera = ({ onPrediction }) => {
     stopSendLoop();
     setPaused(false);
 
-    // if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       try { wsRef.current.close(); } catch { }
     }
@@ -234,7 +246,7 @@ const TranslatorCamera = ({ onPrediction }) => {
   // ---------- LETTERS MODE (HTTP to 8000) ----------
   const startLettersLoop = () => {
     loopTimerRef.current = setInterval(() => tickSendLetters(), LETTERS_INTERVAL_MS);
-    setConnected(true); // we’re “connected” locally to the polling loop
+    setConnected(true);
     setStatus("Predicting");
   };
 
@@ -243,13 +255,11 @@ const TranslatorCamera = ({ onPrediction }) => {
     const hand = handRef.current;
     if (!videoEl || !hand) return;
 
-    // we only need one hand for single-letter classification
     const ts = performance.now();
     const hRes = hand.detectForVideo(videoEl, ts);
     const lm = hRes?.landmarks?.[0];
     if (!lm || !lm.length) {
       setHeadline("");
-      // optional: set "No hand detected"
       return;
     }
 
@@ -264,8 +274,8 @@ const TranslatorCamera = ({ onPrediction }) => {
       const data = await resp.json(); // expect { prediction: "A" }
       const pred = (data.prediction || "").toString();
       setHeadline(pred);
-      setTopK([]);       // letters endpoint might not provide probabilities
-      setStable(true);   // make UI look “locked”
+      setTopK([]);
+      setStable(true);
       onPrediction && onPrediction(pred, []);
     } catch (e) {
       // swallow errors in loop
@@ -314,7 +324,6 @@ const TranslatorCamera = ({ onPrediction }) => {
       await videoRef.current.play().catch(() => { });
       await initMediaPipe();
 
-      // start whichever mode is selected
       if (gestureMode) {
         await startWordsSession();
       } else {
@@ -325,7 +334,6 @@ const TranslatorCamera = ({ onPrediction }) => {
     start().catch((e) => console.error("Camera init failed:", e));
 
     return () => {
-      // cleanup BOTH modes aggressively
       stopLettersLoop();
       stopWordsSession().catch(() => { });
       if (poseRef.current) { poseRef.current.close(); poseRef.current = null; }
@@ -335,24 +343,18 @@ const TranslatorCamera = ({ onPrediction }) => {
         videoRef.current.srcObject = null;
       }
     };
-    // re-run when the mode changes
   }, [gestureMode, onPrediction]);
 
   // ---------- UI actions ----------
   const changeGestureMode = () => {
     if (gestureModeFixed) return;
-    // flip UI state; effect above will handle teardown/startup
     setHeadline("");
     setTopK([]);
     setStable(false);
     setSentence("");
     lastCommittedRef.current = "";
 
-    // stop current loop immediately for snappier switch
-    // if (gestureMode) stopWordsSession();
-    // else stopLettersLoop();
-
-    if (gestureMode) { // leaving words mode
+    if (gestureMode) {
       stopSendLoop();
       setPaused(false);
       stopWordsSession();
@@ -380,60 +382,61 @@ const TranslatorCamera = ({ onPrediction }) => {
 
   return (
     <div>
-      <div className="bg-gray-200 p-2 rounded-lg mb-2">
+      {/* Video */}
+      <div className={videoFrameCls}>
         <video ref={videoRef} autoPlay playsInline width="640" height="400" />
       </div>
 
-      <div className="flex items-center gap-3 border bg-gray-200 rounded-lg px-4 py-3">
-        {/* <span className={`px-2 py-1 rounded text-sm ${connected ? "bg-green-600 text-white" : "bg-red-600 text-white"}`}>
-          {connected ? (gestureMode ? `Words (${status})` : "Letters (Polling)") : "Offline"}
-        </span> */}
-
+      {/* Toolbar */}
+      <div className={`flex items-center gap-3 rounded-lg px-4 py-3 ${softPanelCls}`}>
         <span
           onClick={() => {
             if (gestureMode && connected) {
               paused ? resumeWords() : pauseWords();
             }
           }}
-
           title={
             gestureMode
               ? (connected ? (paused ? "Click to resume" : "Click to pause") : "Not connected")
               : "Pause is only for Words mode"
           }
-
-          className={`px-2 py-1 rounded text-sm select-none cursor-${gestureMode && connected ? "pointer" : "default"} ${connected ? (paused ? "bg-yellow-600 text-white" : "bg-green-600 text-white") : "bg-red-600 text-white"}`}
+          className={`${pillBase} cursor-${gestureMode && connected ? "pointer" : "default"} ${connected ? (gestureMode ? (paused ? pillPaused : pillConnected) : pillConnected) : pillOffline}`}
         >
           {connected ? (gestureMode ? (paused ? "Paused" : `Connected (${status})`) : "Letters (Polling)") : "Offline"}
         </span>
 
         {!gestureModeFixed && (
-          <button onClick={changeGestureMode} className="bg-gray-300 px-3 py-2 border-2 border-black rounded">
+          <button onClick={changeGestureMode} className={btnNeutral}>
             <img src={gestureMode ? gestureIcon : letterIcon} className="w-8 h-8" alt="Mode Toggle" />
           </button>
         )}
 
-        <button onClick={undoWord} className="bg-gray-300 px-3 py-2 border-2 border-black rounded" disabled={!gestureMode}>
+        <button onClick={undoWord} className={btnNeutral} disabled={!gestureMode}>
           Undo
         </button>
-        <button onClick={clearSentence} className="bg-gray-300 px-3 py-2 border-2 border-black rounded" disabled={!gestureMode}>
+        <button onClick={clearSentence} className={btnNeutral} disabled={!gestureMode}>
           Clear
         </button>
 
         <div className="flex-1" />
 
-        <button onClick={toggleSpeak} className="bg-gray-300 p-2 border-2 border-black rounded">
-          <img src={SoundOnIcon} className={`w-8 h-8 ${soundOn ? "" : "opacity-40"}`} alt="Speaker" />
+        <button onClick={toggleSpeak} className={btnNeutral}>
+          <img
+            src={SoundOnIcon}
+            className={`w-8 h-8 ${soundOn ? "" : "opacity-40"}`}
+            alt="Speaker"
+          />
         </button>
       </div>
 
-      <div className="mt-3 border bg-gray-200 rounded-lg p-3">
+      {/* Headline / TopK */}
+      <div className={`mt-3 rounded-lg p-3 ${cardCls}`}>
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">
             {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "—")}
           </h2>
           {gestureMode && (
-            <div className="text-sm text-gray-700">
+            <div className={`text-sm ${textMutedCls}`}>
               {topK.map((t, i) => (
                 <span key={i} className="mr-3">
                   {i + 1}. {t.label} {(t.p * 100).toFixed(1)}%
@@ -444,9 +447,10 @@ const TranslatorCamera = ({ onPrediction }) => {
         </div>
       </div>
 
+      {/* Sentence */}
       <div className="mt-3">
         <h3 className="text-lg font-semibold mb-1">Sentence</h3>
-        <div className="border bg-white rounded p-3 min-h-[60px] text-2xl">
+        <div className={`rounded p-3 min-h-[60px] text-2xl ${boxCls}`}>
           {gestureMode ? (sentence || " ") : " "}
         </div>
       </div>
