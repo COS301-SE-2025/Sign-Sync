@@ -81,3 +81,14 @@ class Trie:
             return scored[:top_k]
 
         return []
+    
+    # Optional unrandked set of next words
+    def next_options(self, prefix: str) -> List[str]:
+        toks = self.tokenize(prefix)
+        node = self.descend(toks)
+        return list(node.children.keys()) if node else []
+    
+    def save_json(self, path: str, encoding: str = "utf-8") -> None:
+        payload = {"lowercase": self.lowercase, "root": self.root.to_dict()}
+        with open(path, "w", encoding=encoding) as f:
+            json.dump(payload, f, ensure_ascii=False)
