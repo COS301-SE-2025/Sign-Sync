@@ -1,457 +1,234 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FilesetResolver, PoseLandmarker, HandLandmarker } from "@mediapipe/tasks-vision";
-
-import pose_task from "../assets/pose_landmarker_full.task";
-import hand_task from "../assets/hand_landmarker.task";
+import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
+import hand_landmarker_task from "../assets/hand_landmarker.task";
 
 import SoundOnIcon from "../assets/SoundOn.png";
 import SoundOffIcon from "../assets/SoundOff.png";
 import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
+import {temp} from "three/src/Three.TSL";
 
-// --- endpoints ---
-const WORDS_API_BASE = "http://localhost:8003"; // words model (WS + REST)
-const LETTERS_API_BASE = "http://localhost:8000"; // letters model (REST)
+import PreferenceManager from "./PreferenceManager";
+import preferenceManager from "./PreferenceManager";
 
-const SEND_INTERVAL_MS = 80;   // words streaming cadence
-const LETTERS_INTERVAL_MS = 500; // letters polling cadence
+const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction, width=700, height=500} ) => {
+    const videoRef = useRef(null);
+    const [handPresence, setHandPresence] = useState(null);
+    const [prediction, setPrediction] = useState(null);
+    const [soundOn, setSoundOn] = useState(null);
+    const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+    // const [gestureMode, setGestureMode] = useState(true); /////////////////////////////////////////////
+    const [gestureMode, setGestureMode] = useState(defaultGestureMode);
 
-// helpers
-const collapseConsecutive = (text) => {
-  const toks = (text || "").trim().split(/\s+/).filter(Boolean);
-  if (!toks.length) return "";
-  const out = [];
-  let prev = null;
-  for (const t of toks) { if (t !== prev) out.push(t); prev = t; }
-  return out.join(" ") + " ";
-};
-const lastWord = (text) => {
-  const toks = (text || "").trim().split(/\s+/).filter(Boolean);
-  return toks.length ? toks[toks.length - 1] : "";
-};
-
-const Camera = ({ onPrediction }) => {
-  const videoRef = useRef(null);
-  const wsRef = useRef(null);
-  const poseRef = useRef(null);
-  const handRef = useRef(null);
-  const loopTimerRef = useRef(null);
-  const sessionIdRef = useRef(null);
-
-  const [connected, setConnected] = useState(false);
-  const [status, setStatus] = useState("Idle");
-  const [soundOn, setSoundOn] = useState(false);
-
-  const [topK, setTopK] = useState([]); // [{label,p}]
-  const [stable, setStable] = useState(false);
-  const [sentence, setSentence] = useState("");
-  const [headline, setHeadline] = useState("");
-
-  const lastCommittedRef = useRef("");
-
-  const [gestureMode, setGestureMode] = useState(true);   // true = WORDS, false = LETTERS
-  const [gestureModeFixed] = useState(false);
-  const [paused, setPaused] = useState(false);
-
-  const startSendLoopWords = () => {
-    if (loopTimerRef.current) return;
-    loopTimerRef.current = setInterval(() => tickSendWords(), SEND_INTERVAL_MS);
-  };
-
-  const stopSendLoop = () => {
-    if (loopTimerRef.current) {
-      clearInterval(loopTimerRef.current);
-      loopTimerRef.current = null;
-    }
-  };
-
-  const pauseWords = () => {
-    if (!gestureMode) return;           // only valid in words mode
-    stopSendLoop();
-    setPaused(true);
-    setStatus("Paused");
-    // optional: if your backend supports it, also notify:
-    // wsRef.current?.send(JSON.stringify({ type: "pause" }));
-  };
-
-  const resumeWords = () => {
-    if (!gestureMode) return;
-    setPaused(false);
-    setStatus("Predicting");
-    startSendLoopWords();
-    // optional backend notify:
-    // wsRef.current?.send(JSON.stringify({ type: "resume" }));
-  };
-
-  const speakText = (text) => {
-    if (!("speechSynthesis" in window) || !text) return;
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = "en-US";
-    utt.rate = 1.0;
-    utt.pitch = 1.0;
-    utt.onstart = () => setSoundOn(true);
-    utt.onend = () => setSoundOn(false);
-    utt.onerror = () => setSoundOn(false);
-    window.speechSynthesis.speak(utt);
-  };
-
-  const toggleSpeak = () => {
-    const text = (sentence || "").replace(/\s+/g, " ").trim();
-    if (!text) {
-      // nothing to read
-      if (window.speechSynthesis.speaking) {
+    const speakText = (text) => {
+        if (!("speechSynthesis" in window)) 
+        {
+            console.warn("Text-to-Speech not supported in this browser.");
+            return;
+        }
+        
+        if (!text || text === "No hand detected") return;
+        const speeds = {"Slow":0.5,"Normal":1,"Fast":2};
         window.speechSynthesis.cancel();
-        setSoundOn(false);
-      }
-      return;
-    }
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = "en-US";
+        utter.rate = speeds[preferenceManager.getPreferences().speechSpeed];
+        utter.pitch = 0.7;
 
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-      setSoundOn(false);
-    } else {
-      speakText(text); // <-- always read the current sentence
-    }
-  };
+        const voice =  window.speechSynthesis.getVoices().find(voice =>
+            voice.name.includes(PreferenceManager.getPreferences().speechVoice));
 
-  // ---------- WORDS MODE (WS to 8003) ----------
-  const startWordsSession = async () => {
-    // create session
-    const resp = await fetch(`${WORDS_API_BASE}/v1/session/start`, { method: "POST" });
-    if (!resp.ok) throw new Error("Failed to start session");
-    const meta = await resp.json();
-    sessionIdRef.current = meta.session_id;
-
-    // open WS
-    const ws = new WebSocket(`ws://localhost:8003/v1/stream/${meta.session_id}`);
-    wsRef.current = ws;
-
-    ws.onopen = () => { setConnected(true); setStatus("Idle"); };
-    ws.onclose = () => { setConnected(false); setStatus("Idle"); };
-    ws.onerror = () => { try { ws.close(); } catch { } };
-
-    ws.onmessage = (ev) => {
-      try {
-        const msg = JSON.parse(ev.data);
-        if (msg.type === "prediction") {
-          if (msg.idle) setStatus("Idle");
-          else if (msg.filling) setStatus("Filling");
-          else setStatus("Predicting");
-
-          setTopK(msg.topk || []);
-          setStable(!!msg.stable);
-          if (msg.topk?.length) {
-            setHeadline(msg.topk[0].label);
-            onPrediction && onPrediction(msg.topk[0].label, msg.topk);
-          } else {
-            setHeadline("");
-          }
-        } else if (msg.type === "word_event") {
-          const w = (msg.label || "").trim();
-          if (w && w !== lastCommittedRef.current) lastCommittedRef.current = w;
-        } else if (msg.type === "sentence") {
-          const cleaned = collapseConsecutive(msg.text || "");
-          setSentence(cleaned);
-          lastCommittedRef.current = lastWord(cleaned);
+        if(voice) {
+            utter.voice = voice;
         }
-      } catch { }
+
+        utter.onstart = () => setSoundOn(true);
+        utter.onend = () => setSoundOn(false);
+        utter.onerror = () => setSoundOn(false);
+
+        window.speechSynthesis.speak(utter);
     };
 
-    // start send loop
-    // loopTimerRef.current = setInterval(() => tickSendWords(), SEND_INTERVAL_MS);
-    setPaused(false);
-    startSendLoopWords();
-  };
+    useEffect(() => {
+        let handLandmarker;
+        let animationFrameId;
 
-  const tickSendWords = () => {
-    const videoEl = videoRef.current;
-    const pose = poseRef.current;
-    const hand = handRef.current;
-    const ws = wsRef.current;
-    if (!videoEl || !pose || !hand || !ws || ws.readyState !== WebSocket.OPEN) return;
-
-    const ts = performance.now();
-
-    // pose 33
-    const pRes = pose.detectForVideo(videoEl, ts);
-    let pose33 = null;
-    if (pRes?.landmarks?.length) {
-      const first = pRes.landmarks[0];
-      if (first && first.length === 33) pose33 = first.map((lm) => [lm.x, lm.y, lm.z ?? 0, lm.visibility ?? 0]);
-    }
-    if (!pose33) return; // keep cadence strict; could also send zeros
-
-    // hands 21/21
-    const hRes = hand.detectForVideo(videoEl, ts);
-    let left21 = Array.from({ length: 21 }, () => [0, 0, 0]);
-    let right21 = Array.from({ length: 21 }, () => [0, 0, 0]);
-
-    if (hRes?.landmarks?.length) {
-      const LM = hRes.landmarks;
-      const H = hRes.handednesses;
-      if (H && H.length === LM.length) {
-        for (let i = 0; i < LM.length; i++) {
-          const side = (H[i][0]?.categoryName || "").toLowerCase();
-          const pts = LM[i].map((lm) => [lm.x, lm.y, lm.z ?? 0]);
-          if (side === "left") left21 = pts;
-          else if (side === "right") right21 = pts;
-        }
-      } else {
-        const pts0 = LM[0]?.map((lm) => [lm.x, lm.y, lm.z ?? 0]);
-        if (pts0) left21 = pts0;
-        const pts1 = LM[1]?.map((lm) => [lm.x, lm.y, lm.z ?? 0]);
-        if (pts1) right21 = pts1;
-      }
-    }
-
-    const payload = { t: Date.now(), pose33, left21, right21 };
-    try { ws.send(JSON.stringify(payload)); } catch { }
-  };
-
-  const stopWordsSession = async () => {
-    stopSendLoop();
-    setPaused(false);
-
-    // if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
-    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      try { wsRef.current.close(); } catch { }
-    }
-    if (sessionIdRef.current) {
-      try {
-        await fetch(`${WORDS_API_BASE}/v1/session/stop`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sessionIdRef.current }),
-        });
-      } catch { }
-      sessionIdRef.current = null;
-    }
-    setConnected(false);
-    setStatus("Idle");
-  };
-
-  // ---------- LETTERS MODE (HTTP to 8000) ----------
-  const startLettersLoop = () => {
-    loopTimerRef.current = setInterval(() => tickSendLetters(), LETTERS_INTERVAL_MS);
-    setConnected(true); // we’re “connected” locally to the polling loop
-    setStatus("Predicting");
-  };
-
-  const tickSendLetters = async () => {
-    const videoEl = videoRef.current;
-    const hand = handRef.current;
-    if (!videoEl || !hand) return;
-
-    // we only need one hand for single-letter classification
-    const ts = performance.now();
-    const hRes = hand.detectForVideo(videoEl, ts);
-    const lm = hRes?.landmarks?.[0];
-    if (!lm || !lm.length) {
-      setHeadline("");
-      // optional: set "No hand detected"
-      return;
-    }
-
-    const keypoints = lm.map((pt) => ({ x: pt.x, y: pt.y, z: pt.z ?? 0 }));
-    try {
-      const resp = await fetch(`${LETTERS_API_BASE}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keypoints }),
-      });
-      if (!resp.ok) return;
-      const data = await resp.json(); // expect { prediction: "A" }
-      const pred = (data.prediction || "").toString();
-      setHeadline(pred);
-      setTopK([]);       // letters endpoint might not provide probabilities
-      setStable(true);   // make UI look “locked”
-      onPrediction && onPrediction(pred, []);
-    } catch (e) {
-      // swallow errors in loop
-    }
-  };
-
-  const stopLettersLoop = () => {
-    if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
-    setConnected(false);
-    setStatus("Idle");
-  };
-
-  // ---------- shared setup / teardown ----------
-  useEffect(() => {
-    let stream = null;
-
-    const initMediaPipe = async () => {
-      const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-      );
-
-      poseRef.current = await PoseLandmarker.createFromOptions(vision, {
-        baseOptions: { modelAssetPath: pose_task },
-        runningMode: "VIDEO",
-        numPoses: 1,
-        minPoseDetectionConfidence: 0.5,
-        minPosePresenceConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
-
-      handRef.current = await HandLandmarker.createFromOptions(vision, {
-        baseOptions: { modelAssetPath: hand_task },
-        runningMode: "VIDEO",
-        numHands: 2,
-        minHandDetectionConfidence: 0.5,
-        minHandPresenceConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
-    };
-
-    const start = async () => {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 400 } });
-      if (!videoRef.current) return;
-      videoRef.current.srcObject = stream;
-      videoRef.current.style.transform = "scaleX(-1)";
-      await videoRef.current.play().catch(() => { });
-      await initMediaPipe();
-
-      // start whichever mode is selected
-      if (gestureMode) {
-        await startWordsSession();
-      } else {
-        startLettersLoop();
-      }
-    };
-
-    start().catch((e) => console.error("Camera init failed:", e));
-
-    return () => {
-      // cleanup BOTH modes aggressively
-      stopLettersLoop();
-      stopWordsSession().catch(() => { });
-      if (poseRef.current) { poseRef.current.close(); poseRef.current = null; }
-      if (handRef.current) { handRef.current.close(); handRef.current = null; }
-      if (videoRef.current && stream) {
-        stream.getTracks().forEach((t) => t.stop());
-        videoRef.current.srcObject = null;
-      }
-    };
-    // re-run when the mode changes
-  }, [gestureMode, onPrediction]);
-
-  // ---------- UI actions ----------
-  const changeGestureMode = () => {
-    if (gestureModeFixed) return;
-    // flip UI state; effect above will handle teardown/startup
-    setHeadline("");
-    setTopK([]);
-    setStable(false);
-    setSentence("");
-    lastCommittedRef.current = "";
-
-    // stop current loop immediately for snappier switch
-    // if (gestureMode) stopWordsSession();
-    // else stopLettersLoop();
-
-    if (gestureMode) { // leaving words mode
-      stopSendLoop();
-      setPaused(false);
-      stopWordsSession();
-    } else {
-      stopLettersLoop();
-    }
-
-    setGestureMode((g) => !g);
-  };
-
-  const clearSentence = () => {
-    lastCommittedRef.current = "";
-    const ws = wsRef.current;
-    if (gestureMode && ws?.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: "clear_sentence" }));
-    }
-    setSentence("");
-  };
-  const undoWord = () => {
-    const ws = wsRef.current;
-    if (gestureMode && ws?.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: "undo" }));
-    }
-  };
-
-  return (
-    <div>
-      <div className="bg-gray-200 p-2 rounded-lg mb-2">
-        <video ref={videoRef} autoPlay playsInline width="640" height="400" />
-      </div>
-
-      <div className="flex items-center gap-3 border bg-gray-200 rounded-lg px-4 py-3">
-        {/* <span className={`px-2 py-1 rounded text-sm ${connected ? "bg-green-600 text-white" : "bg-red-600 text-white"}`}>
-          {connected ? (gestureMode ? `Words (${status})` : "Letters (Polling)") : "Offline"}
-        </span> */}
-
-        <span
-          onClick={() => {
-            if (gestureMode && connected) {
-              paused ? resumeWords() : pauseWords();
+        //https://dev.to/kiyo/integrating-mediapipetasks-vision-for-hand-landmark-detection-in-react-2lbg
+        const initializeHandDetection = async () => {
+            try {
+                const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",);
+                handLandmarker = await HandLandmarker.createFromOptions(
+                    vision, {
+                        baseOptions: { modelAssetPath: hand_landmarker_task },numHands: 2, runningMode: "video"}
+                );
+                animationFrameId = scanWebcam();
+            } catch (error) {
+                console.error(error);
             }
-          }}
+        };
 
-          title={
-            gestureMode
-              ? (connected ? (paused ? "Click to resume" : "Click to pause") : "Not connected")
-              : "Pause is only for Words mode"
-          }
+        const scanWebcam = () => {
+            let arrayLandmarks = [];
+            let start = Date.now();
+            console.log(start);
+            const loop = setInterval(() => {
+                if (videoRef.current && handLandmarker) {
+                    if(gestureMode) {
+                        const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
+                        if (detections.landmarks && detections.landmarks.length > 0) {
+                            const tempArr = [];
+                            for (let i = 0; i < detections.landmarks.length; i++) {
+                                const temp = detections.landmarks[i].flatMap(({ x, y, z }) => [x, y, z]);
+                                tempArr.push(...temp);
+                            }
+                            if (tempArr.length < 126) {
+                                const blankArr = Array(126-tempArr.length).fill(0.0);
+                                tempArr.push(...blankArr);
+                            }
+                            if(arrayLandmarks.length === 0) {
+                                arrayLandmarks = [tempArr];
+                            }else{
+                                arrayLandmarks = [...arrayLandmarks,tempArr];
+                            }
+                            if(arrayLandmarks.length === 50) {
+                                makePredictionGesture(arrayLandmarks);
+                                console.log(Date.now()-start);
+                                start = Date.now();
+                                arrayLandmarks = [];
+                            }
+                        }
+                    }else{
+                        const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
+                        if (detections.landmarks && detections.landmarks.length > 0) {
+                            makePredictionLetters(detections.landmarks[0]);
+                        }else{
+                            setPrediction("No hand detected");
+                        }
+                    }
+                }
+            },gestureMode? 40 : 500);
+            return loop;
+        };
+        const makePredictionGesture = async (arrayLandmarks) => {
 
-          className={`px-2 py-1 rounded text-sm select-none cursor-${gestureMode && connected ? "pointer" : "default"} ${connected ? (paused ? "bg-yellow-600 text-white" : "bg-green-600 text-white") : "bg-red-600 text-white"}`}
-        >
-          {connected ? (gestureMode ? (paused ? "Paused" : `Connected (${status})`) : "Letters (Polling)") : "Offline"}
-        </span>
+            try {
+                const request = await fetch("http://localhost:8003/predict", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({sequence:arrayLandmarks})
+                });
 
-        {!gestureModeFixed && (
-          <button onClick={changeGestureMode} className="bg-gray-300 px-3 py-2 border-2 border-black rounded">
-            <img src={gestureMode ? gestureIcon : letterIcon} className="w-8 h-8" alt="Mode Toggle" />
-          </button>
-        )}
+                const response = await request.json();
+                setPrediction(response.gloss);
 
-        <button onClick={undoWord} className="bg-gray-300 px-3 py-2 border-2 border-black rounded" disabled={!gestureMode}>
-          Undo
-        </button>
-        <button onClick={clearSentence} className="bg-gray-300 px-3 py-2 border-2 border-black rounded" disabled={!gestureMode}>
-          Clear
-        </button>
+                if(onPrediction) {
+                    onPrediction(response.gloss);
+                }
+            } catch (err) {
+                console.error("Failed to fetch prediction:", err);
+            }
+        };
+        const makePredictionLetters = async (keypointArray) => {
+            const landmarkJSON = {
+                keypoints: keypointArray.map((coordinates) => ({
+                    x: coordinates.x,
+                    y: coordinates.y,
+                    z: coordinates.z
+                }))
+            };
 
-        <div className="flex-1" />
+            try {
+                const request = await fetch("http://localhost:8000/predict", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(landmarkJSON)
+                });
 
-        <button onClick={toggleSpeak} className="bg-gray-300 p-2 border-2 border-black rounded">
-          <img src={SoundOnIcon} className={`w-8 h-8 ${soundOn ? "" : "opacity-40"}`} alt="Speaker" />
-        </button>
-      </div>
+                const response = await request.json();
+                setPrediction(response.prediction);
+                if(onPrediction) {
+                    onPrediction(response.prediction);
+                }
+            } catch (err) {
+                console.error("Failed to fetch prediction:", err);
+            }
+        };
 
-      <div className="mt-3 border bg-gray-200 rounded-lg p-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">
-            {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "—")}
-          </h2>
-          {gestureMode && (
-            <div className="text-sm text-gray-700">
-              {topK.map((t, i) => (
-                <span key={i} className="mr-3">
-                  {i + 1}. {t.label} {(t.p * 100).toFixed(1)}%
-                </span>
-              ))}
+        const startWebcam = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoRef.current.srcObject = stream;
+                videoRef.current.style.transform = "scaleX(-1)";
+                await initializeHandDetection();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        startWebcam();
+
+        return () => {
+            if (videoRef.current && videoRef.current.srcObject) {
+                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            }
+            if (handLandmarker) {
+                handLandmarker.close();
+            }
+
+            if (animationFrameId) {
+                clearInterval(animationFrameId);
+            }
+        };
+    }, [gestureMode]);
+
+    const changeSound = () => {
+        // setSoundOn(sound => !sound);
+
+        if (window.speechSynthesis.speaking)
+        {
+            window.speechSynthesis.cancel();
+
+            setSoundOn(false);
+        }
+        else
+        {
+            speakText(prediction);
+        }
+    }
+
+    const changeGestureMode = () => {
+        setGestureMode(gestureMode => !gestureMode);
+    }
+    return (
+        // <div>
+        //     <div className="bg-gray-200 p-2 rounded-lg mb-2">
+        //         <video ref={videoRef} autoPlay playsInline className="object-cover" style={{maxWidth: `${width}px`, height: `${height}px`, width: '100%'}}/>
+        //     </div>
+        //     <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
+                
+        //         {!gestureModeFixed && (<button onClick={changeGestureMode} className="bg-gray-300 p-3.5 border-2 border-black"><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
+                
+        //         <h1 className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] ">{prediction}</h1>
+        //         <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
+        //     </div>
+        // </div>
+        <div>
+            <div className={`p-2 rounded-lg mb-2`} style={{ background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
+                <video ref={videoRef} autoPlay playsInline className="object-cover" style={{maxWidth: `${width}px`, height: `${height}px`, width: '100%'}}/>
             </div>
-          )}
+            <div className="flex items-center border rounded-lg px-4 py-2" style={{ background: isDarkMode ? '#36454f' : '#e5e7eb' }}>
+                
+                {!gestureModeFixed && (<button onClick={changeGestureMode} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#4f5a65' : '#d1d5db' }} ><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
+                
+                <h1 className="text-center w-3/4 text-4xl font-bold border-2 py-2.5 my-2 justify-center flex flex-grow min-h-[60px]" style={{ background: isDarkMode ? '#4f5a65' : '#d1d5db', color: isDarkMode ? 'white' : 'black' }}>{prediction}</h1>
+                <button onClick={changeSound} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#4f5a65' : '#d1d5db' }}><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
+            </div>
         </div>
-      </div>
-
-      <div className="mt-3">
-        <h3 className="text-lg font-semibold mb-1">Sentence</h3>
-        <div className="border bg-white rounded p-3 min-h-[60px] text-2xl">
-          {gestureMode ? (sentence || " ") : " "}
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Camera;
