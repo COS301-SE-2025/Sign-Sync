@@ -101,6 +101,6 @@ class Trie:
         trie.root = Node.from_dict(payload["root"])
         return trie
     
-if __name__ == "__main__":
-    loaded_trie = Trie.load_json("trie.json")
-    print(loaded_trie.predict_next("they see"))
+#if __name__ == "__main__":
+#    loaded_trie = Trie.load_json("trie.json")
+#    print(loaded_trie.predict_next("they need"))
