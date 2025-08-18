@@ -29,3 +29,24 @@ def tidy(tokens):
     if s and s[-1] not in ".!?":
         s += "."
     return capitalize(s)
+
+def gloss_to_english(text: str) -> str:
+    toks = text.strip().lower().split()
+    if not toks:
+        return ""
+    # TOPIC PRONOUN VERB
+    if len(toks) >= 3 and toks[0] not in PRONOUNS and toks[1] in PRONOUNS:
+        topic, subj, verb, *rest = toks[0], toks[1], toks[2], toks[3:]
+        prep = VERB_PREP.get(verb, None)
+        parts = [subj, verb]
+        if topic in PLACES and prep:
+            art = article_for(topic)
+            if prep != "—":
+                parts.append(prep)
+            if art:
+                parts.append(art)
+            parts.append(topic)
+        else:
+            parts.append(topic)
+        parts.extend(rest)
+        return tidy(parts)
