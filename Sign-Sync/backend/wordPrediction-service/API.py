@@ -4,6 +4,7 @@ from Trie import Trie
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Tuple, List
+import corrector
 import random
 
 class PredictIn(BaseModel):
@@ -15,6 +16,12 @@ class PredictIn(BaseModel):
 class PredictOut(BaseModel):
     token: Optional[str]
     prob: float
+
+class TranslateIn(BaseModel):
+    text: str
+
+class TranslateOut(BaseModel):
+    translation: str
 
 JSON_PATH = "trie.json"
 app = FastAPI()
@@ -45,3 +52,10 @@ def predict(body: PredictIn) -> PredictOut:
     tied = [tok for tok, p in preds if abs(p - max_p) <= TIE_EPS]
     token = random.choice(tied)
     return PredictOut(token=token, prob=max_p)
+
+@app.post("/translate", response_model=TranslateOut)
+def translate(body: TranslateIn) -> TranslateOut:
+    if not body.text.strip():
+        return TranslateOut(translation="")
+    translation = corrector.gloss_to_english(body.text)
+    return TranslateOut(translation=translation)
