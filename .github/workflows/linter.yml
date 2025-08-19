@@ -13,9 +13,7 @@ jobs:
       - name: Run Super-Linter
         uses: github/super-linter@v5
         env:
-          # Force full validation (avoids Git diff issues)
           VALIDATE_ALL_CODEBASE: "true"
-          # Disable "only changed files" mode
           VALIDATE_ONLY_CHANGED_FILES: "false"
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
