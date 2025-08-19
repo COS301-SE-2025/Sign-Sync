@@ -2,8 +2,11 @@ class PreferenceManager
 {
     static preferences = {
         displayMode: 'Light Mode',
-        //preferredAvatar: 'Default',
+        preferredAvatar: 'Zac',
+        animationSpeed: 'Normal',
         fontSize: 'Medium',
+        speechSpeed: 1,
+        speechVoice: 'George'
     };
 
     static async initialize() 

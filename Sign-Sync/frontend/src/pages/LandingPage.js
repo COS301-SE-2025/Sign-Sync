@@ -12,7 +12,8 @@ class LandingPage extends React.Component
   render() 
   {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 text-white px-6">
+      <div className="flex flex-col items-center justify-center min-h-screen" style={{ background: "linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)" }} >
+              
         <motion.div
           initial={{ opacity: 0, y: 150 }}
           animate={{ opacity: 1, y: 0 }}

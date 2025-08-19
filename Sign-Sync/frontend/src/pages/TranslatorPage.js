@@ -1,9 +1,10 @@
 import React from "react";
-import Camera from "../components/Camera";
+// import Camera from "../components/Camera";
 import SideNavbar from "../components/sideNavbar";
 import TextToSign from "../components/textToSign";
 import Swap from "../assets/Swap-icon.png"
 import PreferenceManager from "../components/PreferenceManager";
+import TranslatorCamera from "../components/TranslatorCamera";
 
 class TranslatorPage extends React.Component
 {
@@ -24,7 +25,7 @@ class TranslatorPage extends React.Component
         let translatorType = this.state.type;
         if(translatorType === "SignText"){
             translatorMode = <div>
-                <Camera/>
+                <TranslatorCamera/>
             </div>
         }else{
             translatorMode = <div>
@@ -35,9 +36,13 @@ class TranslatorPage extends React.Component
         const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
         return (
-            <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
+            // <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
+            <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
+                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
+                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
                 <SideNavbar/>
-                <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"} px-6 py-10`}>
+                <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "text-white" : "text-black"} px-6 py-10`}>
+                {/* <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"} px-6 py-10`}> */}
                     {translatorMode}
                     <div className={"flex mt-2"}>
                         <button onClick={this.changeType} className={`p-2 font-bold w-20 ${translatorType === "SignText" ? "bg-[#801E20] text-[#FFFFFD]": "bg-[#FFFFFD] text-[#801E20]"}  border-gray-600 rounded`}>

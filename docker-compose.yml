@@ -1,0 +1,44 @@
+services:
+  alphabet-translate:
+    build:
+      context: ./Sign-Sync/backend/alphabetTranslate-service
+      dockerfile: Dockerfile
+    container_name: alphabet-translate
+    ports:
+      - "8000:8000"
+
+  speech-to-text:
+    build:
+      context: ./Sign-Sync/backend/speechToText-service
+      dockerfile: Dockerfile
+    container_name: speech-to-text
+    ports:
+      - "8001:8001"
+
+  text-to-asl-gloss:
+    build:
+      context: ./Sign-Sync/backend/textToAslGloss-service
+      dockerfile: Dockerfile
+    container_name: text-to-asl-gloss
+    ports:
+      - "8002:8002"
+
+  gesture-recognition:
+    build:
+      context: ./Sign-Sync/backend/gestureRecognition-service
+      dockerfile: Dockerfile
+    container_name: gesture-recognition
+    ports:
+      - "8003:8003"
+
+  frontend:
+    build:
+      context: ./Sign-Sync
+      dockerfile: Dockerfile
+    container_name: sign-sync-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+

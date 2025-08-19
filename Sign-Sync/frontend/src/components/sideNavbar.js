@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { FaChevronDown } from "react-icons/fa";
 //import topBtn from "../assets/sideNav-topButton.png";
@@ -36,9 +37,9 @@ class SideNavbar extends React.Component
     localStorage.removeItem('user');
     this.setState({ isLoggedIn: false });
 
-    alert("Logout successful!, redirecting to Splash page...");
+    toast.success("Logout successful!, redirecting to Splash page...");
 
-    window.location.href = '/';
+    setTimeout(() => { window.location.href = '/' }, 1200);
   }
 
   toggleEducation = () =>
@@ -62,17 +63,7 @@ class SideNavbar extends React.Component
 
     return (
       <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]"> 
-        <div className="relative w-full h-[66px] bg-[#1c4a7c]">
-          <div className="flex w-[61px] h-[60px] items-center justify-center relative top-[3px] left-[13px]">
-            <div className="flex flex-col w-24 items-center justify-center relative mt-[-18.00px] mb-[-18.00px] ml-[-17.50px] mr-[-17.50px] rounded-[28px] overflow-hidden">
-              <div className="flex h-24 items-center justify-center relative self-stretch w-full">
-                <div className="w-12 h-12" />
-                  {/* <img src={topBtn} alt="Logo" className="w-15 h-13 pt-2" /> */}
-              </div>
-            </div>
-          </div>
-        </div>
-
+      
         <div className="w-full flex flex-col gap-4 pt-4 text-white ">
 
             <div className="p-2 text-4xl">
@@ -82,12 +73,12 @@ class SideNavbar extends React.Component
                 </Link>
             </div>
 
-            <div className="p-2 text-4xl cursor-pointer flex items-center justify-between" onClick={this.toggleEducation}>
-              <div className="flex items-center">
-                <img src={EducationBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-                Education
+            <div className="cursor-pointer flex items-center justify-between p-2" onClick={this.toggleEducation}>
+              <div className="flex items-center gap-2">
+                <img src={EducationBtn} alt="Education Icon" className="w-8 h-8" />
+                <span className="text-4xl">Education</span>
               </div>
-              <FaChevronDown className={`transition-transform duration-300 ${educationOpen ? 'rotate-180' : ''}`} />
+              <FaChevronDown className={`transition-transform duration-300 ${educationOpen ? 'rotate-180' : ''}`} style={{ display: 'block', height: '2em', width: '2em', marginTop: '0.5em'}}/>
             </div>
 
             {educationOpen && (
@@ -102,7 +93,7 @@ class SideNavbar extends React.Component
                 {learnOpen && (
                   <div className="pl-6 flex flex-col gap-1 text-xl">
                     <Link to="/learn-Alphabet" className="hover:underline">Alphabet</Link>
-                    <Link to="/translator" className="hover:underline">Words</Link>
+                    <Link to="/learn-Words" className="hover:underline">Words</Link>
                   </div>
                 )}
 
@@ -114,7 +105,7 @@ class SideNavbar extends React.Component
                 {practiseOpen && (
                   <div className="pl-6 flex flex-col gap-1 text-xl">
                     <Link to="/practise-Alphabet" className="hover:underline">Alphabet</Link>
-                    <Link to="/translator" className="hover:underline">Words</Link>
+                    <Link to="/practise-Words" className="hover:underline">Words</Link>
                   </div>
                 )}
 

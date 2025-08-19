@@ -8,13 +8,46 @@ import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
 import {temp} from "three/src/Three.TSL";
 
-const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction} ) => {
+import PreferenceManager from "./PreferenceManager";
+import preferenceManager from "./PreferenceManager";
+
+const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction, width=700, height=500} ) => {
     const videoRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [prediction, setPrediction] = useState(null);
     const [soundOn, setSoundOn] = useState(null);
+    const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
     // const [gestureMode, setGestureMode] = useState(true); /////////////////////////////////////////////
     const [gestureMode, setGestureMode] = useState(defaultGestureMode);
+
+    const speakText = (text) => {
+        if (!("speechSynthesis" in window)) 
+        {
+            console.warn("Text-to-Speech not supported in this browser.");
+            return;
+        }
+        
+        if (!text || text === "No hand detected") return;
+        const speeds = {"Slow":0.5,"Normal":1,"Fast":2};
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = "en-US";
+        utter.rate = speeds[preferenceManager.getPreferences().speechSpeed];
+        utter.pitch = 0.7;
+
+        const voice =  window.speechSynthesis.getVoices().find(voice =>
+            voice.name.includes(PreferenceManager.getPreferences().speechVoice));
+
+        if(voice) {
+            utter.voice = voice;
+        }
+
+        utter.onstart = () => setSoundOn(true);
+        utter.onend = () => setSoundOn(false);
+        utter.onerror = () => setSoundOn(false);
+
+        window.speechSynthesis.speak(utter);
+    };
 
     useEffect(() => {
         let handLandmarker;
@@ -79,7 +112,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
         const makePredictionGesture = async (arrayLandmarks) => {
 
             try {
-                const request = await fetch("http://localhost:8003/predict", {
+                const request = await fetch("http://localhost:8007/api/gesture/predict", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -89,6 +122,10 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
 
                 const response = await request.json();
                 setPrediction(response.gloss);
+
+                if(onPrediction) {
+                    onPrediction(response.gloss);
+                }
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
             }
@@ -103,7 +140,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
             };
 
             try {
-                const request = await fetch("http://localhost:8000/predict", {
+                const request = await fetch("http://localhost:8007/api/alphabet/predict", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -149,22 +186,46 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
     }, [gestureMode]);
 
     const changeSound = () => {
-        setSoundOn(sound => !sound);
+        // setSoundOn(sound => !sound);
+
+        if (window.speechSynthesis.speaking)
+        {
+            window.speechSynthesis.cancel();
+
+            setSoundOn(false);
+        }
+        else
+        {
+            speakText(prediction);
+        }
     }
+
     const changeGestureMode = () => {
         setGestureMode(gestureMode => !gestureMode);
     }
     return (
+        // <div>
+        //     <div className="bg-gray-200 p-2 rounded-lg mb-2">
+        //         <video ref={videoRef} autoPlay playsInline className="object-cover" style={{maxWidth: `${width}px`, height: `${height}px`, width: '100%'}}/>
+        //     </div>
+        //     <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
+                
+        //         {!gestureModeFixed && (<button onClick={changeGestureMode} className="bg-gray-300 p-3.5 border-2 border-black"><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
+                
+        //         <h1 className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] ">{prediction}</h1>
+        //         <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
+        //     </div>
+        // </div>
         <div>
-            <div className="bg-gray-200 p-2 rounded-lg mb-2">
-                <video ref={videoRef} autoPlay playsInline width="640" height="400" />
+            <div className={`p-2 rounded-lg mb-2`} style={{ background: isDarkMode ? '#36454f' : '#e5e7eb'}}>
+                <video ref={videoRef} autoPlay playsInline className="object-cover" style={{maxWidth: `${width}px`, height: `${height}px`, width: '100%'}}/>
             </div>
-            <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
+            <div className="flex items-center border rounded-lg px-4 py-2" style={{ background: isDarkMode ? '#36454f' : '#e5e7eb' }}>
                 
-                {!gestureModeFixed && (<button onClick={changeGestureMode} className="bg-gray-300 p-3.5 border-2 border-black"><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
+                {!gestureModeFixed && (<button onClick={changeGestureMode} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#4f5a65' : '#d1d5db' }} ><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
                 
-                <h1 className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] ">{prediction}</h1>
-                <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
+                <h1 className="text-center w-3/4 text-4xl font-bold border-2 py-2.5 my-2 justify-center flex flex-grow min-h-[60px]" style={{ background: isDarkMode ? '#4f5a65' : '#d1d5db', color: isDarkMode ? 'white' : 'black' }}>{prediction}</h1>
+                <button onClick={changeSound} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#4f5a65' : '#d1d5db' }}><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
             </div>
         </div>
     );

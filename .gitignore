@@ -7,6 +7,7 @@ pycache/
 env/
 venv/
 .venv/
+myvenv/
 
 #Environment variables,
 .env
