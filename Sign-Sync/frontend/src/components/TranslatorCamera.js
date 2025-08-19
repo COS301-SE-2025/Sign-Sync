@@ -283,7 +283,23 @@ const TranslatorCamera = ({ onPrediction }) => {
     }
   };
 
-  
+  const toEnglish = async (text) => {
+    if (!text) return "";
+    try {
+      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setSentence(data.translation || sentence);
+      }
+    } catch (e) {
+      console.error("Failed to convert to English:", e);
+      return "";
+    }
+  }
 
   const stopLettersLoop = () => {
     if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
