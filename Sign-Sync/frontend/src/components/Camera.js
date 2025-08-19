@@ -8,12 +8,13 @@ import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
 import {temp} from "three/src/Three.TSL";
 
-const Camera = () => {
+const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPrediction} ) => {
     const videoRef = useRef(null);
     const [handPresence, setHandPresence] = useState(null);
     const [prediction, setPrediction] = useState(null);
     const [soundOn, setSoundOn] = useState(null);
-    const [gestureMode, setGestureMode] = useState(true);
+    // const [gestureMode, setGestureMode] = useState(true); /////////////////////////////////////////////
+    const [gestureMode, setGestureMode] = useState(defaultGestureMode);
 
     useEffect(() => {
         let handLandmarker;
@@ -112,6 +113,9 @@ const Camera = () => {
 
                 const response = await request.json();
                 setPrediction(response.prediction);
+                if(onPrediction) {
+                    onPrediction(response.prediction);
+                }
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
             }
@@ -156,7 +160,9 @@ const Camera = () => {
                 <video ref={videoRef} autoPlay playsInline width="640" height="400" />
             </div>
             <div className="flex items-center border bg-gray-200 rounded-lg px-4 py-2 ">
-                <button onClick={changeGestureMode} className="bg-gray-300 p-3.5 border-2 border-black"><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button>
+                
+                {!gestureModeFixed && (<button onClick={changeGestureMode} className="bg-gray-300 p-3.5 border-2 border-black"><img src={gestureMode? gestureIcon : letterIcon} className="w-8 h-8" alt={"Conversation"}/></button> )}
+                
                 <h1 className="text-center w-3/4 text-4xl font-bold border-2 border-black bg-gray-300 py-2.5 my-2 justify-center flex flex-grow min-h-[60px] ">{prediction}</h1>
                 <button onClick={changeSound} className="bg-gray-300 p-3.5 border-2 border-black"><img src={soundOn? SoundOnIcon : SoundOffIcon} className="w-8 h-8" alt={"Speaker"}/></button>
             </div>
