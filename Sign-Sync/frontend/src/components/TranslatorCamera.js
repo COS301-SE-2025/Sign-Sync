@@ -11,7 +11,7 @@ import letterIcon from "../assets/Letters.png";
 import PreferenceManager from "../components/PreferenceManager"; // <-- add this
 
 // --- endpoints ---
-const WORDS_API_BASE = "http://localhost:8004"; // words model (WS + REST)
+const WORDS_API_BASE = "http://localhost:8004/api/stt"; // words model (WS + REST)
 const LETTERS_API_BASE = "http://localhost:8007/api/alphabet"; // letters model (REST)
 const GRAMMAR_API_BASE = "http://localhost:8007/api/word"; // grammar model (REST)
 

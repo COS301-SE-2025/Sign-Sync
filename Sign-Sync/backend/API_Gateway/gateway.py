@@ -1,7 +1,5 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv(dotenv_path=Path(__file__).with_name(".env"))
 
 import asyncio
 import httpx
@@ -13,22 +11,18 @@ from fastapi import FastAPI, Request, HTTPException, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
+CORS_ORIGINS = "http://localhost:3000"
+WS_ORIGINS = "http://localhost:3000"
+DEFAULT_TIMEOUT = 15.0
 
-CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",") if o.strip()]
-
-WS_ORIGINS = [o.strip() for o in os.getenv("WS_ORIGINS", "http://localhost:3000").split(",") if o.strip()]
-
-DEFAULT_TIMEOUT = float(os.getenv("REQUEST_TIMEOUT_SECONDS", "15.0"))
-
-
-SPEECH_URL   = os.getenv("SPEECH_URL", "")
-ASL_URL      = os.getenv("ASL_URL", "")
-TTS_URL      = os.getenv("TTS_URL", "")
-AUTH_URL     = os.getenv("AUTH_URL", "")
-ALPHABET_URL = os.getenv("ALPHABET_URL", "")
-WORD_URL     = os.getenv("WORD_URL", "")
-STT_URL = os.getenv("STT_URL", "")
-GESTURE_URL = os.getenv("GESTURE_URL", "")
+SPEECH_URL   = "http://localhost:8003"
+ASL_URL      = "http://localhost:8002"
+TTS_URL      = "http://localhost:8001"
+AUTH_URL     = "http://localhost:8004"
+ALPHABET_URL = "http://localhost:8000"
+WORD_URL     = "http://localhost:8005"
+STT_URL = "http://localhost:8006"
+GESTURE_URL = "http://localhost:8008"
 
 class Route(BaseModel):
     prefix: str                 
@@ -53,7 +47,7 @@ if SPEECH_URL:
         prefix="/api/speech",
         backend=SPEECH_URL,
         strip_prefix=True,
-        upstream_prefix="/api"
+        upstream_prefix=""
     ))
 
 if ASL_URL:
