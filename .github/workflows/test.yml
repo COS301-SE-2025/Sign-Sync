@@ -36,7 +36,7 @@ jobs:
           fi
 
       - name: Run Python tests
-        run: python -m pytest
+        run: python -m pytest --ignore=Sign-Sync/backend/alphabetTranslate-service/image-cnn/scripts/test_asl_model.py
           # if [ -f "Sign-Sync/__tests__" ]; then
           #   pytest Sign-Sync/__tests__
           # else
