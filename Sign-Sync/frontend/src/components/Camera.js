@@ -112,7 +112,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
         const makePredictionGesture = async (arrayLandmarks) => {
 
             try {
-                const request = await fetch("http://localhost:8003/predict", {
+                const request = await fetch("http://localhost:8007/api/gesture/predict", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -140,7 +140,7 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
             };
 
             try {
-                const request = await fetch("http://localhost:8000/predict", {
+                const request = await fetch("http://localhost:8007/api/alphabet/predict", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

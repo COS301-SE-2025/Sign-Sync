@@ -28,6 +28,7 @@ AUTH_URL     = os.getenv("AUTH_URL", "")
 ALPHABET_URL = os.getenv("ALPHABET_URL", "")
 WORD_URL     = os.getenv("WORD_URL", "")
 STT_URL = os.getenv("STT_URL", "")
+GESTURE_URL = os.getenv("GESTURE_URL", "")
 
 class Route(BaseModel):
     prefix: str                 
@@ -90,6 +91,14 @@ if STT_URL:
     routes.append(Route(
         prefix="/api/stt",
         backend=STT_URL,
+        strip_prefix=True,
+        upstream_prefix=""
+    ))
+
+if GESTURE_URL:
+    routes.append(Route(
+        prefix="/api/gesture",
+        backend=GESTURE_URL,
         strip_prefix=True,
         upstream_prefix=""
     ))

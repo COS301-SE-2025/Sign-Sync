@@ -99,7 +99,7 @@ const SpeechToTextBox = ({onSpeechInput}) => {
         formData.append('file', audioBlob, 'recording.wav');
 
         try {
-          const response = await fetch('http://localhost:8001/api/upload-audio', {
+          const response = await fetch('http://localhost:8007/api/speech/api/upload-audio', {
             method: 'POST',
             body: formData,
           });

@@ -43,7 +43,7 @@ class TextToSign extends React.Component
         console.log(sentence);
         const aslGlossFunction = async () => {
             try {
-                const request = await fetch("http://localhost:8002/translate", {
+                const request = await fetch("http://localhost:8007/api/asl/translate", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
