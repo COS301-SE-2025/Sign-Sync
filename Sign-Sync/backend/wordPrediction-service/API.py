@@ -2,6 +2,7 @@ from __future__ import annotations
 import os
 from Trie import Trie
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Tuple, List
 import corrector
@@ -24,7 +25,19 @@ class TranslateOut(BaseModel):
     translation: str
 
 JSON_PATH = "trie.json"
+
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+    ],  # add your dev frontend origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def load_trie():

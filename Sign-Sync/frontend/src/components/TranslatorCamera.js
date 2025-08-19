@@ -13,6 +13,7 @@ import PreferenceManager from "../components/PreferenceManager"; // <-- add this
 // --- endpoints ---
 const WORDS_API_BASE = "http://localhost:8004"; // words model (WS + REST)
 const LETTERS_API_BASE = "http://localhost:8000"; // letters model (REST)
+const GRAMMAR_API_BASE = "http://localhost:8006"; // grammar model (REST)
 
 const SEND_INTERVAL_MS = 80;   // words streaming cadence
 const LETTERS_INTERVAL_MS = 500; // letters polling cadence
@@ -282,6 +283,24 @@ const TranslatorCamera = ({ onPrediction }) => {
     }
   };
 
+  const toEnglish = async (text) => {
+    if (!text) return "";
+    try {
+      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setSentence(data.translation || sentence);
+      }
+    } catch (e) {
+      console.error("Failed to convert to English:", e);
+      return "";
+    }
+  }
+
   const stopLettersLoop = () => {
     if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
     setConnected(false);
@@ -449,11 +468,20 @@ const TranslatorCamera = ({ onPrediction }) => {
 
       {/* Sentence */}
       <div className="mt-3">
-        <h3 className="text-lg font-semibold mb-1">Sentence</h3>
-        <div className={`rounded p-3 min-h-[60px] text-2xl ${boxCls}`}>
-          {gestureMode ? (sentence || " ") : " "}
-        </div>
-      </div>
+  <h3 className="text-lg font-semibold mb-1">Sentence</h3>
+  
+  <div className="flex rounded min-h-[60px]">
+    <div className={`p-3 text-2xl w-4/5 ${boxCls}`}>
+      {gestureMode ? (sentence || " ") : " "}
+    </div>
+
+    <div className="w-1/5 flex items-center justify-center">
+      <button onClick={() => (toEnglish(sentence))} className="px-3 py-2 bg-blue-500 text-white rounded">
+        To English
+      </button>
+    </div>
+  </div>
+</div>
     </div>
   );
 };
