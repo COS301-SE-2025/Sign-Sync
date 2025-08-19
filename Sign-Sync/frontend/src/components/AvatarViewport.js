@@ -18,6 +18,7 @@ function Avatar({signs}) {
     const animationSpeed = PreferenceManager.getPreferences().animationSpeed;
     const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Angry":[0,0.75],"Surprise":[0.5,0]};
     const emotionsRef = useRef(null);
+    const animationController = useRef(null);
 
     const speeds = {"Very Slow": 0.75,"Slow":1,"Normal":1.5,"Fast":2.5,"Very Fast":5};
     useEffect(() => {
@@ -34,36 +35,63 @@ function Avatar({signs}) {
 
     useEffect(() => {
         if (!actions["Idle"]) return;
+        const controller = new AbortController();
+        animationController.current = controller;
         let animationIndex = [mixer.clipAction(actions["Idle"].getClip()), null];
         async function playAnimations() {
-            for (let i = 0; i < signs.length; i++) {
-                const animation = actions[signs[i]];
-                animationIndex[1] = mixer.clipAction(animation.getClip());
-                animationIndex[1].reset();
+            try {
+                for (let i = 0; i < signs.length; i++) {
+                    const animation = actions[signs[i]];
+                    animationIndex[1] = mixer.clipAction(animation.getClip());
+                    animationIndex[1].reset();
+
+                    if (animationIndex[0] !== null) {
+                        animationIndex[1].fadeIn(0.2).play();
+                        animationIndex[1].crossFadeFrom(animationIndex[0], 0.2, false);
+                        animationIndex[1].timeScale = speeds[animationSpeed];
+                    }
+                    animationIndex[0] = animationIndex[1];
+                    if (signs[i].includes("Pronoun-")) {
+                        setTranslatedWord(signs[i].substring(signs[i].indexOf("-") + 1, signs[i].length));
+                    } else {
+                        setTranslatedWord(signs[i]);
+                    }
+                    await new Promise((resolve, reject) => {
+                        const animationTime = (animation.getClip().duration / speeds[animationSpeed]) * 1000;
+                        const timer = setTimeout(resolve, animationTime);
+                        controller.signal.addEventListener('abort', () => {
+                            clearTimeout(timer);
+                            reject(new Error('Animation stopped - Rerun'));
+                        });
+                    });
+                }
                 if (animationIndex[0] !== null) {
-                    animationIndex[1].fadeIn(0.2).play();
-                    animationIndex[1].crossFadeFrom(animationIndex[0], 0.2, false);
-                    animationIndex[1].timeScale = speeds[animationSpeed];
+                    animationIndex[0].fadeOut(0.5).stop();
+                    mixer.clipAction(actions["Idle"].getClip());
+                    actions["Idle"].reset().play();
+                    setTranslatedWord("");
                 }
-                animationIndex[0] = animationIndex[1];
-                if (signs[i].includes("Pronoun-")) {
-                    setTranslatedWord(signs[i].substring(signs[i].indexOf("-") + 1, signs[i].length));
-                } else {
-                    setTranslatedWord(signs[i]);
+            }catch (error) {
+                if (error.message !== 'Animation stopped - Rerun') {
+                    console.error("Animation error other than rerun:", error);
                 }
-                await new Promise(resolve => setTimeout(resolve, (animation.getClip().duration / speeds[animationSpeed]) * 1000));
-            }
-            if (animationIndex[0] !== null) {
-                animationIndex[0].fadeOut(0.5).stop();
-                mixer.clipAction(actions["Idle"].getClip());
-                actions["Idle"].reset().play();
-                setTranslatedWord("");
+            } finally {
+                if (animationController.current === controller) {
+                    animationController.current = null;
+                }
             }
         }
         playAnimations();
         return () => {
+            controller.abort();
             mixer.stopAllAction();
             setTranslatedWord("");
+            if (actions["Idle"]) {
+                actions["Idle"].reset().play();
+            }
+            if (animationController.current === controller) {
+                animationController.current = null;
+            }
         };
     },[signs,actions,mixer]);
 

@@ -9,6 +9,15 @@ router.post('/register', async (req, res) => {
     try {
         const existingEmail = await req.app.locals.userCollection.findOne({ email })
 
+        const defaultPreference = {
+            displayMode: 'Light Mode',
+            preferredAvatar: 'Zac',
+            animationSpeed: 'Normal',
+            fontSize: 'Medium',
+            speechSpeed: 1,
+            speechVoice: 'George'
+        };
+
         if (existingEmail) {
             return res.status(400).json({ message: 'Email already exists' });
         }
@@ -36,6 +45,7 @@ router.post('/register', async (req, res) => {
             email,
             password: hashedPassword,
             achievements: [1],
+            preferences: defaultPreference,
         };
 
         await req.app.locals.userCollection.insertOne(newUser);
