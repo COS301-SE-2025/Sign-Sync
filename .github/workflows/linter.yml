@@ -17,3 +17,5 @@ jobs:
           VALIDATE_ONLY_CHANGED_FILES: "false"
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_JAVASCRIPT_ES: true   # For React JS/TS
+          VALIDATE_PYTHON_FLAKE8: true   # For Python (flake8)
