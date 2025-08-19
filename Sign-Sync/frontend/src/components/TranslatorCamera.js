@@ -476,7 +476,7 @@ const TranslatorCamera = ({ onPrediction }) => {
     </div>
 
     <div className="w-1/5 flex items-center justify-center">
-      <button onClick={toEnglish} className="px-3 py-2 bg-blue-500 text-white rounded">
+      <button onClick={() => (toEnglish(sentence))} className="px-3 py-2 bg-blue-500 text-white rounded">
         To English
       </button>
     </div>
