@@ -31,6 +31,14 @@ services:
     ports:
       - "8008:8008"
 
+  word-prediction:
+    build:
+      context: ./Sign-Sync/backend/wordPrediction-service
+      dockerfile: Dockerfile
+    container_name: word-prediction
+    ports:
+      - "8005:8005"
+
   sign-to-text:
     build:
       context: ./Sign-Sync/backend/signToText-service
