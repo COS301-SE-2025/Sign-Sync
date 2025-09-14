@@ -46,6 +46,14 @@ services:
     container_name: sign-to-text
     ports:
       - "8006:8006"
+  
+  api-gateway:
+    build:
+      context: ./Sign-Sync/backend/API_Gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8007:8007"
 
   frontend:
     build:
