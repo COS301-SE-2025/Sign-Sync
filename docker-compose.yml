@@ -13,7 +13,7 @@ services:
       dockerfile: Dockerfile
     container_name: speech-to-text
     ports:
-      - "8001:8001"
+      - "8003:8003"
 
   text-to-asl-gloss:
     build:
@@ -29,7 +29,15 @@ services:
       dockerfile: Dockerfile
     container_name: gesture-recognition
     ports:
-      - "8003:8003"
+      - "8008:8008"
+
+  sign-to-text:
+    build:
+      context: ./Sign-Sync/backend/signToText-service
+      dockerfile: Dockerfile
+    container_name: sign-to-text
+    ports:
+      - "8006:8006"
 
   frontend:
     build:
