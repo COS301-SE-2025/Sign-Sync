@@ -4,6 +4,7 @@ from pathlib import Path
 import asyncio
 import httpx
 import websockets
+import time
 
 from typing import Optional, Tuple, List
 from pydantic import BaseModel
@@ -112,12 +113,39 @@ print([(r.prefix, r.backend) for r in routes])
 
 app = FastAPI()
 
+# Configure the CORS_ORIGINS at deployment
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+rate_limits = {}
+MAX_REQUESTS = 20
+WINDOW = 60
+
+@app.middleware("http")
+async def rate_limiter(request: Request, call_next):
+    client_ip = request.client.host
+    now = time.time()
+
+    if client_ip not in rate_limits:
+        rate_limits[client_ip] = []
+
+    requests = [t for t in rate_limits[client_ip] if now - t < WINDOW]
+    requests.append(now)
+    rate_limits[client_ip] = requests
+
+    if len(requests) > MAX_REQUESTS:
+        return JSONResponse(
+            {"detail": "Too many requests"},
+            status_code=429,
+            headers={"Retry-After": str(WINDOW)}
+        )
+    
+    response = await call_next(request)
+    return response
 
 @app.get("/healthz")
 def healthz():
