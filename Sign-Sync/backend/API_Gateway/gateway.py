@@ -24,6 +24,17 @@ WORD_URL     = "http://localhost:8005"
 STT_URL = "http://localhost:8006"
 GESTURE_URL = "http://localhost:8008"
 
+#Docker-version:
+
+# SPEECH_URL   = "http://speech-to-text:8003"
+# ASL_URL      = "http://text-to-asl-gloss:8002"
+# TTS_URL      = "http://localhost:8001"
+# AUTH_URL     = "http://localhost:8004"
+# ALPHABET_URL = "http://alphabet-translate:8000"
+# WORD_URL     = "http://word-prediction:8005"
+# STT_URL = "http://sign-to-text:8006"
+# GESTURE_URL = "http://gesture-recognition:8008"
+
 class Route(BaseModel):
     prefix: str                 
     backend: str                
