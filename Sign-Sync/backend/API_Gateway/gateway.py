@@ -122,7 +122,7 @@ app.add_middleware(
 )
 
 rate_limits = {}
-MAX_REQUESTS = 25
+MAX_REQUESTS = 20
 WINDOW = 60
 
 @app.middleware("http")
@@ -138,7 +138,11 @@ async def rate_limiter(request: Request, call_next):
     rate_limits[client_ip] = requests
 
     if len(requests) > MAX_REQUESTS:
-        raise HTTPException(status_code=429, detail="Too many requests")
+        return JSONResponse(
+            {"detail": "Too many requests"},
+            status_code=429,
+            headers={"Retry-After": str(WINDOW)}
+        )
     
     response = await call_next(request)
     return response
