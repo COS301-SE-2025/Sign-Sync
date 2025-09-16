@@ -112,7 +112,8 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
         const makePredictionGesture = async (arrayLandmarks) => {
 
             try {
-                const request = await fetch("http://localhost:8007/api/gesture/predict", {
+                //const request = await fetch("http://localhost:8007/api/gesture/predict", {
+                const request = await fetch("https://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/gesture/predict", { //deployment version
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -140,7 +141,8 @@ const Camera = ( {defaultGestureMode = true, gestureModeFixed = false, onPredict
             };
 
             try {
-                const request = await fetch("http://localhost:8007/api/alphabet/predict", {
+                //const request = await fetch("http://localhost:8007/api/alphabet/predict", {
+                const request = await fetch("https://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/alphabet/predict", { //deployment version
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

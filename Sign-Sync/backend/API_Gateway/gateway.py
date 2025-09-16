@@ -38,14 +38,14 @@ DEFAULT_TIMEOUT = 15.0
 
 #Azure-version:
 
-# SPEECH_URL   = "https://speechtotext-e4fkhwe7hwf6hgh4.southafricanorth-01.azurewebsites.net/"
-# ASL_URL      = "https://texttoaslgloss-h3buaxf6g0fqe6hk.southafricanorth-01.azurewebsites.net/"
-# TTS_URL      = "http://localhost:8001"
-# AUTH_URL     = "http://localhost:8004"
-# ALPHABET_URL = "https://alphabettranslate-cdarg5fyhraja3gu.southafricanorth-01.azurewebsites.net/"
-# WORD_URL     = "https://wordprediction-d6eke0emc6d5c6eq.southafricanorth-01.azurewebsites.net/"
-# STT_URL = "https://signtotext-dnh8gbcqegfve2h9.southafricanorth-01.azurewebsites.net/"
-# GESTURE_URL = "https://gestrurerecognition-fmg3grgxawaagzhe.southafricanorth-01.azurewebsites.net/"
+SPEECH_URL   = "https://speechtotext-e4fkhwe7hwf6hgh4.southafricanorth-01.azurewebsites.net/"
+ASL_URL      = "https://texttoaslgloss-h3buaxf6g0fqe6hk.southafricanorth-01.azurewebsites.net/"
+TTS_URL      = "http://localhost:8001"
+AUTH_URL     = "http://localhost:8004"
+ALPHABET_URL = "https://alphabettranslate-cdarg5fyhraja3gu.southafricanorth-01.azurewebsites.net/"
+WORD_URL     = "https://wordprediction-d6eke0emc6d5c6eq.southafricanorth-01.azurewebsites.net/"
+STT_URL = "https://signtotext-dnh8gbcqegfve2h9.southafricanorth-01.azurewebsites.net/"
+GESTURE_URL = "https://gestrurerecognition-fmg3grgxawaagzhe.southafricanorth-01.azurewebsites.net/"
 
 class Route(BaseModel):
     prefix: str                 
