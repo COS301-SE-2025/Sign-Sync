@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from corrector import tidy, capitalize
+from corrector import tidy, capitalize, gloss_to_english
 
 class TestCorrector(unittest.TestCase):
 
@@ -30,9 +30,28 @@ class TestCorrector(unittest.TestCase):
         # test capitalization of capitalized sentence
         self.assertEqual(capitalize("I go to the store"), "I go to the store")
 
-    def test_gloss_to_english(self):
+    @patch("corrector.tidy", return_value="MOCKED_TIDY")
+    @patch("corrector.article_for", return_value="MOCKED_ARTICLE")
+    def test_gloss_to_english(self, mock_article, mock_tidy):
         print("Corrector: gloss_to_english() unit testing")
-        
+
+        # TOPIC PRONOUN VERB
+        result = gloss_to_english("STORE I GO")
+        self.assertEqual(result, "MOCKED_TIDY")
+        mock_article.assert_called_with("store")
+        mock_tidy.assert_called_with(["i", "go", "to", "MOCKED_ARTICLE", "store"])
+
+        # PRONOUN VERB TOPIC
+        result = gloss_to_english("I GO STORE")
+        self.assertEqual(result, "MOCKED_TIDY")
+        mock_article.assert_called_with("store")
+        mock_tidy.assert_called_with(["i", "go", "to", "MOCKED_ARTICLE", "store"])
+
+        # TOPIC VERB
+        result = gloss_to_english("STORE GO")
+        self.assertEqual(result, "MOCKED_TIDY")
+        mock_article.assert_called_with("store")
+        mock_tidy.assert_called_with(["i", "go", "to", "MOCKED_ARTICLE", "store"])
 
 if __name__ == "__main__":
     unittest.main()
