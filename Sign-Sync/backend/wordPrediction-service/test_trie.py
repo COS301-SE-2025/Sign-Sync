@@ -47,6 +47,18 @@ class TestTrie(unittest.TestCase):
         result = self.trie.descend(["missing"])
         self.assertIsNone(result)
 
+    def test_predict_next(self):
+        fake_child1 = MagicMock()
+        fake_child2 = MagicMock()
+        fake_child3 = MagicMock()
+
+        fake_child1.children = {"b": fake_child2, "c": fake_child3}
+
+        self.mock_node_instance.children = {"a": fake_child1}
+        self.mock_node_instance.next_counts = {"a": 1, "b": 2, "c": 1}
+
+        self.assertEqual(self.trie.predict_next(None), [])
+        self.assertEqual(self.trie.predict_next(""), [])
 
 
 

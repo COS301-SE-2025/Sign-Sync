@@ -56,6 +56,9 @@ class Trie:
         add_k: float = 0.0, 
     ) -> List[Tuple[str, float]]:
         
+        if not prefix:
+            return []
+        
         toks = self.tokenize(prefix)
 
         starts = range(0, len(toks) + 1) if backoff else range(len(toks), len(toks) + 1)
