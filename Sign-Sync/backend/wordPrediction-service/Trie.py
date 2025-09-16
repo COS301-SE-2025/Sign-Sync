@@ -11,7 +11,6 @@ class Trie:
         self.root = Node()
         self.lowercase = lowercase
 
-    
     def tokenize(self, text: str) -> List[str]:
         t = text.strip()
         if self.lowercase:
