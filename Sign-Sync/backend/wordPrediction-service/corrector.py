@@ -36,7 +36,7 @@ def gloss_to_english(text: str) -> str:
         return ""
     # TOPIC PRONOUN VERB
     if len(toks) >= 3 and toks[0] not in PRONOUNS and toks[1] in PRONOUNS:
-        topic, subj, verb, *rest = toks[0], toks[1], toks[2], toks[3:]
+        topic, subj, verb, *rest = toks
         prep = VERB_PREP.get(verb, None)
         parts = [subj, verb]
         if topic in PLACES and prep:
@@ -48,12 +48,13 @@ def gloss_to_english(text: str) -> str:
             parts.append(topic)
         else:
             parts.append(topic)
-        parts.extend(rest)
+        if rest:
+            parts.extend(rest)
         return tidy(parts)
     
     # PRONOUN VERB TOPIC
     if len(toks) >= 3 and toks[0] in PRONOUNS:
-        subj, verb, obj, *rest = toks[0], toks[1], toks[2], toks[3:]
+        subj, verb, obj, *rest = toks
         prep = VERB_PREP.get(verb, None)
         parts = [subj, verb]
         if obj in PLACES and prep:
@@ -65,7 +66,8 @@ def gloss_to_english(text: str) -> str:
             parts.append(obj)
         else:
             parts.append(obj)
-        parts.extend(rest)
+        if rest:
+            parts.extend(rest)
         return tidy(parts)
     
     ## TOPIC VERB
