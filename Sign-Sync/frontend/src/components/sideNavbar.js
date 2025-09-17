@@ -1,155 +1,169 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import { FaChevronDown } from "react-icons/fa";
-//import topBtn from "../assets/sideNav-topButton.png";
-import translateBtn from '../assets/Translator-icon.png';
-import EducationBtn from '../assets/Education-icon.png';
-import SettingsBtn from '../assets/Settings-icon.png';
-import HelpMenuBtn from '../assets/info-icon.png';
 
-class SideNavbar extends React.Component 
-{
-  constructor(props)
-  {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-      educationOpen: false,
-      practiseOpen: false,
-      learnOpen: false
-    };
-  }
+import translateBtn from "../assets/Translator-icon.png";
+import SettingsBtn from "../assets/Settings-icon.png";
+import HelpMenuBtn from "../assets/info-icon.png";
 
-  componentDidMount()
-  {
-    const user = localStorage.getItem('user');
-    
-    if(user) 
-    {
-      this.setState({ isLoggedIn: true });
-    }
-  } 
+const SideNavbar = () => {
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [learnOpen, setLearnOpen] = useState(false);
+  const [practiseOpen, setPractiseOpen] = useState(false);
 
-  handleLogout = () =>
-  {
-    localStorage.removeItem('user');
-    this.setState({ isLoggedIn: false });
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) setIsLoggedIn(true);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
 
     toast.success("Logout successful!, redirecting to Splash page...");
-
-    setTimeout(() => { window.location.href = '/' }, 1200);
-  }
-
-  toggleEducation = () =>
-  {
-    this.setState(prevState => ({ educationOpen: !prevState.educationOpen })); 
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1200);
   };
 
-  togglePractise = () =>
-  {
-    this.setState(prevState => ({ practiseOpen: !prevState.practiseOpen })); 
-  }
+  //helper: highlight active link
+  const isActive = (path) =>
+    location.pathname.startsWith(path)
+      ? "bg-[#1a436b] text-white rounded"
+      : "text-gray-200 hover:bg-[#1a436b] rounded";
 
-  toggleLearn = () =>
-  {
-    this.setState(prevState => ({ learnOpen: !prevState.learnOpen })); 
-  }
+  return (
+    <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]">
+      <div className="w-full flex flex-col gap-2 pt-6 text-white">
+        {/* App title */}
+        <div className="px-4 py-2 text-3xl font-bold">Sign Sync</div>
 
-  render()  
-  {
-    const { isLoggedIn, educationOpen, practiseOpen, learnOpen } = this.state;
+        {/* Translator */}
+        <Link
+          to="/translator"
+          className={`px-4 py-2 text-2xl flex items-center gap-2 ${isActive(
+            "/translator"
+          )}`}
+        >
+          <img src={translateBtn} alt="Translator Icon" className="w-6 h-6" />
+          Translator
+        </Link>
 
-    return (
-      <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]"> 
-      
-        <div className="w-full flex flex-col gap-4 pt-4 text-white ">
-
-            <div className="p-2 text-4xl">
-                <Link to="/translator">
-                  <img src={translateBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-                  Translator
-                </Link>
-            </div>
-
-            <div className="cursor-pointer flex items-center justify-between p-2" onClick={this.toggleEducation}>
-              <div className="flex items-center gap-2">
-                <img src={EducationBtn} alt="Education Icon" className="w-8 h-8" />
-                <span className="text-4xl">Education</span>
-              </div>
-              <FaChevronDown className={`transition-transform duration-300 ${educationOpen ? 'rotate-180' : ''}`} style={{ display: 'block', height: '2em', width: '2em', marginTop: '0.5em'}}/>
-            </div>
-
-            {educationOpen && (
-              <div className="pl-8 flex flex-col gap-1 text-2xl">
-                <Link to="/achievements" className="hover:underline">Achievements</Link>
-
-                <div className="cursor-pointer flex items-center justify-between" onClick={this.toggleLearn}>
-                  <div>Learn</div>
-                  <FaChevronDown className={`transition-transform duration-300 ${learnOpen ? "rotate-180" : ""}`} />
-                </div>
-
-                {learnOpen && (
-                  <div className="pl-6 flex flex-col gap-1 text-xl">
-                    <Link to="/learn-Alphabet" className="hover:underline">Alphabet</Link>
-                    <Link to="/learn-Words" className="hover:underline">Words</Link>
-                  </div>
-                )}
-
-                <div className="cursor-pointer flex items-center justify-between" onClick={this.togglePractise}>
-                  <div>Practise</div>
-                  <FaChevronDown className={`transition-transform duration-300 ${practiseOpen ? "rotate-180" : ""}`} />
-                </div>
-
-                {practiseOpen && (
-                  <div className="pl-6 flex flex-col gap-1 text-xl">
-                    <Link to="/practise-Alphabet" className="hover:underline">Alphabet</Link>
-                    <Link to="/practise-Words" className="hover:underline">Words</Link>
-                  </div>
-                )}
-
-              </div>
-            )}
-
-            <div className="p-2 text-4xl">
-              <Link to="/settings">
-                <img src={SettingsBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-                Settings
-              </Link>
-            </div>
-
-            <div className="p-2 text-4xl">
-              <Link to="/helpMenu">
-                <img src={HelpMenuBtn} alt="Translator Icon" className="w-8 h-8 inline-block mr-4" />
-                Help Menu
-              </Link>
-            </div>
+        {/* Learn (expandable) */}
+        <div
+          className={`cursor-pointer flex items-center justify-between px-4 py-2 text-2xl ${isActive(
+            "/learn"
+          )}`}
+          onClick={() => setLearnOpen(!learnOpen)}
+        >
+          <span>Learn</span>
+          <FaChevronDown
+            className={`transition-transform duration-300 ${
+              learnOpen ? "rotate-180" : ""
+            }`}
+          />
         </div>
+        {learnOpen && (
+          <div className="pl-8 flex flex-col gap-1 text-xl">
+            <Link to="/learn-Alphabet" className={`${isActive("/learn-Alphabet")} px-2 py-1`}>
+              Alphabet
+            </Link>
+            <Link to="/learn-Words" className={`${isActive("/learn-Words")} px-2 py-1`}>
+              Words
+            </Link>
+          </div>
+        )}
 
-        <div className="flex w-full h-[78px] items-center justify-center gap-4 mt-auto px-2">
-
-          {!isLoggedIn ? (
-            <>
-              <Link to="/login" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-white text-[#801d1f] font-semibold rounded">
-                Sign in
-              </Link>
-              <Link to="/register" className=" text-2xl flex items-center justify-center h-12 w-[129px] bg-[#801d1f] text-white font-semibold rounded">
-                Register
-              </Link>
-            </>
-          ) : (
-            <button 
-              onClick={this.handleLogout} 
-              className="text-2xl h-12 w-[200px] bg-red-700 text-white font-semibold rounded hover:bg-red-800"
-            >
-              Sign out
-            </button>
-          )}
+        {/* Practise (expandable) */}
+        <div
+          className={`cursor-pointer flex items-center justify-between px-4 py-2 text-2xl ${isActive(
+            "/practise"
+          )}`}
+          onClick={() => setPractiseOpen(!practiseOpen)}
+        >
+          <span>Practise</span>
+          <FaChevronDown
+            className={`transition-transform duration-300 ${
+              practiseOpen ? "rotate-180" : ""
+            }`}
+          />
         </div>
+        {practiseOpen && (
+          <div className="pl-8 flex flex-col gap-1 text-xl">
+            <Link to="/practise-Alphabet" className={`${isActive("/practise-Alphabet")} px-2 py-1`}>
+              Alphabet
+            </Link>
+            <Link to="/practise-Words" className={`${isActive("/practise-Words")} px-2 py-1`}>
+              Words
+            </Link>
+          </div>
+        )}
+
+        {/* Achievements */}
+        <Link
+          to="/achievements"
+          className={`px-4 py-2 text-2xl ${isActive("/achievements")}`}
+        >
+          Achievements
+        </Link>
+
+        <hr className="border-gray-600 my-4" />
+
+        {/* Help */}
+        <Link
+          to="/helpMenu"
+          className={`px-4 py-2 text-2xl flex items-center gap-2 ${isActive(
+            "/helpMenu"
+          )}`}
+        >
+          <img src={HelpMenuBtn} alt="Help Icon" className="w-6 h-6" />
+          Help
+        </Link>
+
+        {/* Settings */}
+        <Link
+          to="/settings"
+          className={`px-4 py-2 text-2xl flex items-center gap-2 ${isActive(
+            "/settings"
+          )}`}
+        >
+          <img src={SettingsBtn} alt="Settings Icon" className="w-6 h-6" />
+          Settings
+        </Link>
+
+        {/* Logout button */}
+        {isLoggedIn && (
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 mt-2 text-2xl text-white font-semibold rounded text-left"
+          >
+            Sign Out
+          </button>
+        )}
       </div>
-    );
-  }
-}
+
+      {/* Sign in / Register buttons (if logged out) */}
+      {!isLoggedIn && (
+        <div className="flex w-full items-center justify-center gap-2 mt-auto px-2">
+          <Link
+            to="/login"
+            className="text-xl flex items-center justify-center h-12 w-[120px] bg-white text-[#801d1f] font-semibold rounded"
+          >
+            Sign in
+          </Link>
+          <Link
+            to="/register"
+            className="text-xl flex items-center justify-center h-12 w-[120px] bg-[#801d1f] text-white font-semibold rounded"
+          >
+            Register
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default SideNavbar;
+
