@@ -44,7 +44,7 @@ const SideNavbar = () => {
       : "text-gray-200 hover:bg-[#1a436b] rounded";
 
   return (
-    <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]">
+    <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#1B2432]">
       <div className="w-full flex flex-col gap-2 pt-6 text-white">
         {/* App title */}
         <div className="px-4 py-2 text-3xl font-bold flex items-center gap-2">
