@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import handBtn from '../assets/hand.png';
+import translateBtn from "../assets/Translator-icon.png";
 import EducationBtn from "../assets/Education-icon.png";
 import AchievementsBtn from "../assets/achievements.png";
 import PractiseBtn from "../assets/homework.png"
@@ -25,41 +26,49 @@ class LandingPage extends React.Component
           initial={{ opacity: 0, y: 150 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="bg-[#0f172a]/70 backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-12 shadow-2xl max-w-md w-full text-center"
+          className="bg-[#1B2432] backdrop-blur-xl border border-white/10 rounded-2xl p-12 sm:p-16 shadow-2xl max-w-2xl w-full text-center"
         >
           {/* Logo + Title */}
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-white">
-            <span className="flex justify-center items-center gap-2 mb-2">
-              <img src={handBtn} alt="Hand Icon" className="w-10 h-10" />
-              <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
+          <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 leading-normal text-white">
+            <span className="flex justify-center items-center gap-2 mb-4">
+              <img src={handBtn} alt="Hand Icon" className="w-12 h-12" />
+              <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent inline-block leading-normal">
                 Sign-Sync
               </span>
             </span>
           </h1>
-
+        
           {/* Subtitle */}
-          <p className="text-gray-300 text-sm sm:text-base mb-6">
-            <span className="font-bold">Sign-sync</span> is a real time sign language
+          <p className="text-gray-300 text-lg mb-6">
+            <span className="font-bold">Sign-Sync</span> is a real time sign language
             translation platform that bridges the gap between spoken and signed
             communication.
           </p>
 
           {/* Feature list */}
-          <div className="text-gray-200 text-left space-y-3 mb-8">
-            <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-lg">
+          <div className="text-gray-200 text-left space-y-4 mb-10">
+            <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-lg text-lg">
+              <img src={translateBtn} alt="Learn Icon" className="w-6 h-6" />
+              <span>Real-Time sign-language translation</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-lg text-lg">
               <img src={EducationBtn} alt="Learn Icon" className="w-6 h-6" />
               <span>Learn sign words and alphabet</span>
             </div>
-            <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-lg text-lg">
               <img src={AchievementsBtn} alt="Achievements Icon" className="w-6 h-6" />
               <span>Unlock achievements to track your progress</span>
             </div>
-            <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-lg text-lg">
               <img src={PractiseBtn} alt="Practise Icon" className="w-6 h-6" />
               <span>Practice sign words and alphabet</span>
             </div>
           </div>
 
+          <p className="text-gray-300 text-lg mb-6">
+            You can get started right away, or log in to access your saved preferences.
+          </p>
+          
           {/* Bottom buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <Link
