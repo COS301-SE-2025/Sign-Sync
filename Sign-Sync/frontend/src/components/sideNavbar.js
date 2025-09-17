@@ -47,9 +47,11 @@ const SideNavbar = () => {
     <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#1B2432]">
       <div className="w-full flex flex-col gap-2 pt-6 text-white">
         {/* App title */}
-        <div className="px-4 py-2 text-3xl font-bold flex items-center gap-2">
+        <div className="px-4 py-2 text-4xl font-bold flex items-center gap-2">
           <img src={handLogo} alt="Hand Logo" className="inline w-10 h-10" />
-          Sign Sync
+          <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent inline-block leading-normal">
+            Sign-Sync
+          </span>
         </div>
 
         {/* Translator */}
