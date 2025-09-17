@@ -100,7 +100,7 @@ class LoginPage extends React.Component
         return (
             <div 
                 className="flex items-center justify-center min-h-screen p-4" 
-                style={{ background: "linear-gradient(to bottom, #080C1A, #172034)" }}
+                style={{ background: "linear-gradient(135deg, #080C1A, #172034)" }}
             >
                 <form
                     onSubmit={this.handleSubmit}

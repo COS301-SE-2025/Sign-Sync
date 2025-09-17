@@ -102,7 +102,7 @@ class RegistrationPage extends React.Component
         const { email, password, confirmPassword, errors } = this.state;
 
         return (
-            <div className="flex items-center justify-center min-h-screen p-4" style={{ background: "linear-gradient(to bottom, #080C1A, #172034)"}} >
+            <div className="flex items-center justify-center min-h-screen p-4" style={{ background: "linear-gradient(135deg, #080C1A, #172034)"}} >
                 <form
                     onSubmit={this.handleSubmit}
                     className="w-full max-w-2xl rounded-2xl shadow-2xl p-8 space-y-6" style={{ background: "#1B2432"}}
