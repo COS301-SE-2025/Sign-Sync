@@ -1,5 +1,9 @@
 import unittest
 from unittest.mock import patch
+import sys, os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from corrector import tidy, capitalize, gloss_to_english
 
 class TestCorrector(unittest.TestCase):

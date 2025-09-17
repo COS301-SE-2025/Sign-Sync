@@ -1,5 +1,9 @@
 import unittest
 from unittest.mock import patch
+import sys, os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from Node import Node
 from collections import Counter
 
