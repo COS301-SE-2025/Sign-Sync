@@ -3,9 +3,18 @@ import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaChevronDown } from "react-icons/fa";
 
+import handLogo from "../assets/hand.png"
 import translateBtn from "../assets/Translator-icon.png";
+import EducationBtn from "../assets/Education-icon.png";
+import PractiseBtn from "../assets/homework.png"
+import AlphabetBtn from "../assets/abc-block.png";
+import WordsBtn from "../assets/speech-bubble.png";
+import AchievementsBtn from "../assets/achievements.png";
 import SettingsBtn from "../assets/Settings-icon.png";
 import HelpMenuBtn from "../assets/info-icon.png";
+import SignoutBtn from "../assets/SignOut.png";
+import SignInBtn from "../assets/SignIn.png"
+import RegisterBtn from "../assets/Register.png";
 
 const SideNavbar = () => {
   const location = useLocation();
@@ -38,7 +47,10 @@ const SideNavbar = () => {
     <div className="w-64 flex flex-col h-screen items-start px-0 pt-0 pb-5 bg-[#102a46]">
       <div className="w-full flex flex-col gap-2 pt-6 text-white">
         {/* App title */}
-        <div className="px-4 py-2 text-3xl font-bold">Sign Sync</div>
+        <div className="px-4 py-2 text-3xl font-bold flex items-center gap-2">
+          <img src={handLogo} alt="Hand Logo" className="inline w-10 h-10" />
+          Sign Sync
+        </div>
 
         {/* Translator */}
         <Link
@@ -58,7 +70,10 @@ const SideNavbar = () => {
           )}`}
           onClick={() => setLearnOpen(!learnOpen)}
         >
-          <span>Learn</span>
+          <div className="flex items-center gap-2">
+            <img src={EducationBtn} alt="Learn Icon" className="w-6 h-6" />
+            <span>Learn</span>
+          </div>
           <FaChevronDown
             className={`transition-transform duration-300 ${
               learnOpen ? "rotate-180" : ""
@@ -67,10 +82,12 @@ const SideNavbar = () => {
         </div>
         {learnOpen && (
           <div className="pl-8 flex flex-col gap-1 text-xl">
-            <Link to="/learn-Alphabet" className={`${isActive("/learn-Alphabet")} px-2 py-1`}>
+            <Link to="/learn-Alphabet" className={`${isActive("/learn-Alphabet")} px-2 py-1 flex items-center gap-2`}>
+              <img src={AlphabetBtn} alt="Alphabet Icon" className="w-6 h-6 bg-white" />
               Alphabet
             </Link>
-            <Link to="/learn-Words" className={`${isActive("/learn-Words")} px-2 py-1`}>
+            <Link to="/learn-Words" className={`${isActive("/learn-Words")} px-2 py-1 flex items-center gap-2`}>
+              <img src={WordsBtn} alt="Words Icon" className="w-6 h-6 bg-white" />
               Words
             </Link>
           </div>
@@ -83,7 +100,10 @@ const SideNavbar = () => {
           )}`}
           onClick={() => setPractiseOpen(!practiseOpen)}
         >
-          <span>Practise</span>
+          <div className="flex items-center gap-2">
+            <img src={PractiseBtn} alt="Learn Icon" className="w-6 h-6" />
+            <span>Practise</span>
+          </div>
           <FaChevronDown
             className={`transition-transform duration-300 ${
               practiseOpen ? "rotate-180" : ""
@@ -92,10 +112,12 @@ const SideNavbar = () => {
         </div>
         {practiseOpen && (
           <div className="pl-8 flex flex-col gap-1 text-xl">
-            <Link to="/practise-Alphabet" className={`${isActive("/practise-Alphabet")} px-2 py-1`}>
+            <Link to="/practise-Alphabet" className={`${isActive("/learn-Alphabet")} px-2 py-1 flex items-center gap-2`}>
+              <img src={AlphabetBtn} alt="Alphabet Icon" className="w-6 h-6 bg-white" />
               Alphabet
             </Link>
-            <Link to="/practise-Words" className={`${isActive("/practise-Words")} px-2 py-1`}>
+            <Link to="/practise-Words" className={`${isActive("/learn-Words")} px-2 py-1 flex items-center gap-2`}>
+              <img src={WordsBtn} alt="Words Icon" className="w-6 h-6 bg-white" />
               Words
             </Link>
           </div>
@@ -104,8 +126,9 @@ const SideNavbar = () => {
         {/* Achievements */}
         <Link
           to="/achievements"
-          className={`px-4 py-2 text-2xl ${isActive("/achievements")}`}
+          className={`px-4 py-2 text-2xl flex items-center gap-2 ${isActive("/achievements")}`}
         >
+          <img src={AchievementsBtn} alt="Achievements Icon" className="w-6 h-6" />
           Achievements
         </Link>
 
@@ -133,12 +156,15 @@ const SideNavbar = () => {
           Settings
         </Link>
 
+        <hr className="border-gray-600 my-4" />
+
         {/* Logout button */}
         {isLoggedIn && (
           <button
             onClick={handleLogout}
-            className="px-4 py-2 mt-2 text-2xl text-white font-semibold rounded text-left"
+            className="px-4 py-2 text-2xl text-white font-semibold flex items-center gap-2"
           >
+            <img src={SignoutBtn} alt="Sign Out Icon" className="w-6 h-6" />
             Sign Out
           </button>
         )}
@@ -146,18 +172,20 @@ const SideNavbar = () => {
 
       {/* Sign in / Register buttons (if logged out) */}
       {!isLoggedIn && (
-        <div className="flex w-full items-center justify-center gap-2 mt-auto px-2">
+        <div className="flex flex-col w-full gap-1">
           <Link
             to="/login"
-            className="text-xl flex items-center justify-center h-12 w-[120px] bg-white text-[#801d1f] font-semibold rounded"
+            className="w-full px-4 py-2 text-2xl flex items-center gap-2 text-gray-200 hover:bg-[#1a436b] rounded"
           >
-            Sign in
+            <img src={SignInBtn} alt="SignIn Icon" className="w-6 h-6" />
+            <span>Sign In</span>
           </Link>
           <Link
             to="/register"
-            className="text-xl flex items-center justify-center h-12 w-[120px] bg-[#801d1f] text-white font-semibold rounded"
+            className="w-full px-4 py-2 text-2xl flex items-center gap-2 text-gray-200 hover:bg-[#1a436b] rounded mt-1"
           >
-            Register
+            <img src={RegisterBtn} alt="Register Icon" className="w-6 h-6" />
+            <span>Register</span>
           </Link>
         </div>
       )}
