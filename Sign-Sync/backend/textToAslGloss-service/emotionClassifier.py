@@ -30,6 +30,10 @@ def classify(sentence):
     emotions = {"sad", "happy", "surprise", "anger"}
     matrix = [0.0, 0.0, 0.0, 0.0]
     words = sentence.lower().strip(string.punctuation).split(" ")
+    for word in words:
+        if word in dictionary:
+            matrix = numpy.add(matrix,dictionary[word])
+
 
     return matrix
 
