@@ -27,14 +27,20 @@ dictionary = {
     "mad": [0.0, 0.0, 0.0, 0.75],
 }
 def classify(sentence):
-    emotions = {"sad", "happy", "surprise", "anger"}
+    emotions = ["sad", "happy", "surprise", "anger"]
     matrix = [0.0, 0.0, 0.0, 0.0]
     words = sentence.lower().strip(string.punctuation).split(" ")
+    negative = False
     for word in words:
+        if word == "no" or word == "not":
+            negative = True
         if word in dictionary:
             matrix = numpy.add(matrix,dictionary[word])
+    if max(matrix) == 0:
+        result = "neutral"
+    else:
+        result = emotions[numpy.argmax(matrix)]
 
+    return result
 
-    return matrix
-
-print(classify("why are you angry?"))
+print(classify("I am not angry"))
