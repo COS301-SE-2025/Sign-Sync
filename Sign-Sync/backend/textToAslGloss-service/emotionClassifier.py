@@ -1,3 +1,6 @@
+import string
+
+import numpy
 dictionary = {
     "sad": [1.0, 0.0, 0.0, 0.0],
     "unhappy": [1.0, 0.0, 0.0, 0.0],
@@ -24,3 +27,10 @@ dictionary = {
     "mad": [0.0, 0.0, 0.0, 0.75],
 }
 def classify(sentence):
+    emotions = {"sad", "happy", "surprise", "anger"}
+    matrix = [0.0, 0.0, 0.0, 0.0]
+    words = sentence.lower().strip(string.punctuation).split(" ")
+
+    return matrix
+
+print(classify("why are you angry?"))
