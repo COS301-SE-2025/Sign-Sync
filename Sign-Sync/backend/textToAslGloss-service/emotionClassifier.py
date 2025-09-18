@@ -40,6 +40,10 @@ def classify(sentence):
         result = "neutral"
     else:
         result = emotions[numpy.argmax(matrix)]
+        if negative:
+            if result == "happy":result="sad"
+            if result == "sad": result = "happy"
+            if result == "anger": result = "happy"
 
     return result
 
