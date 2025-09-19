@@ -29,6 +29,10 @@ function Avatar({signs,emotion = "Neutral"}) {
 
     useEffect(() =>{
         if (emotion === "") emotion = "Neutral";
+
+        //Remove this when but is found
+        if (emotion === "SSurprise") emotion = "Surprise";
+
         emotionsRef.current = emotion;
         materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
         materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
