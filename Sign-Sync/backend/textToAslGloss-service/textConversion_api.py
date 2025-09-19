@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from phrase_matcher import match_phrase
 from gloss_converter import convert_to_gloss
 from asl_templates import apply_asl_template
+from emotionClassifier import classify
 
 app = FastAPI()
 
@@ -20,6 +21,7 @@ class TranslationResponse(BaseModel):
 
 @app.post("/translate", response_model=TranslationResponse)
 def translate(req: TranslationRequest):
+    emotion = classify(req.sentence)
     phrase_result = match_phrase(req.sentence)
     if phrase_result:
         return {"source": "database", "gloss": phrase_result}

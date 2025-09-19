@@ -43,8 +43,6 @@ def classify(sentence):
         if negative:
             if result == "happy":result="sad"
             if result == "sad": result = "happy"
-            if result == "anger": result = "happy"
+            if result == "anger": result = "neutral"
 
     return result
-
-print(classify("I am not angry"))
