@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import preferenceManager from "./PreferenceManager";
 
 
-function Avatar({signs}) {
+function Avatar({signs,emotion = "Neutral"}) {
     const avatarReference = useRef();
     const {scene, animations, materials} = useGLTF(TranslatorAvatar);
     const {actions, mixer} = useAnimations(animations,avatarReference);
@@ -19,19 +19,21 @@ function Avatar({signs}) {
     const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Angry":[0,0.75],"Surprise":[0.5,0]};
     const emotionsRef = useRef(null);
     const animationController = useRef(null);
-
     const speeds = {"Very Slow": 0.75,"Slow":1,"Normal":1.5,"Fast":2.5,"Very Fast":5};
     useEffect(() => {
         setAvatarType(PreferenceManager.getPreferences().preferredAvatar);
-        emotionsRef.current = "Neutral";
-        materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
-        materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
-        materials["Face-CM-Material"].map.needsUpdate = true;
-
         if (!actions["Idle"]) return;
         mixer.clipAction(actions["Idle"].getClip());
         actions["Idle"].reset().play();
     }, [scene,camera]);
+
+    useEffect(() =>{
+        if (emotion === "") emotion = "Neutral";
+        emotionsRef.current = emotion;
+        materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
+        materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
+        materials["Face-CM-Material"].map.needsUpdate = true;
+    },[emotion])
 
     useEffect(() => {
         if (!actions["Idle"]) return;
@@ -124,7 +126,7 @@ function Avatar({signs}) {
     </>;
 }
 
-export default function AvatarViewport({input,trigger, height, width}) {
+export default function AvatarViewport({input,emotion = "Neutral",trigger, height, width}) {
     const [signs,setSigns] = useState([]);
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
@@ -170,7 +172,7 @@ export default function AvatarViewport({input,trigger, height, width}) {
         <div style={{ height: `${height}px`, width: `${width}px`, maxWidth: '100%', margin: '0 auto', background: isDarkMode ? '#36454f' : '#e5e7eb', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {/* <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: height, width: width, background: isDarkMode ? '#36454f' : '#e5e7eb'}}> */}
             <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '100%', width: '100%', display: 'block'}}>
-                <Avatar signs={signs}/>
+                <Avatar signs={signs} emotion={emotion} />
                 <directionalLight color="white" position={[5,10,7.5]} intensity={1}/>
                 <ambientLight color="white" intensity={0.75}/>
             </Canvas>
