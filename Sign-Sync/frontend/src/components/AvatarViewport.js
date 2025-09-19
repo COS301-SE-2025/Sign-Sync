@@ -16,7 +16,7 @@ function Avatar({signs,emotion = "Neutral"}) {
     const [translatedWord, setTranslatedWord] = useState("");
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
     const animationSpeed = PreferenceManager.getPreferences().animationSpeed;
-    const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Angry":[0,0.75],"Surprise":[0.5,0]};
+    const emotions = {"Neutral":[0,0],"Happy":[0,0.25],"Sad":[0,0.5],"Anger":[0,0.75],"Surprise":[0.5,0]};
     const emotionsRef = useRef(null);
     const animationController = useRef(null);
     const speeds = {"Very Slow": 0.75,"Slow":1,"Normal":1.5,"Fast":2.5,"Very Fast":5};
