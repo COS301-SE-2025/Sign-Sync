@@ -72,6 +72,10 @@ function Avatar({signs,emotion = "Neutral"}) {
                     mixer.clipAction(actions["Idle"].getClip());
                     actions["Idle"].reset().play();
                     setTranslatedWord("");
+                    emotionsRef.current = "Neutral";
+                    materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
+                    materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
+                    materials["Face-CM-Material"].map.needsUpdate = true;
                 }
             }catch (error) {
                 if (error.message !== 'Animation stopped - Rerun') {
