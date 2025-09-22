@@ -116,13 +116,13 @@ app = FastAPI()
 # Configure the CORS_ORIGINS at deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=[CORS_ORIGINS],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 rate_limits = {}
-MAX_REQUESTS = 20
+MAX_REQUESTS = 1000
 WINDOW = 60
 
 @app.middleware("http")
