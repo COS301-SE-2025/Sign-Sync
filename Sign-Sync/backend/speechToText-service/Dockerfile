@@ -9,6 +9,12 @@ RUN apt-get update && \
 
 COPY . .
 
-EXPOSE 8003
+#EXPOSE 8003
 
-CMD ["uvicorn", "API:app", "--host", "0.0.0.0", "--port", "8003"]
+#CMD ["uvicorn", "API:app", "--host", "0.0.0.0", "--port", "8003"]
+
+# Read port from env or default to 8000
+ENV PORT=${PORT:-8003}
+EXPOSE ${PORT}
+
+CMD ["sh", "-c", "uvicorn API:app --host 0.0.0.0 --port $PORT"]
