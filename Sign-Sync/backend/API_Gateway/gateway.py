@@ -133,12 +133,18 @@ app.add_middleware(
 )
 
 rate_limits = {}
-MAX_REQUESTS = 1000
+MAX_REQUESTS = 40
 WINDOW = 60
 
 @app.middleware("http")
 async def rate_limiter(request: Request, call_next):
     if request.method == "OPTIONS":
+        return await call_next(request)
+    
+    path = request.url.path.rstrip("/")
+    print(path)
+    # this won't allow any other path to bypass the limiter
+    if path == "/api/alphabet/predict" or path == "/api/gesture/predict":
         return await call_next(request)
     
     client_ip = request.client.host
