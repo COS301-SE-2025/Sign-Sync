@@ -13,7 +13,7 @@ COPY . .
 
 #CMD ["uvicorn", "API:app", "--host", "0.0.0.0", "--port", "8003"]
 
-# Read port from env or default to 8000
+# Read port from env or default to 8003
 ENV PORT=${PORT:-8003}
 EXPOSE ${PORT}
 

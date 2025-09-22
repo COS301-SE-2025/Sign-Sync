@@ -12,7 +12,7 @@ COPY . .
 
 #CMD ["uvicorn", "textConversion_api:app", "--host", "0.0.0.0", "--port", "8002"]
 
-# Read port from env or default to 8000
+# Read port from env or default to 8002
 ENV PORT=${PORT:-8002}
 EXPOSE ${PORT}
 

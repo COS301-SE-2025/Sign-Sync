@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-# Read port from env or default to 8000
+# Read port from env or default to 8007
 ENV PORT=${PORT:-8007}
 EXPOSE ${PORT}
 

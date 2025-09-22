@@ -8,7 +8,7 @@ COPY . .
 
 #CMD ["uvicorn", "signToText_API:app", "--host", "0.0.0.0", "--port", "8006"]
 
-# Read port from env or default to 8000
+# Read port from env or default to 8006
 ENV PORT=${PORT:-8006}
 EXPOSE ${PORT}
 
