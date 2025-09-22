@@ -4,10 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-# Read port from env or default to 8007
-ENV PORT=${PORT:-8007}
-EXPOSE ${PORT}
+EXPOSE 8007
 
-CMD ["sh", "-c", "uvicorn gateway:app --host 0.0.0.0 --port $PORT"]
-
+CMD ["uvicorn", "gateway:app", "--host", "0.0.0.0", "--port", "8007"]
 
