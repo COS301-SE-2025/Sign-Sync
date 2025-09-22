@@ -12,7 +12,7 @@ const app = express();
 
 const url = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB_NAME;
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 //Middleware
 app.use(express.json());
