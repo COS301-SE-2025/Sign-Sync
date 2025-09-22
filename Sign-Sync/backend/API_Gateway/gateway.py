@@ -127,6 +127,9 @@ WINDOW = 60
 
 @app.middleware("http")
 async def rate_limiter(request: Request, call_next):
+    if request.method == "OPTIONS":
+        return await call_next(request)
+    
     client_ip = request.client.host
     now = time.time()
 
@@ -141,7 +144,8 @@ async def rate_limiter(request: Request, call_next):
         return JSONResponse(
             {"detail": "Too many requests"},
             status_code=429,
-            headers={"Retry-After": str(WINDOW)}
+            headers={"Retry-After": str(WINDOW),
+                     "Access-Control-Allow-Origin": CORS_ORIGINS}
         )
     
     response = await call_next(request)
