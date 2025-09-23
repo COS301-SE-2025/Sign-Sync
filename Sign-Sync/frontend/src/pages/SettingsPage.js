@@ -180,8 +180,8 @@ class SettingsPage extends React.Component
                 }`}
                 style={{
                     background: isDarkMode
-                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                    : "linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)"
+                    ? "linear-gradient(135deg, #080C1A, #172034)"
+                    : "#f5f5f5"
                 }}
             >
                 <aside className="w-64 flex-shrink-0">
@@ -190,7 +190,7 @@ class SettingsPage extends React.Component
 
                 <main className="flex-1 relative p-8 flex items-center justify-center">
                     <div className="max-w-screen-xl w-full">
-                        <div className={`w-full bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}>
+                        <div className={`w-full p-8 md:p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`} style={{backgroundColor: isDarkMode ? "#1B2432" : "#f5f5f5", border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2"}}>
                             {/* Header */}
                             <div className="mb-6 text-center">
                             <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">
