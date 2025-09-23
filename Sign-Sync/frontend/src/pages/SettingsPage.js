@@ -175,171 +175,169 @@ class SettingsPage extends React.Component
 
         return (
             <section
-            className={`flex h-screen transition-colors duration-300 ${
-                isDarkMode ? "text-white" : "text-black"
-            }`}
-            style={{
-                background: isDarkMode
-                ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                : "linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)"
-            }}
+                className={`flex h-screen transition-colors duration-300 ${
+                    isDarkMode ? "text-white" : "text-black"
+                }`}
+                style={{
+                    background: isDarkMode
+                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
+                    : "linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)"
+                }}
             >
-            <aside className="w-64 flex-shrink-0">
-                <SideNavbar />
-            </aside>
+                <aside className="w-64 flex-shrink-0">
+                    <SideNavbar />
+                </aside>
 
-            <main className="flex-1 relative p-8 flex items-center justify-center">
-                <div className="max-w-screen-xl w-full">
-                <div
-                    className={`w-full bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}
-                >
-                    {/* Header */}
-                    <div className="mb-6 text-center">
-                    <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">
-                        Settings
-                    </h2>
-                    <p className="text-xl text-gray-600 dark:text-gray-400">
-                        Update your preferences
-                    </p>
+                <main className="flex-1 relative p-8 flex items-center justify-center">
+                    <div className="max-w-screen-xl w-full">
+                        <div className={`w-full bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}>
+                            {/* Header */}
+                            <div className="mb-6 text-center">
+                            <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">
+                                Settings
+                            </h2>
+                            <p className="text-xl text-gray-600 dark:text-gray-400">
+                                Update your preferences
+                            </p>
+                            </div>
+
+                            {/* Email row */}
+                            <SettingsRow title="Email" value={email} className="mt-4" />
+
+                            {/* Fields grid */}
+                            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Display mode */}
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Display Mode
+                                    </label>
+                                    <SelectField
+                                    value={displayMode}
+                                    onChange={(value) => this.handleChange("displayMode", value)}
+                                    options={["Light Mode", "Dark Mode"]}
+                                    />
+                                </div>
+
+                                {/* Font Size */}
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Font Size
+                                    </label>
+                                    <SliderField
+                                    leftLabel="Small"
+                                    rightLabel="Large"
+                                    description="Font Size"
+                                    value={fontSize}
+                                    OPTIONS={["Small", "Medium", "Large"]}
+                                    onChange={(value) => this.handleChange("fontSize", value)}
+                                    />
+                                </div>
+
+                                {/* Preferred Avatar */}
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Preferred Avatar
+                                    </label>
+                                    <SelectField
+                                    value={preferredAvatar}
+                                    onChange={(value) =>
+                                        this.handleChange("preferredAvatar", value)
+                                    }
+                                    options={["Zac", "Jenny"]}
+                                    />
+                                </div>
+
+                                {/* Animation Speed */}
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Animation Speed
+                                    </label>
+                                    <SliderField
+                                    leftLabel="Slow"
+                                    rightLabel="Fast"
+                                    description="Animation Speed"
+                                    value={animationSpeed}
+                                    OPTIONS={["Very Slow", "Slow", "Normal", "Fast", "Very Fast"]}
+                                    onChange={(value) =>
+                                        this.handleChange("animationSpeed", value)
+                                    }
+                                    />
+                                </div>
+
+                                {/* Preferred Voice */}
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Preferred Voice
+                                    </label>
+                                    <SelectField
+                                    value={speechVoice}
+                                    onChange={(value) => this.handleChange("speechVoice", value)}
+                                    options={["George", "Hazel", "Susan"]}
+                                    />
+                                </div>
+
+                                {/* Speech Speed */}
+                                <div className="flex flex-col">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Speech Speed
+                                    </label>
+                                    <SliderField
+                                    leftLabel="Slow"
+                                    rightLabel="Fast"
+                                    description="Speech Speed"
+                                    value={speechSpeed}
+                                    OPTIONS={["Slow", "Normal", "Fast"]}
+                                    onChange={(value) => this.handleChange("speechSpeed", value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mt-8 flex justify-center gap-4">
+                                <button
+                                    onClick={this.handleSavePreferences}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
+                                >
+                                    Save Preferences
+                                </button>
+
+                                <button
+                                    onClick={this.handleDeleteAccount}
+                                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-all duration-200"
+                                >
+                                    Delete Account
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Email row */}
-                    <SettingsRow title="Email" value={email} className="mt-4" />
-
-                    {/* Fields grid */}
-                    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Display mode */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Display Mode
-                        </label>
-                        <SelectField
-                        value={displayMode}
-                        onChange={(value) => this.handleChange("displayMode", value)}
-                        options={["Light Mode", "Dark Mode"]}
-                        />
-                    </div>
-
-                    {/* Font Size */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Font Size
-                        </label>
-                        <SliderField
-                        leftLabel="Small"
-                        rightLabel="Large"
-                        description="Font Size"
-                        value={fontSize}
-                        OPTIONS={["Small", "Medium", "Large"]}
-                        onChange={(value) => this.handleChange("fontSize", value)}
-                        />
-                    </div>
-
-                    {/* Preferred Avatar */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Preferred Avatar
-                        </label>
-                        <SelectField
-                        value={preferredAvatar}
-                        onChange={(value) =>
-                            this.handleChange("preferredAvatar", value)
-                        }
-                        options={["Zac", "Jenny"]}
-                        />
-                    </div>
-
-                    {/* Animation Speed */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Animation Speed
-                        </label>
-                        <SliderField
-                        leftLabel="Slow"
-                        rightLabel="Fast"
-                        description="Animation Speed"
-                        value={animationSpeed}
-                        OPTIONS={["Very Slow", "Slow", "Normal", "Fast", "Very Fast"]}
-                        onChange={(value) =>
-                            this.handleChange("animationSpeed", value)
-                        }
-                        />
-                    </div>
-
-                    {/* Preferred Voice */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Preferred Voice
-                        </label>
-                        <SelectField
-                        value={speechVoice}
-                        onChange={(value) => this.handleChange("speechVoice", value)}
-                        options={["George", "Hazel", "Susan"]}
-                        />
-                    </div>
-
-                    {/* Speech Speed */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Speech Speed
-                        </label>
-                        <SliderField
-                        leftLabel="Slow"
-                        rightLabel="Fast"
-                        description="Speech Speed"
-                        value={speechSpeed}
-                        OPTIONS={["Slow", "Normal", "Fast"]}
-                        onChange={(value) => this.handleChange("speechSpeed", value)}
-                        />
-                    </div>
-                    </div>
-
-                    <div className="mt-8 flex justify-center gap-4">
-                    <button
-                        onClick={this.handleSavePreferences}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200"
-                    >
-                        Save Preferences
-                    </button>
-
-                    <button
-                        onClick={this.handleDeleteAccount}
-                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-all duration-200"
-                    >
-                        Delete Account
-                    </button>
-                    </div>
-                </div>
-                </div>
-
-                {/* Login overlay */}
-                {!user && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                    className={`p-8 rounded-lg shadow-xl ${
-                        isDarkMode ? "bg-gray-800" : "bg-white"
-                    } border ${
-                        isDarkMode ? "border-gray-700" : "border-gray-200"
-                    } z-10 max-w-md text-center`}
-                    >
-                    <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-                    <p className="mb-6">
-                        Please log in to view and change your settings
-                    </p>
-                    <button
-                        onClick={() => (window.location.href = "/login")}
-                        className={`px-6 py-2 rounded-lg ${
-                        isDarkMode
-                            ? "bg-blue-600 hover:bg-blue-700"
-                            : "bg-blue-500 hover:bg-blue-600"
-                        } text-white font-medium transition-colors`}
-                    >
-                        Go to Login
-                    </button>
-                    </div>
-                </div>
-                )}
-            </main>
+                    {/* Login overlay */}
+                    {!user && (
+                        <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm">
+                            <div
+                                className={`p-8 rounded-lg shadow-xl ${
+                                    isDarkMode ? "bg-gray-800" : "bg-white"
+                                } border ${
+                                    isDarkMode ? "border-gray-700" : "border-gray-200"
+                                } z-10 max-w-md text-center`}
+                            >
+                                <h2 className="text-2xl font-bold mb-4">Login Required</h2>
+                                <p className="mb-6">
+                                    Please log in to view and change your settings
+                                </p>
+                                <button
+                                    onClick={() => (window.location.href = "/login")}
+                                    className={`px-6 py-2 rounded-lg ${
+                                    isDarkMode
+                                        ? "bg-blue-600 hover:bg-blue-700"
+                                        : "bg-blue-500 hover:bg-blue-600"
+                                    } text-white font-medium transition-colors`}
+                                >
+                                    Go to Login
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </main>
             </section>
         );
     }
