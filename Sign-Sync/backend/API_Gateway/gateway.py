@@ -235,7 +235,7 @@ async def proxy(req: Request, route: Route, upstream_path: str) -> Response:
     )
 
 
-@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def gateway(full_path: str, req: Request) -> Response:
     print(full_path)
     route, upstream_path = match_route("/" + full_path)
