@@ -66,7 +66,7 @@ class LandingPage extends React.Component
           </div>
 
           <p className="text-gray-300 text-lg mb-6">
-            You can get started right away, or log in to access your saved preferences.
+            You can get started right away, or log in to access your saved preferences and achievements.
           </p>
           
           {/* Bottom buttons */}
