@@ -38,8 +38,8 @@ class TranslatorPage extends React.Component
         return (
             // <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
             <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
-                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
+                                                                                                    ? "linear-gradient(135deg, #080C1A, #172034)"
+                                                                                                    : "#f5f5f5"}}>
                 <SideNavbar/>
                 <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "text-white" : "text-black"} px-6 py-10`}>
                 {/* <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"} px-6 py-10`}> */}

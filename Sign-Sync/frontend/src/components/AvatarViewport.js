@@ -167,7 +167,7 @@ export default function AvatarViewport({input,trigger, height, width}) {
     }, [input,trigger]);
 
     return (
-        <div style={{ height: `${height}px`, width: `${width}px`, maxWidth: '100%', margin: '0 auto', background: isDarkMode ? '#36454f' : '#e5e7eb', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ height: `${height}px`, width: `${width}px`, maxWidth: '100%', margin: '0 auto', background: isDarkMode ? '#1B2432' : '#e5e7eb', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {/* <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: height, width: width, background: isDarkMode ? '#36454f' : '#e5e7eb'}}> */}
             <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: '100%', width: '100%', display: 'block'}}>
                 <Avatar signs={signs}/>

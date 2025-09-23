@@ -78,7 +78,7 @@ class TextToSign extends React.Component
         }else{
              inputType = <input className="w-full text-center text-4xl font-bold border-2 border-black py-2.5 mx-2 min-h-[60px]"
                                 style={{
-                                    background: isDarkMode ? '#36454f' : '#e5e7eb',
+                                    background: isDarkMode ? '#1B2432' : '#e5e7eb',
                                     color: isDarkMode ? 'white' : 'black',
                                 }}
                                 type={"text"} value={this.state.sentence} onChange={this.processSentence} />;
@@ -89,10 +89,10 @@ class TextToSign extends React.Component
         const avatarHeight = this.props.compact ? 400 : 500;
         
         return (
-            <div className= 'p-2 rounded-lg' style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
+            <div className= 'p-2 rounded-lg' style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black', border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2" }}>
                 <div className="flex flex-col items-center w-full" style={{ maxWidth: avatarWidth}}>
                     {/* Avatar */}
-                    <div className= 'w-full p-2 rounded-lg mb-2' style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
+                    <div className= 'w-full p-2 rounded-lg mb-2' style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
                         <AvatarViewport
                             input={this.state.textToBeSent}
                             trigger={this.state.timestamp}
@@ -102,12 +102,12 @@ class TextToSign extends React.Component
                     </div>
 
                     {/* Controls */}
-                    <div className= 'flex items-center w-full border rounded-lg px-4 py-2' style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
-                        <button onClick={this.changeMic} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
+                    <div className= 'flex items-center w-full border rounded-lg px-4 py-2' style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
+                        <button onClick={this.changeMic} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
                             <img src={mic ? MicOn : MicOff} className="w-8 h-8" alt="Mic"/>
                         </button>
                         {inputType}
-                        <button onClick={this.sendText} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
+                        <button onClick={this.sendText} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
                             <img src={Submit} className="w-8 h-8" alt="Submit"/>
                         </button>
                     </div>
