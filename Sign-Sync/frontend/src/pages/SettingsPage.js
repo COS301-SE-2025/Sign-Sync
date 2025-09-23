@@ -189,8 +189,8 @@ class SettingsPage extends React.Component
                 </aside>
 
                 <main className="flex-1 relative p-8 flex items-center justify-center">
-                    <div className="max-w-screen-xl w-full">
-                        <div className={`w-full p-8 md:p-10 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`} style={{backgroundColor: isDarkMode ? "#1B2432" : "#f5f5f5", border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2"}}>
+                    <div className="w-full min-w-[320px] max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto">
+                        <div className={`w-full p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`} style={{backgroundColor: isDarkMode ? "#1B2432" : "#f5f5f5", border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2"}}>
                             {/* Header */}
                             <div className="mb-6 text-center">
                             <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">
