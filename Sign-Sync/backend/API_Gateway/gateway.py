@@ -13,7 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
 CORS_ORIGINS = "http://localhost:3000"
+#CORS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
 WS_ORIGINS = "http://localhost:3000"
+#WS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
+
 DEFAULT_TIMEOUT = 15.0
 
 SPEECH_URL   = "http://localhost:8003"
