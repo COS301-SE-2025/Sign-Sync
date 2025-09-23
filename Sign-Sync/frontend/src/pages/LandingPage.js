@@ -19,18 +19,19 @@ class LandingPage extends React.Component
   {
     return (
       <div
-        className="flex flex-col items-center justify-center min-h-screen"
+        className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6"
         style={{ background: "linear-gradient(135deg, #080C1A, #172034)" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 150 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="bg-[#1B2432] backdrop-blur-xl border border-white/10 rounded-2xl p-12 sm:p-16 shadow-2xl max-w-2xl w-full text-center"
+          className="bg-[#1B2432] backdrop-blur-xl border border-white/10 rounded-2xl max-w-2xl w-full text-center flex flex-col"
+          style={{ padding: '2rem' }}
         >
           {/* Logo + Title */}
-          <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 leading-normal text-white">
-            <span className="flex justify-center items-center gap-2 mb-4">
+          <h1 className="text-5xl sm:text-6xl font-extrabold leading-normal text-white">
+            <span className="flex justify-center items-center gap-2">
               <img src={handBtn} alt="Hand Icon" className="w-12 h-12" />
               <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent inline-block leading-normal">
                 Sign-Sync
@@ -46,7 +47,7 @@ class LandingPage extends React.Component
           </p>
 
           {/* Feature list */}
-          <div className="text-gray-200 text-left space-y-4 mb-10">
+          <div className="text-gray-200 text-left space-y-4 mb-6">
             <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-lg text-lg">
               <img src={translateBtn} alt="Learn Icon" className="w-6 h-6" />
               <span>Real-Time sign-language translation</span>
@@ -70,7 +71,7 @@ class LandingPage extends React.Component
           </p>
           
           {/* Bottom buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-6">
+          <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <Link
               to="/login"
               className="flex-1 border border-white text-white font-semibold py-3 rounded-lg hover:bg-white/10 transition-all"
