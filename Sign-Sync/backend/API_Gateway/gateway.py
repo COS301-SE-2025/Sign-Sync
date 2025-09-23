@@ -13,7 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
 CORS_ORIGINS = "http://localhost:3000"
+#CORS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
 WS_ORIGINS = "http://localhost:3000"
+#WS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
+
 DEFAULT_TIMEOUT = 15.0
 
 SPEECH_URL   = "http://localhost:8003"
@@ -127,7 +130,8 @@ app = FastAPI()
 # Configure the CORS_ORIGINS at deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[CORS_ORIGINS],
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -231,7 +235,7 @@ async def proxy(req: Request, route: Route, upstream_path: str) -> Response:
     )
 
 
-@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def gateway(full_path: str, req: Request) -> Response:
     print(full_path)
     route, upstream_path = match_route("/" + full_path)

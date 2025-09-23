@@ -32,7 +32,8 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
+        "http://localhost:3000", 
+        #"https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"
     ], 
     allow_credentials=True,
     allow_methods=["*"],
