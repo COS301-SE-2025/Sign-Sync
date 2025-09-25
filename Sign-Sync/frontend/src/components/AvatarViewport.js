@@ -35,9 +35,9 @@ function Avatar({signs,emotion = "Neutral"}) {
         if (emotion === "SSurprise") emotion = "Surprise";
 
         emotionsRef.current = emotion;
-        materials["Face-CM-Material"].map.offset.x = emotions[emotionsRef.current][0];
-        materials["Face-CM-Material"].map.offset.y = emotions[emotionsRef.current][1];
-        materials["Face-CM-Material"].map.needsUpdate = true;
+        materials[avatarName+"-Face"].map.offset.x = emotions[emotionsRef.current][0];
+        materials[avatarName+"-Face"].map.offset.y = emotions[emotionsRef.current][1];
+        materials[avatarName+"-Face"].map.needsUpdate = true;
     },[emotion])
 
     useEffect(() => {
@@ -107,7 +107,9 @@ function Avatar({signs,emotion = "Neutral"}) {
     },[signs,actions,mixer]);
 
     function setAvatarType(type) {
-        console.log(type)
+        scene.getObjectByName("Temp-Face").visible = false;
+        scene.getObjectByName("Temp-Head").visible = false;
+        scene.getObjectByName("Temp-Body").visible = false;
         switch (type) {
             case "Zac":
                 scene.getObjectByName("Body-F").visible = false;
@@ -133,7 +135,7 @@ function Avatar({signs,emotion = "Neutral"}) {
                 scene.getObjectByName("Hair-CM").visible = false;
                 scene.getObjectByName("Hair-CF").visible = true;
                 scene.getObjectByName("Hair-Bongani").visible = false;
-                scene.getObjectByName("Body-F").material = materials["Jenny_BODY-Material"];
+                scene.getObjectByName("Body-F").material = materials["Zac_BODY-Material"];
                 scene.getObjectByName("Face-F").material = materials["Jenny-Face"];
                 scene.getObjectByName("Head-F").material = materials["Head"];
                 break;
