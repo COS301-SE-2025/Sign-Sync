@@ -249,4 +249,9 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     setConnected(true); setStatus("Predicting");
   }, [lettersTick]);
 
+  const stopLetters = useCallback(() => {
+    if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
+    setConnected(false); setStatus("Idle");
+  }, []);
+
 }
