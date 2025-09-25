@@ -298,7 +298,16 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
 
     start().catch(e => console.error("Camera init failed:", e));
 
-    
+    return () => {
+      stopLetters();
+      stopWordsSession().catch(() => {});
+      if (poseRef.current) { poseRef.current.close(); poseRef.current = null; }
+      if (handRef.current) { handRef.current.close(); handRef.current = null; }
+      if (videoRef.current && stream) {
+        stream.getTracks().forEach(t => t.stop());
+        videoRef.current.srcObject = null;
+      }
+    };
   }, [mode, onPrediction]);
 
 }
