@@ -69,4 +69,19 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     else { speakText(text); }
   }, [sentence, speakText]);
 
+  const toEnglish = useCallback(async (text) => {
+    if (!text) return "";
+    try {
+      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setSentence(data.translation || sentence);
+      }
+    } catch {/* ignore */}
+  }, [sentence]);
+
 }
