@@ -25,3 +25,26 @@ const lastWord = (text) => {
   return toks.length ? toks[toks.length - 1] : "";
 };
 
+export function useSignStream({ mode = "words", onPrediction, autoStart = true, videoConstraints = { width: 640, height: 400 } } = {}) {
+  // Refs to engine pieces
+  const videoRef = useRef(null);
+  const wsRef = useRef(null);
+  const poseRef = useRef(null);
+  const handRef = useRef(null);
+  const loopTimerRef = useRef(null);
+  const sessionIdRef = useRef(null);
+
+  // Public state
+  const [connected, setConnected] = useState(false);
+  const [status, setStatus] = useState("Idle");
+  const [paused, setPaused] = useState(false);
+
+  const [headline, setHeadline] = useState("");
+  const [topK, setTopK] = useState([]);    // [{label,p}]
+  const [stable, setStable] = useState(false);
+  const [sentence, setSentence] = useState("");
+
+  const [soundOn, setSoundOn] = useState(false);
+  const lastCommittedRef = useRef("");
+
+}
