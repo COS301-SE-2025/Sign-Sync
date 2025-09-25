@@ -310,4 +310,20 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     };
   }, [mode, onPrediction]);
 
+  return {
+    // refs
+    videoRef,
+
+    // state
+    connected, status, paused,
+    headline, topK, stable, sentence, setSentence,
+    soundOn,
+
+    // controls
+    start: mode === "words" ? startWordsSession : startLetters,
+    stop:  mode === "words" ? stopWordsSession  : stopLetters,
+    pause, resume,
+    undo, clear,
+    toEnglish, toggleSpeak,
+  };
 }
