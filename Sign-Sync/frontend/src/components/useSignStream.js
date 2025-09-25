@@ -254,4 +254,36 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     setConnected(false); setStatus("Idle");
   }, []);
 
+  // -------- shared setup/teardown --------
+  useEffect(() => {
+    let stream = null;
+
+    const init = async () => {
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+      );
+
+      poseRef.current = await PoseLandmarker.createFromOptions(vision, {
+        baseOptions: { modelAssetPath: pose_task },
+        runningMode: "VIDEO",
+        numPoses: 1,
+        minPoseDetectionConfidence: 0.5,
+        minPosePresenceConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+
+      handRef.current = await HandLandmarker.createFromOptions(vision, {
+        baseOptions: { modelAssetPath: hand_task },
+        runningMode: "VIDEO",
+        numHands: 2,
+        minHandDetectionConfidence: 0.5,
+        minHandPresenceConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+    };
+
+    
+  }, [mode, onPrediction]);
+
+  
 }
