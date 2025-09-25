@@ -198,11 +198,16 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
     setPaused(true); setStatus("Paused");
   }, []);
-
+  
   const resume = useCallback(() => {
     if (!paused) return;
     loopTimerRef.current = setInterval(tickSendWords, SEND_INTERVAL_MS);
     setPaused(false); setStatus("Predicting");
   }, [paused, tickSendWords]);
+
+  const undo = useCallback(() => {
+    const ws = wsRef.current;
+    if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: "undo" }));
+  }, []);
 
 }
