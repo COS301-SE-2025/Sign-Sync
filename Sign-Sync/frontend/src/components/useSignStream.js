@@ -173,4 +173,25 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     loopTimerRef.current = setInterval(tickSendWords, SEND_INTERVAL_MS);
   }, [onPrediction, tickSendWords]);
 
+  const stopWordsSession = useCallback(async () => {
+    if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
+    setPaused(false);
+
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      try { wsRef.current.close(); } catch {}
+    }
+    if (sessionIdRef.current) {
+      try {
+        await fetch(`${WORDS_API_BASE}/v1/session/stop`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: sessionIdRef.current }),
+        });
+      } catch {/* ignore */}
+      sessionIdRef.current = null;
+    }
+    setConnected(false);
+    setStatus("Idle");
+  }, []);
+
 }
