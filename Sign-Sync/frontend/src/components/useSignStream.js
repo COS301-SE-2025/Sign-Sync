@@ -244,5 +244,9 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     } catch {/* ignore */}
   }, [onPrediction]);
 
-}
+  const startLetters = useCallback(() => {
+    loopTimerRef.current = setInterval(lettersTick, LETTERS_INTERVAL_MS);
+    setConnected(true); setStatus("Predicting");
+  }, [lettersTick]);
 
+}
