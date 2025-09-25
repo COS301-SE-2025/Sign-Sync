@@ -194,4 +194,8 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     setStatus("Idle");
   }, []);
 
+  const pause = useCallback(() => {
+    if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
+    setPaused(true); setStatus("Paused");
+  }, []);
 }
