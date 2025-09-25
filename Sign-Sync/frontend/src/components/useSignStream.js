@@ -47,4 +47,26 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
   const [soundOn, setSoundOn] = useState(false);
   const lastCommittedRef = useRef("");
 
+  // -------- helpers (speak / english) --------
+  const speakText = useCallback((text) => {
+    if (!("speechSynthesis" in window) || !text) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = "en-US";
+    utt.onstart = () => setSoundOn(true);
+    utt.onend = () => setSoundOn(false);
+    utt.onerror = () => setSoundOn(false);
+    window.speechSynthesis.speak(utt);
+  }, []);
+
+  const toggleSpeak = useCallback(() => {
+    const text = (sentence || "").replace(/\s+/g, " ").trim();
+    if (!text) {
+      if (window.speechSynthesis.speaking) { window.speechSynthesis.cancel(); setSoundOn(false); }
+      return;
+    }
+    if (window.speechSynthesis.speaking) { window.speechSynthesis.cancel(); setSoundOn(false); }
+    else { speakText(text); }
+  }, [sentence, speakText]);
+
 }
