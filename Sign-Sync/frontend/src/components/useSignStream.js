@@ -282,8 +282,23 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
       });
     };
 
+    const start = async () => {
+      stream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints });
+      if (!videoRef.current) return;
+      videoRef.current.srcObject = stream;
+      videoRef.current.style.transform = "scaleX(-1)";
+      await videoRef.current.play().catch(() => {});
+      await init();
+
+      if (autoStart) {
+        if (mode === "words") await startWordsSession();
+        else startLetters();
+      }
+    };
+
+    start().catch(e => console.error("Camera init failed:", e));
+
     
   }, [mode, onPrediction]);
 
-  
 }
