@@ -195,7 +195,7 @@ class SettingsPage extends React.Component
                                 label="Preferred Avatar"
                                 value={preferredAvatar}
                                 onChange={(value) => this.handleChange("preferredAvatar", value)}
-                                options={["Zac", "Jenny"]}
+                                options={["Zac", "Jenny", "Bongani"]}
                             />
 
                             <SliderField
