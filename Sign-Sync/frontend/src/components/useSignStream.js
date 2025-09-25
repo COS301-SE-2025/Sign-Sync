@@ -129,4 +129,48 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     try { ws.send(JSON.stringify(payload)); } catch { /* ignore */ }
   }, []);
 
+  const startWordsSession = useCallback(async () => {
+    const resp = await fetch(`${WORDS_API_BASE}/v1/session/start`, { method: "POST" });
+    if (!resp.ok) throw new Error("Failed to start session");
+    const meta = await resp.json();
+    sessionIdRef.current = meta.session_id;
+
+    const ws = new WebSocket(`ws://localhost:8007/api/stt/v1/stream/${meta.session_id}`);
+    wsRef.current = ws;
+
+    ws.onopen   = () => { setConnected(true); setStatus("Idle"); };
+    ws.onclose  = () => { setConnected(false); setStatus("Idle"); };
+    ws.onerror  = () => { try { ws.close(); } catch {} };
+
+    ws.onmessage = (ev) => {
+      try {
+        const msg = JSON.parse(ev.data);
+        if (msg.type === "prediction") {
+          if (msg.idle) setStatus("Idle");
+          else if (msg.filling) setStatus("Filling");
+          else setStatus("Predicting");
+
+          setTopK(msg.topk || []);
+          setStable(!!msg.stable);
+          if (msg.topk?.length) {
+            setHeadline(msg.topk[0].label);
+            onPrediction && onPrediction(msg.topk[0].label, msg.topk);
+          } else {
+            setHeadline("");
+          }
+        } else if (msg.type === "word_event") {
+          const w = (msg.label || "").trim();
+          if (w && w !== lastCommittedRef.current) lastCommittedRef.current = w;
+        } else if (msg.type === "sentence") {
+          const cleaned = collapseConsecutive(msg.text || "");
+          setSentence(cleaned);
+          lastCommittedRef.current = lastWord(cleaned);
+        }
+      } catch {/* ignore */}
+    };
+
+    setPaused(false);
+    loopTimerRef.current = setInterval(tickSendWords, SEND_INTERVAL_MS);
+  }, [onPrediction, tickSendWords]);
+
 }
