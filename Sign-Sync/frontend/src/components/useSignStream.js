@@ -209,5 +209,12 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     const ws = wsRef.current;
     if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: "undo" }));
   }, []);
+  
+  const clear = useCallback(() => {
+    lastCommittedRef.current = "";
+    const ws = wsRef.current;
+    if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: "clear_sentence" }));
+    setSentence("");
+  }, []);
 
 }
