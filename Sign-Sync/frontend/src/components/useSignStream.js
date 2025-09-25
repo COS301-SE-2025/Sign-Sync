@@ -84,4 +84,49 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     } catch {/* ignore */}
   }, [sentence]);
 
+  // -------- words mode engine --------
+  const tickSendWords = useCallback(() => {
+    const videoEl = videoRef.current;
+    const pose = poseRef.current;
+    const hand = handRef.current;
+    const ws = wsRef.current;
+    if (!videoEl || !pose || !hand || !ws || ws.readyState !== WebSocket.OPEN) return;
+
+    const ts = performance.now();
+
+    // Pose
+    const pRes = pose.detectForVideo(videoEl, ts);
+    let pose33 = null;
+    if (pRes?.landmarks?.length) {
+      const first = pRes.landmarks[0];
+      if (first && first.length === 33) pose33 = first.map((lm) => [lm.x, lm.y, lm.z ?? 0, lm.visibility ?? 0]);
+    }
+    if (!pose33) return;
+
+    // Hands
+    const hRes = hand.detectForVideo(videoEl, ts);
+    let left21 = Array.from({ length: 21 }, () => [0, 0, 0]);
+    let right21 = Array.from({ length: 21 }, () => [0, 0, 0]);
+    if (hRes?.landmarks?.length) {
+      const LM = hRes.landmarks;
+      const H = hRes.handednesses;
+      if (H && H.length === LM.length) {
+        for (let i = 0; i < LM.length; i++) {
+          const side = (H[i][0]?.categoryName || "").toLowerCase();
+          const pts = LM[i].map((lm) => [lm.x, lm.y, lm.z ?? 0]);
+          if (side === "left") left21 = pts;
+          else if (side === "right") right21 = pts;
+        }
+      } else {
+        const pts0 = LM[0]?.map((lm) => [lm.x, lm.y, lm.z ?? 0]);
+        if (pts0) left21 = pts0;
+        const pts1 = LM[1]?.map((lm) => [lm.x, lm.y, lm.z ?? 0]);
+        if (pts1) right21 = pts1;
+      }
+    }
+
+    const payload = { t: Date.now(), pose33, left21, right21 };
+    try { ws.send(JSON.stringify(payload)); } catch { /* ignore */ }
+  }, []);
+
 }
