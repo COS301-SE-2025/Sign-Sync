@@ -217,4 +217,32 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     setSentence("");
   }, []);
 
+  // -------- letters mode engine --------
+  const lettersTick = useCallback(async () => {
+    const videoEl = videoRef.current;
+    const hand = handRef.current;
+    if (!videoEl || !hand) return;
+
+    const ts = performance.now();
+    const hRes = hand.detectForVideo(videoEl, ts);
+    const lm = hRes?.landmarks?.[0];
+    if (!lm || !lm.length) { setHeadline(""); return; }
+
+    const keypoints = lm.map((pt) => ({ x: pt.x, y: pt.y, z: pt.z ?? 0 }));
+    try {
+      const resp = await fetch(`${LETTERS_API_BASE}/predict`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keypoints }),
+      });
+      if (!resp.ok) return;
+      const data = await resp.json(); // {prediction:"A"}
+      const pred = (data.prediction || "").toString();
+      setHeadline(pred);
+      setTopK([]); setStable(true);
+      onPrediction && onPrediction(pred, []);
+    } catch {/* ignore */}
+  }, [onPrediction]);
+
 }
+
