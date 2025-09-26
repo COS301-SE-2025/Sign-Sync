@@ -51,7 +51,7 @@ export default function EducationTranslatorCamera({ onPrediction }) {
             <div className={`mt-3 rounded-lg p-3 ${cardCls}`}>
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold">
-                        {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "—")}
+                        {gestureMode ? (headline ? `${headline}${stable ? " " : ""}` : "—") : (headline || "—")}
                     </h2>
                     {gestureMode && (
                         <div className={`text-sm ${textMutedCls}`}>
