@@ -1,6 +1,10 @@
 
 # Apollo Projects - Sign Sync
 
+<div align="center">
+  <img src="./assets/logo.png" alt="Sign Sync Logo" width="200">
+</div>
+
 **What It Does:**
 
 Sign Sync is an innovative AI-powered communication bridge that enables seamless two-way translation between spoken language and sign language. Using speech recognition, motion capture, and AI animation, it converts:
@@ -44,11 +48,13 @@ Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes
 |[Technical Installation Manual](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Technical%20Installation%20Manual.pdf)| Instructions for setting up the applications |
 |[Testing Policy]()| Policies and procedures for testing |
 |[Coding Standards](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Coding%20Standards%20Document.pdf)| Guidelines for coding practices |
-|[Advertisement Video]()| Advertisement for Sign Sync |
-
-- [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)
+|[GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)| A board showing the progress of the team |
 
 ## Team
+
+<div align="center">
+  <img src="./assets/team.png" alt="Team Photo" width="200">
+</div>
 
 |**Name**|**Description**|**LinkedIn**|
 |--------|---------------|----------|
