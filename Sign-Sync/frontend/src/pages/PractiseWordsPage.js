@@ -2,6 +2,7 @@ import React from "react";
 import SideNavbar from "../components/sideNavbar";
 import Camera from "../components/Camera";
 import PreferenceManager from "../components/PreferenceManager";
+import EducationTranslatorCamera from "../components/EducationTranslator";
 
 class PractiseWordsPage extends React.Component 
 {
@@ -120,13 +121,9 @@ class PractiseWordsPage extends React.Component
 
                     <section className="flex justify-center w-full">
                         <div className="w-auto rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
-                            <Camera
-                              defaultGestureMode={true}
-                              gestureModeFixed={true}
-                              onPrediction={this.handlePrediction}
-                              width={700}
-                              height={400}
-                            />
+                          <EducationTranslatorCamera
+                              onPrediction={(prediction) => this.handlePrediction(prediction)}
+                          />
                         </div>
                         </section>
 
