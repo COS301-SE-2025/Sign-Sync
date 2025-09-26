@@ -200,7 +200,7 @@ class PractiseWordsPage extends React.Component
                                 : "bg-indigo-600 text-white hover:bg-indigo-700"
                             }`}
                           >
-                            Previous
+                            Previous word
                           </button>
 
                           {isLastWord && success ? (
@@ -220,7 +220,7 @@ class PractiseWordsPage extends React.Component
                                   : "bg-blue-600 text-white hover:bg-blue-700"
                               }`}
                             >
-                              Next
+                              Next word
                             </button>
                           )}
                         </div>
