@@ -85,6 +85,18 @@ export default function TranslatorCamera({ onPrediction }) {
             ))}
           </ol>
 
+          <div className="mt-auto" />
+        </div>
+      </aside>
+
+      {/* ROW 2 — LEFT: SENTENCE + SPEAK / UNDO / CLEAR */}
+      <div className="md:col-span-8 md:row-start-2">
+        <div className="grid grid-cols-12 gap-3 items-center">
+          {/* Sentence box */}
+          <div className={`col-span-12 md:col-span-8 ${soft} rounded-2xl px-4 py-3 text-xl min-h-[56px] flex items-center`}>
+            {gestureMode ? (sentence || " ") : " "}
+          </div>
+
           
     </div>
   );
