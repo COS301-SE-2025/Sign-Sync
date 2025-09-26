@@ -117,8 +117,8 @@ class LearnWordsPage extends React.Component
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2 py-5">
-                                        <h1 className="text-5xl font-extrabold text-white">Learn</h1>
-                                        <p className="text-3xl text-white">
+                                        <h1 className="text-5xl font-extrabold">Learn Words</h1>
+                                        <p className="text-3xl">
                                             Current Word:{" "}
                                             <span className="text-yellow-400 font-bold">{currentWord.toUpperCase()}</span>
                                         </p>

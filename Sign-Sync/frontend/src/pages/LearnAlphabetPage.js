@@ -113,8 +113,8 @@ class LearnAlphabetPage extends React.Component
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2 py-5">
-                                        <h1 className="text-5xl font-extrabold text-white">Learn the Alphabet</h1>
-                                        <p className="text-3xl text-white">
+                                        <h1 className="text-5xl font-extrabold">Learn the Alphabet</h1>
+                                        <p className="text-3xl">
                                             Current letter:{" "}
                                             <span className="text-yellow-400 font-bold">{currentLetter.toUpperCase()}</span>
                                         </p>
