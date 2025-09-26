@@ -156,7 +156,7 @@ class PractiseAlphabetPage extends React.Component
                               <button
                                 onClick={this.handleNext}
                                 disabled={!success}
-                                className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
+                                className={`px-5 py-2 rounded-md transition ${success ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
                               >
                                 Next
                               </button>
