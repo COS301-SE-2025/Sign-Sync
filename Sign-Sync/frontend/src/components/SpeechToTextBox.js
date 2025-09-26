@@ -146,7 +146,7 @@ const SpeechToTextBox = ({onSpeechInput}) => {
           placeholder="Speech will appear here..."
         />
         <button
-          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 border-2 border-black ${recording ? (isDarkMode ? 'bg-[#36454f] text-white' : 'bg-[#801E20] text-white') : (isDarkMode ? 'bg-[#801E20] text-black' : 'bg-[#36454f] text-white')}`}>
+          onClick={toggleRecording} className={`text-2xl font-bold py-2.5 my-2 min-h-[60px] w-1/4 border-2 border-black ${recording ? 'bg-indigo-700 text-white hover:bg-indigo-800' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
           {recording ? 'Stop' : 'Speak 🎙️'}
         </button>
       </div>
