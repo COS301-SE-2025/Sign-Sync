@@ -42,7 +42,19 @@ class TranslatorPage extends React.Component {
                         : "#f5f5f8",
                 }}
             >
-                
+                <SideNavbar />
+
+                <main className="flex-1 w-full flex">
+                    <div className="max-w-6xl mx-auto px-6 py-10 w-full my-auto flex flex-col gap-6">
+                        <header className="mb-6">
+                            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                                {translatorType === "SignText" ? "Translator" : "Avatar"}
+                            </h1>
+                        </header>
+
+                        
+                    </div>
+                </main>
             </div>
         )
     }
