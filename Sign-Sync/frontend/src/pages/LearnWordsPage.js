@@ -91,10 +91,9 @@ class LearnWordsPage extends React.Component
         const isLastWord = currentIndex === words.length - 1;
 
         return (
-            // <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
             <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
-                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
+                    ? "linear-gradient(135deg, #080C1A, #172034)"
+                    : '#f5f5f5'}}>
                 <div className="w-64 flex-shrink-0">
                     <SideNavbar />
                 </div>
@@ -107,7 +106,7 @@ class LearnWordsPage extends React.Component
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2">
-                                        <h1 className="text-5xl font-extrabold text-white">Learn some words</h1>
+                                        <h1 className="text-5xl font-extrabold text-white">Learn</h1>
                                         <p className="text-3xl text-white">
                                             Current Word:{" "}
                                             <span className="text-red-600 font-bold">{currentWord.toUpperCase()}</span>
