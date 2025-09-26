@@ -127,7 +127,7 @@ class LearnAlphabetPage extends React.Component
                                                 gestureModeFixed={true}
                                                 onPrediction={this.handlePrediction}
                                                 width={500}
-                                                height={400}
+                                                height={300}
                                             />
                                             <div className="flex flex-row items-center space-x-3">
                                                 <button
