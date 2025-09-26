@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
+const loginRateLimiter = require('../auth-service/loginRateLimiter.js');
+
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
 
@@ -61,7 +63,7 @@ router.post('/register', async (req, res) => {
 
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimiter, async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -190,8 +192,8 @@ router.get('/achievements/:userID', async (req, res) => {
     const { userID } = req.params;
 
     try {
-        const user = await req.app.locals.userCollection.findOne({ 
-            userID: parseInt(userID) 
+        const user = await req.app.locals.userCollection.findOne({
+            userID: parseInt(userID)
         });
 
         if (!user) {
@@ -202,9 +204,9 @@ router.get('/achievements/:userID', async (req, res) => {
         res.set('Content-Type', 'application/json');
         res.status(200).json(user.achievements || []);
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             message: 'Error getting achievements',
-            error: error.message 
+            error: error.message
         });
     }
 });
@@ -260,15 +262,15 @@ router.put('/achievements/:userID', async (req, res) => {
 
         // Return success response
         res.set('Content-Type', 'application/json');
-        res.status(200).json({ 
+        res.status(200).json({
             status: 'success',
             message: 'Achievements updated successfully',
             achievements
         });
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             message: 'Error updating achievements',
-            error: error.message 
+            error: error.message
         });
     }
 });
