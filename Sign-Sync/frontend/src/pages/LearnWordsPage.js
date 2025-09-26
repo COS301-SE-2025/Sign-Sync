@@ -91,18 +91,18 @@ class LearnWordsPage extends React.Component
         const isLastWord = currentIndex === words.length - 1;
 
         return (
-            <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
+            <div className={`flex min-h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
                     ? "linear-gradient(135deg, #080C1A, #172034)"
                     : '#f5f5f5'}}>
                 <div className="w-64 flex-shrink-0">
                     <SideNavbar />
                 </div>
 
-                <div className="flex-1 h-screen overflow-y-auto relative">
+                <div className="flex-1 overflow-y-auto relative">
                     
                     {/* Blur when not logged in */}
                     <div className={!this.state.user ? "blur-sm" : ""}>
-                        <main className="flex flex-col items-center w-full h-full p-6 sm:p-8 md:p-12 space-y-12">
+                        <main className="flex flex-col items-center w-full h-full p-4 space-y-6">
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2">
@@ -125,9 +125,6 @@ class LearnWordsPage extends React.Component
                                             <EducationTranslatorCamera
                                                 onPrediction={(prediction) => this.handlePrediction(prediction)}
                                             />
-                                                {success && (
-                                                    <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
-                                                )}
                                             <div className="flex flex-row items-center space-x-3">
                                                 <button
                                                     onClick={this.handlePrev}
@@ -145,6 +142,9 @@ class LearnWordsPage extends React.Component
                                                     {isLastWord ? "Finish" : "Next"}
                                                 </button>
                                             </div>
+                                            {success && (
+                                                <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
+                                            )}
                                         </div>
                                     </section>
                                 </>
