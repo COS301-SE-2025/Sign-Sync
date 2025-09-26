@@ -52,7 +52,22 @@ class TranslatorPage extends React.Component {
                             </h1>
                         </header>
 
-                        
+                        {/* {translatorType === "SignText" ? <TranslatorCamera /> : <TextToSign />} */}
+                        {translatorMode}
+
+                        {/* BUTTONS AT BOTTOM */}
+                        <div className="flex justify-center gap-4">
+                            <button
+                                onClick={this.changeType}
+                                className={`px-6 py-3 font-bold rounded-xl transition
+            ${translatorType === "SignText"
+                                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                                        : "bg-indigo-600 hover:bg-indigo-700 text-white"}`}
+                            >
+                                Translator
+                            </button>
+                            
+                        </div>
                     </div>
                 </main>
             </div>
