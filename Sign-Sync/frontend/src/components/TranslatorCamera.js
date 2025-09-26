@@ -33,56 +33,13 @@ export default function TranslatorCamera({ onPrediction }) {
     : `${btnBase} border-black/10 bg-gray-200 hover:bg-gray-300`;
 
   return (
-    <div>
-      <div className={`${panelCls} p-2 rounded-lg mb-2`}>
-        <CameraFeed videoRef={videoRef} />
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+      {/* ROW 1 — LEFT: CAMERA */}
+      <div className="md:col-span-8 md:row-start-1">
+        <div className="relative rounded-2xl overflow-hidden shadow-lg">
+          <CameraFeed videoRef={videoRef} />
 
-      <div className={`flex items-center gap-3 rounded-lg px-4 py-3 ${softPanelCls}`}>
-        <span
-          onClick={() => { if (gestureMode && connected) { paused ? resume() : pause(); } }}
-          className={`${pillBase} cursor-${gestureMode && connected ? "pointer" : "default"} ${connected ? (gestureMode ? (paused ? pillPaused : pillConnected) : pillConnected) : pillOffline}`}
-          title={gestureMode ? (connected ? (paused ? "Click to resume" : "Click to pause") : "Not connected") : "Pause only in Words mode"}
-        >
-          {connected ? (gestureMode ? (paused ? "Paused" : `Connected (${status})`) : "Letters (Polling)") : "Offline"}
-        </span>
-
-        <button onClick={() => setGestureMode(v => !v)} className={btnNeutral}>
-          <img src={gestureMode ? gestureIcon : letterIcon} className="w-8 h-8" alt="Mode" />
-        </button>
-
-        <button onClick={undo} className={btnNeutral} disabled={!gestureMode}>Undo</button>
-        <button onClick={clear} className={btnNeutral} disabled={!gestureMode}>Clear</button>
-
-        <div className="flex-1" />
-
-        <button onClick={toggleSpeak} className={btnNeutral}>
-          <img src={SoundOnIcon} className={`w-8 h-8 ${soundOn ? "" : "opacity-40"}`} alt="Speaker" />
-        </button>
-      </div>
-
-      <div className={`mt-3 rounded-lg p-3 ${cardCls}`}>
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">
-            {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "—")}
-          </h2>
-          {gestureMode && (
-            <div className={`text-sm ${textMutedCls}`}>
-              {topK.map((t, i) => <span key={i} className="mr-3">{i + 1}. {t.label} {(t.p * 100).toFixed(1)}%</span>)}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-3">
-        <h3 className="text-lg font-semibold mb-1">Sentence</h3>
-        <div className="flex rounded min-h-[60px]">
-          <div className={`p-3 text-2xl w-4/5 ${boxCls}`}>{gestureMode ? (sentence || " ") : " "}</div>
-          <div className="w-1/5 flex items-center justify-center">
-            <button onClick={() => toEnglish(sentence)} className="px-3 py-2 bg-blue-500 text-white rounded">To English</button>
-          </div>
-        </div>
-      </div>
+          
     </div>
   );
 }
