@@ -89,29 +89,19 @@ class TextToSign extends React.Component
         const avatarHeight = this.props.compact ? 400 : 500;
         
         return (
-            <div className= 'p-2 rounded-lg' style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black', border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2" }}>
-                <div className="flex flex-col items-center w-full" style={{ maxWidth: avatarWidth}}>
-                    {/* Avatar */}
-                    <div className= 'w-full p-2 rounded-lg mb-2' style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
-                        <AvatarViewport
-                            input={this.state.textToBeSent}
-                            trigger={this.state.timestamp}
-                            width={avatarWidth}
-                            height={avatarHeight}
-                        />
-                    </div>
+            <div
+                className="rounded-2xl p-6 mx-auto"
+                style={{
+                    background: isDarkMode ? '#1B2432' : '#e5e7eb',
+                    color: isDarkMode ? 'white' : 'black',
+                    border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2",
+                    // Make the whole card only as wide as the avatar + padding
+                    maxWidth: `${avatarWidth + 80}px` // padding/border allowance
+                }}
+            >
+                {/* CHANGED: added mx-auto to center this column */}
+                <div className="flex flex-col items-center w-full">
 
-                    {/* Controls */}
-                    <div className= 'flex items-center w-full border rounded-lg px-4 py-2' style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
-                        <button onClick={this.changeMic} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
-                            <img src={mic ? MicOn : MicOff} className="w-8 h-8" alt="Mic"/>
-                        </button>
-                        {inputType}
-                        <button onClick={this.sendText} className="p-3.5 border-2 border-black" style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
-                            <img src={Submit} className="w-8 h-8" alt="Submit"/>
-                        </button>
-                    </div>
-                    
                     
                 </div>
             </div>
