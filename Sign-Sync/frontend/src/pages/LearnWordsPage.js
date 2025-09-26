@@ -1,6 +1,7 @@
 import React from "react";
 import SideNavbar from "../components/sideNavbar";
 import Camera from "../components/Camera";
+import EducationTranslatorCamera from "../components/EducationTranslator";
 import TextToSign from "../components/textToSign";
 import PreferenceManager from "../components/PreferenceManager";
 
@@ -56,11 +57,11 @@ class LearnWordsPage extends React.Component
         this.setState({ showCongratulations: true });
     };
 
-    handlePrediction = (prediction) => 
+    handlePrediction = (prediction) =>
     {
         const currentWord = this.state.words[this.state.currentIndex];
 
-        if(prediction.toLowerCase() === currentWord) 
+        if(prediction.toLowerCase() === currentWord)
         {
             this.setState((prevState) => {
                 const newCompleted = new Set(prevState.completedWords);
@@ -122,12 +123,8 @@ class LearnWordsPage extends React.Component
 
                                         {/* camera side */}
                                         <div className="flex-none" style={{ width: '500px' }}>
-                                            <Camera
-                                                defaultGestureMode={true}
-                                                gestureModeFixed={true}
-                                                onPrediction={this.handlePrediction}
-                                                width={500}
-                                                height={400}
+                                            <EducationTranslatorCamera
+                                                onPrediction={(prediction) => this.handlePrediction(prediction)}
                                             />
                                         </div>
                                     </section>
