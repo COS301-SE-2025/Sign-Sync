@@ -68,6 +68,23 @@ export default function TranslatorCamera({ onPrediction }) {
             Predicted Word
           </h3>
 
+          <div className="text-4xl md:text-5xl font-black leading-none mb-4 break-words">
+            {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "—")}
+          </div>
+
+          <ol className="space-y-3">
+            {topK.slice(0, 3).map((t, i) => (
+              <li key={i} className="flex items-center justify-between">
+                <span className="font-semibold text-lg md:text-xl">
+                  {i + 1}. {t.label}
+                </span>
+                <span className="opacity-80 text-sm md:text-base">
+                  {(t.p * 100).toFixed(1)}%
+                </span>
+              </li>
+            ))}
+          </ol>
+
           
     </div>
   );
