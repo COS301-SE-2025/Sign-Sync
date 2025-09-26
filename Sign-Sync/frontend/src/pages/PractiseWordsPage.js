@@ -131,10 +131,10 @@ class PractiseWordsPage extends React.Component
                   <>
                     {/* Header */}
                     <header className="text-center space-y-2">
-                      <h1 className="text-5xl font-extrabold text-white">
+                      <h1 className="text-5xl font-extrabold">
                         Practise Words
                       </h1>
-                      <p className="text-3xl text-white">
+                      <p className="text-3xl">
                         Please make the sign for:{" "}
                         <span className="text-yellow-400 font-bold">
                           {currentWord.toUpperCase()}
