@@ -45,10 +45,13 @@ export default function EducationTranslatorCamera({ onPrediction }) {
             <div className={`${panelCls} p-2 rounded-lg mb-2`}>
                 <CameraFeed videoRef={videoRef} />
             </div>
+            <div className={"left-2 px-2 py-1 rounded text-sm font-semibold bg-black/50 text-white"}>
+                {connected ? (gestureMode ? (paused ? "Paused" : `Connected (${status})`) : "Letters (Polling)") : "Loading"}
+            </div>
             <div className={`mt-3 rounded-lg p-3 ${cardCls}`}>
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold">
-                        {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "Camera Loading")}
+                        {gestureMode ? (headline ? `${headline}${stable ? " ✅" : ""}` : "—") : (headline || "—")}
                     </h2>
                     {gestureMode && (
                         <div className={`text-sm ${textMutedCls}`}>
