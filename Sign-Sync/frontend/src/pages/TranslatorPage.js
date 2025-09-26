@@ -66,7 +66,15 @@ class TranslatorPage extends React.Component {
                             >
                                 Translator
                             </button>
-                            
+                            <button
+                                onClick={this.changeType}
+                                className={`px-6 py-3 font-bold rounded-xl transition
+            ${translatorType === "SignText"
+                                        ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                        : "bg-blue-600 hover:bg-blue-700 text-white"}`}
+                            >
+                                Avatar
+                            </button>
                         </div>
                     </div>
                 </main>
