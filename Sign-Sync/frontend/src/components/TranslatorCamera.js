@@ -51,7 +51,17 @@ export default function TranslatorCamera({ onPrediction }) {
             {connected ? (gestureMode ? (paused ? "Paused" : `Connected (${status})`) : "Connected (Alphabet)") : "Offline"}
           </button>
 
-          
+          {/* Alphabet toggle */}
+          <button
+            onClick={() => setGestureMode(v => !v)}
+            className="absolute top-3 right-3 px-3 py-1.5 rounded-lg border bg-white/90 text-black"
+          >
+            {gestureMode ? "Alphabet" : "Words"}
+          </button>
+        </div>
+      </div>
+
+      
     </div>
   );
 }
