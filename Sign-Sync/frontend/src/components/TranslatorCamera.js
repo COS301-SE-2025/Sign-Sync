@@ -15,6 +15,11 @@ const WORDS_API_BASE = "http://localhost:8007/api/stt"; // words model (WS + RES
 const LETTERS_API_BASE = "http://localhost:8007/api/alphabet"; // letters model (REST)
 const GRAMMAR_API_BASE = "http://localhost:8007/api/word"; // grammar model (REST)
 
+//deployment version:
+// const WORDS_API_BASE = "https://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/stt"; // words model (WS + REST)
+// const LETTERS_API_BASE = "https://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/alphabet"; // letters model (REST)
+// const GRAMMAR_API_BASE = "https://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/word"; // grammar model (REST)
+
 const SEND_INTERVAL_MS = 80;   // words streaming cadence
 const LETTERS_INTERVAL_MS = 500; // letters polling cadence
 
@@ -143,6 +148,8 @@ const TranslatorCamera = ({ onPrediction }) => {
     sessionIdRef.current = meta.session_id;
 
     const ws = new WebSocket(`ws://localhost:8007/api/stt/v1/stream/${meta.session_id}`);
+    //const ws = new WebSocket(`wss://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/stt/v1/stream/${meta.session_id}`); //deployment version
+
     wsRef.current = ws;
 
     ws.onopen = () => { setConnected(true); setStatus("Idle"); };

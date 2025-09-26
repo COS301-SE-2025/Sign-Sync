@@ -16,6 +16,7 @@ class TextToSign extends React.Component
             timestamp: Date.now(),
             sentence:"",
             textToBeSent:"",
+            emotionToBeSent:"",
             mic : false
         };
     }
@@ -44,6 +45,7 @@ class TextToSign extends React.Component
         const aslGlossFunction = async () => {
             try {
                 const request = await fetch("http://localhost:8007/api/asl/translate", {
+                //const request = await fetch("https://apigateway-evbsd4dmhbbyhwch.southafricanorth-01.azurewebsites.net/api/asl/translate", { //deployment version
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -53,6 +55,7 @@ class TextToSign extends React.Component
 
                 const response = await request.json();
                 this.setState({textToBeSent: response.gloss});
+                this.setState({emotionToBeSent: response.emotion});
                 this.setState({timestamp: Date.now()});
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
@@ -95,6 +98,7 @@ class TextToSign extends React.Component
                     <div className= 'w-full p-2 rounded-lg mb-2' style={{ background: isDarkMode ? '#36454f' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}>
                         <AvatarViewport
                             input={this.state.textToBeSent}
+                            emotion={this.state.emotionToBeSent}
                             trigger={this.state.timestamp}
                             width={avatarWidth}
                             height={avatarHeight}

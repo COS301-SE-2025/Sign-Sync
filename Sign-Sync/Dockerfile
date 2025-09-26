@@ -17,10 +17,8 @@ RUN npm run build
 #set environment variable to production
 ENV NODE_ENV=production
 
-#expose the port defined in .env (fallback to 3000)
-ARG PORT=3000
-ENV PORT=${PORT}
-EXPOSE ${PORT}
+#this is for azure.
+EXPOSE 8080 
 
 #start the backend server
 CMD ["node", "backend/dist/server.js"]
