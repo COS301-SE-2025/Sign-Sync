@@ -106,6 +106,7 @@ export default function TranslatorCamera({ onPrediction }) {
               <img src={soundOn ? SoundOnIcon : SoundOffIcon} className="w-5 h-5" alt="" />
             </button>
 
+            <button onClick={undo} className={`${btnNeutral} h-[56px] shrink-0 px-4`} disabled={!gestureMode}>Undo</button>
             
     </div>
   );
