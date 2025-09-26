@@ -39,6 +39,18 @@ export default function TranslatorCamera({ onPrediction }) {
         <div className="relative rounded-2xl overflow-hidden shadow-lg">
           <CameraFeed videoRef={videoRef} />
 
+          {/* Connected pill */}
+          <button
+            onClick={() => { if (gestureMode && connected) { paused ? resume() : pause(); } }}
+            className={`absolute top-3 left-3 px-3 py-1.5 rounded-lg text-xs font-semibold shadow
+            ${connected ? (gestureMode ? (paused ? "bg-yellow-600 text-white" : "bg-green-600 text-white")
+                : "bg-green-600 text-white")
+                : "bg-red-600 text-white"}`}
+            title={gestureMode ? (connected ? (paused ? "Click to resume" : "Click to pause") : "Not connected") : "Pause only in Words mode"}
+          >
+            {connected ? (gestureMode ? (paused ? "Paused" : `Connected (${status})`) : "Connected (Alphabet)") : "Offline"}
+          </button>
+
           
     </div>
   );
