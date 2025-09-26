@@ -13,7 +13,11 @@ class LearnWordsPage extends React.Component
 
         this.initialState = {
             currentIndex: 0,
-            words: ["go", "know", "live", "movie", "we", "you", "school", "thank", "tomorrow", "tonight", "watch", "yes", "goodbye", "hello"],
+            words: [
+                "goodbye", "hello", "no", "thank", "yes", "go", "know", "live", "movie", "i",
+                "school", "we", "you", "tomorrow", "tonight", "watch", "your", "friend", "family", "want",
+                "have", "need", "come", "see", "like", "work", "eat", "drink", "help", "learn"
+            ],
             success: false,
             completedWords: new Set(),
             showCongratulations: false,
