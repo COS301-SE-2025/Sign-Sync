@@ -119,59 +119,106 @@ class PractiseAlphabetPage extends React.Component
                         </p>
                         </header>
 
-                    <section className="flex justify-center w-full">
-                        <div className="w-auto rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
-                            <Camera
-                              defaultGestureMode={false}
-                              gestureModeFixed={true}
-                              onPrediction={this.handlePrediction}
-                              width={700}
-                              height={400}
-                            />
+                    {/* Camera + Progress Tracker Section */}
+                    <section className="flex justify-center w-full gap-6">
+                      {/* Left panel: Progress tracker */}
+                      <div
+                        className="w-64 rounded-lg border border-gray-300 dark:border-gray-700 shadow-lg p-4 flex flex-col"
+                        style={{ background: isDarkMode ? "#1e293b" : "#f5f5f5f5", height: '520px' }}
+                      >
+                        <div className="space-y-2 overflow-y-auto flex-1">
+                          {alphabet.map((word, index) => {
+                            const isCurrent = index === currentIndex;
+                            const isDone = index < currentIndex;
+
+                            return (
+                              <div
+                                key={index}
+                                className={`flex items-center justify-between px-2 py-1 rounded-md text-2xl font-medium ${
+                                  isCurrent
+                                    ? "bg-[#1a436b] text-white"
+                                    : isDone
+                                    ? "text-green-600"
+                                    : "text-gray-800 dark:text-gray-200"
+                                }`}
+                              >
+                                <span>{word}</span>
+
+                                {isCurrent && (
+                                  <button
+                                    onClick={this.handleSkip}
+                                    className="ml-2 text-sm bg-yellow-400 text-black px-2 py-0.5 rounded hover:bg-yellow-500"
+                                  >
+                                    Skip
+                                  </button>
+                                )}
+
+                                {isDone && (
+                                  <span className="ml-2 text-green-600 font-bold">✔</span>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                        </section>
 
-                    <section className="flex flex-col items-center space-y-4 w-full">
-                        {success && (
-                          <p className="text-green-500 font-semibold text-3xl">✔ Well Done!</p>
-                        )}
-
-                        <nav className="flex gap-4 justify-center">
+                        {/* Nav buttons at bottom */}
+                        <div className="flex justify-between mt-4">
                           <button
-                              onClick={this.handlePrev}
-                              disabled={currentIndex === 0}
-                              className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+                            onClick={this.handlePrev}
+                            disabled={currentIndex === 0}
+                            className={`px-3 py-1 rounded-md transition ${
+                              currentIndex === 0
+                                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                            }`}
                           >
-                              Previous
+                            Previous
                           </button>
 
-                          <button
-                              onClick={this.handleSkip}
-                              className="px-5 py-2 rounded-md bg-yellow-400 text-black hover:bg-yellow-500 transition"
-                          >
-                              Skip
-                          </button>
-
-                          {!isLastLetter && (
-                              <button
-                                onClick={this.handleNext}
-                                disabled={!success}
-                                className={`px-5 py-2 rounded-md transition ${success ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
-                              >
-                                Next
-                              </button>
+                          {/* Right side: Next or Finish */}
+                          {isLastLetter && success ? (
+                            <button
+                              onClick={this.handleFinish}
+                              className="px-3 py-1 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
+                            >
+                              Finish
+                            </button>
+                          ) : (
+                            <button
+                              onClick={this.handleNext}
+                              disabled={!success || isLastLetter}
+                              className={`px-3 py-1 rounded-md transition ${
+                                !success || isLastLetter
+                                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                  : "bg-blue-600 text-white hover:bg-blue-700"
+                              }`}
+                            >
+                              Next
+                            </button>
                           )}
+                        </div>
+                      </div>
 
-                          {isLastLetter && success && (
-                              <button
-                                onClick={this.handleFinish}
-                                className="px-5 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
-                              >
-                                Finish
-                              </button>
-                          )}
-                        </nav>
+                      {/* Right panel: Camera */}
+                      <div className="w-auto rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
+                        <Camera
+                          defaultGestureMode={false}
+                          gestureModeFixed={true}
+                          onPrediction={this.handlePrediction}
+                          width={700}
+                          height={400}
+                        />
+                      </div>
+
+                     
                     </section>
+
+                     {success && (
+                      <p className="text-green-500 font-semibold text-3xl mt-4 text-center">
+                        ✔ Well Done!
+                      </p>
+                    )}
+
                     </>
                 ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
