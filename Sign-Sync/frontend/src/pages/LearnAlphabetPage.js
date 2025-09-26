@@ -98,11 +98,11 @@ class LearnAlphabetPage extends React.Component
                     <SideNavbar />
                 </div>
 
-                <div className="flex-1 h-screen overflow-y-auto relative">
+                <div className="flex-1 overflow-y-auto relative">
                     
                     {/* Blur when not logged in */}
                     <div className={!this.state.user ? "blur-sm" : ""}>           
-                        <main className="flex flex-col items-center w-full p-6 sm:p-8 md:p-12 space-y-12">
+                        <main className="flex flex-col items-center w-full h-full p-4 space-y-6">
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2">
@@ -113,7 +113,7 @@ class LearnAlphabetPage extends React.Component
                                         </p>
                                     </header>
 
-                                    <section className="w-full flex justify-center items-center space-x-6">
+                                    <section className="flex-row flex justify-center items-start space-x-6">
                                         
                                         {/* avatar side */}
                                         <div className="flex-none border-r border-gray-400 pr-10">
@@ -121,7 +121,7 @@ class LearnAlphabetPage extends React.Component
                                         </div>
 
                                         {/* camera side */}
-                                        <div className="flex-none" style={{ width: '500px' }}>
+                                        <div className="flex-none w-[500px] flex flex-col items-center space-y-4">
                                             <Camera
                                                 defaultGestureMode={false}
                                                 gestureModeFixed={true}
