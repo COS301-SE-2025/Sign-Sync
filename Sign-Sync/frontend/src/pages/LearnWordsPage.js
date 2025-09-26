@@ -125,6 +125,26 @@ class LearnWordsPage extends React.Component
                                             <EducationTranslatorCamera
                                                 onPrediction={(prediction) => this.handlePrediction(prediction)}
                                             />
+                                                {success && (
+                                                    <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
+                                                )}
+                                            <div className="flex flex-row items-center space-x-3">
+                                                <button
+                                                    onClick={this.handlePrev}
+                                                    disabled={currentIndex === 0}
+                                                    className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+                                                >
+                                                    Previous
+                                                </button>
+
+                                                <button
+                                                    onClick={isLastWord ? this.handleFinish : this.handleNext}
+                                                    disabled={!success}
+                                                    className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
+                                                >
+                                                    {isLastWord ? "Finish" : "Next"}
+                                                </button>
+                                            </div>
                                         </div>
                                     </section>
                                 </>
