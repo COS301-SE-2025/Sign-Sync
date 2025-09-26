@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
-const loginRateLimiter = require('../auth-service/loginRateLimiter.js');
+const loginRateLimiter = require('./loginRateLimiter.js');
 
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
