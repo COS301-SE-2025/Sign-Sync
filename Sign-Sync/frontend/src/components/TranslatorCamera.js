@@ -97,7 +97,16 @@ export default function TranslatorCamera({ onPrediction }) {
             {gestureMode ? (sentence || " ") : " "}
           </div>
 
-          
+          {/* Controls */}
+          <div className="col-span-12 md:col-span-4 flex justify-end gap-2 whitespace-nowrap">
+            {/* Icon-only, square, non-shrinking */}
+            <button onClick={toggleSpeak} aria-label={soundOn ? "Mute" : "Speak"} className={`w-[56px] h-[56px] rounded-2xl flex items-center justify-center shrink-0
+          ${isDarkMode ? "border border-white/15 bg-white/10 hover:bg-white/20" : "border border-black/10 bg-gray-200 hover:bg-gray-300"}`}
+            >
+              <img src={soundOn ? SoundOnIcon : SoundOffIcon} className="w-5 h-5" alt="" />
+            </button>
+
+            
     </div>
   );
 }
