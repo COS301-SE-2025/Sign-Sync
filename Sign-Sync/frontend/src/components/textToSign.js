@@ -119,7 +119,29 @@ class TextToSign extends React.Component
                         </div>
                     </div>
 
-                    
+                    {/* Controls (already sized to the same column width) */}
+                    <div
+                        className="flex items-center w-full border rounded-lg px-4 py-2"
+                        style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}
+                    >
+                        <button
+                            onClick={this.changeMic}
+                            className="p-3.5 border-2 border-black"
+                            style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}
+                        >
+                            <img src={mic ? MicOn : MicOff} className="w-8 h-8" alt="Mic" />
+                        </button>
+
+                        {inputType}
+
+                        <button
+                            onClick={this.sendText}
+                            className="p-3.5 border-2 border-black"
+                            style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}
+                        >
+                            <img src={Submit} className="w-8 h-8" alt="Submit" />
+                        </button>
+                    </div>
                 </div>
             </div>
         )
