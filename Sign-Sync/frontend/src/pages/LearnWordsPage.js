@@ -120,7 +120,7 @@ class LearnWordsPage extends React.Component
                                         <h1 className="text-5xl font-extrabold text-white">Learn</h1>
                                         <p className="text-3xl text-white">
                                             Current Word:{" "}
-                                            <span className="text-red-600 font-bold">{currentWord.toUpperCase()}</span>
+                                            <span className="text-yellow-400 font-bold">{currentWord.toUpperCase()}</span>
                                         </p>
                                     </header>
 
