@@ -101,8 +101,8 @@ class LearnWordsPage extends React.Component
                 <div className="flex-1 h-screen overflow-y-auto relative">
                     
                     {/* Blur when not logged in */}
-                    <div className={!this.state.user ? "blur-sm" : ""}>           
-                        <main className="flex flex-col items-center w-full p-6 sm:p-8 md:p-12 space-y-12">
+                    <div className={!this.state.user ? "blur-sm" : ""}>
+                        <main className="flex flex-col items-center w-full h-full p-6 sm:p-8 md:p-12 space-y-12">
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2">
@@ -113,41 +113,19 @@ class LearnWordsPage extends React.Component
                                         </p>
                                     </header>
 
-                                    <section className="w-full flex justify-center items-center space-x-6">
-                                        
+                                    <section className="flex-row flex justify-center items-start space-x-6">
+
                                         {/* avatar side */}
                                         <div className="flex-none border-r border-gray-400 pr-10">
                                             <TextToSign key={currentWord} sentence={currentWord} compact />
                                         </div>
 
                                         {/* camera side */}
-                                        <div className="flex-none" style={{ width: '500px' }}>
+                                        <div className="flex-none w-[500px] flex flex-col items-center space-y-4">
                                             <EducationTranslatorCamera
                                                 onPrediction={(prediction) => this.handlePrediction(prediction)}
                                             />
                                         </div>
-                                    </section>
-
-                                    <section className="flex flex-col items-center space-y-4">
-                                        {success && (
-                                            <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
-                                        )}
-
-                                        <button
-                                            onClick={this.handlePrev}
-                                            disabled={currentIndex === 0}
-                                            className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
-                                        >
-                                            Previous
-                                        </button>
-
-                                        <button
-                                            onClick={isLastWord ? this.handleFinish : this.handleNext}
-                                            disabled={!success}
-                                            className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
-                                        >
-                                            {isLastWord ? "Finish" : "Next"}
-                                        </button>
                                     </section>
                                 </>
                             ) : (
