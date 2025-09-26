@@ -101,8 +101,15 @@ class LearnAlphabetPage extends React.Component
                 <div className="flex-1 overflow-y-auto relative">
                     
                     {/* Blur when not logged in */}
-                    <div className={!this.state.user ? "blur-sm" : ""}>           
-                        <main className="flex flex-col items-center w-full h-full p-4 space-y-6">
+                    <div className={!this.state.user ? "blur-sm" : ""}>
+                        <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div
+                                className={`w-full p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}
+                                style={{
+                                    backgroundColor: isDarkMode ? "#1B2432" : "#f5f5f5",
+                                    border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2",
+                                }}
+                            >
                             {!showCongratulations ? (
                                 <>
                                     <header className="text-center space-y-2">
@@ -170,7 +177,8 @@ class LearnAlphabetPage extends React.Component
                                     </section>
                                 </div>
                             )}
-                        </main>
+                            </div>
+                        </div>
                     </div>
 
                      {/* Login required overlay */}
