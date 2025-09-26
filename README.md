@@ -4,13 +4,6 @@
   <img src="./assets/logo.png" alt="Sign Sync Logo" width="200">
 </div>
 
-<div align="center">
-  <img src="https://img.shields.io/badge/Coverage-95%25-brightgreen" alt="Coverage">
-  <img src="https://img.shields.io/github/actions/workflow/status/COS301-SE-2025/Sign-Sync/main.yml?label=Build" alt="Build Status">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python">
-  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome">
-</div>
-
 ## Overview
 
 Sign Sync is an innovative AI-powered communication bridge that enables seamless two-way translation between spoken language and sign language. Using advanced speech recognition, motion capture, and AI animation technologies, we're breaking down communication barriers in real-time.
@@ -105,10 +98,10 @@ This project follows a monorepo structure where all components are maintained in
 
 | Category | Status |
 |----------|--------|
-| Test Coverage | 95% |
-| Build Status | Passing |
-| Code Quality | SonarCloud Passed |
-| Dependencies | Python 3.10+ |
+| Test Coverage | <img src="https://img.shields.io/badge/Coverage-95%25-brightgreen" alt="Coverage"> |
+| Build Status | <img src="https://img.shields.io/github/actions/workflow/status/COS301-SE-2025/Sign-Sync/main.yml?label=Build" alt="Build Status"> |
+| Code Quality | <img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome"> |
+| Dependencies | <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python"> |
 
 ---
 
