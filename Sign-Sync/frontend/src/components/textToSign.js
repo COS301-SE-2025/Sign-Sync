@@ -102,6 +102,23 @@ class TextToSign extends React.Component
                 {/* CHANGED: added mx-auto to center this column */}
                 <div className="flex flex-col items-center w-full">
 
+                    {/* Avatar stage */}
+                    {/* CHANGED: grid + place-items-center to center the inner box */}
+                    <div
+                        className="w-full p-2 rounded-lg mb-2 grid place-items-center"
+                        style={{ background: isDarkMode ? '#1B2432' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}
+                    >
+                        {/* CHANGED: explicit box that defines the viewport size */}
+                        <div style={{ width: avatarWidth, height: avatarHeight }}>
+                            <AvatarViewport
+                                input={this.state.textToBeSent}
+                                trigger={this.state.timestamp}
+                                width={avatarWidth}
+                                height={avatarHeight}
+                            />
+                        </div>
+                    </div>
+
                     
                 </div>
             </div>
