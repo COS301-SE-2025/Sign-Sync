@@ -129,7 +129,7 @@ class RegistrationPage extends React.Component
                             placeholder="Enter your email"
                             className={`px-4 py-3 rounded-lg border ${
                                 errors.email ? "border-red-500" : "border-white"
-                            } focus:outline-none focus:ring-2 focus:ring-red-600`}
+                            } focus:outline-none focus:ring-2 focus:ring-indigo-600`}
                         />
 
                         {errors.email && (
@@ -153,7 +153,7 @@ class RegistrationPage extends React.Component
                                 placeholder="Enter your password"
                                 className={`px-4 py-3 rounded-lg border ${
                                     errors.password ? "border-red-500" : "border-gray-300"
-                                } focus:outline-none focus:ring-2 focus:ring-red-600`}
+                                } focus:outline-none focus:ring-2 focus:ring-indigo-600`}
                             />
 
                             {errors.password && (
@@ -178,7 +178,7 @@ class RegistrationPage extends React.Component
                                     errors.confirmPassword
                                     ? "border-red-500"
                                     : "border-gray-300"
-                                } focus:outline-none focus:ring-2 focus:ring-red-600`}
+                                } focus:outline-none focus:ring-2 focus:ring-indigo-600`}
                             />
                             
                             {errors.confirmPassword && (
