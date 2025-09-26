@@ -5,7 +5,7 @@
 
 Sign Sync is an innovative AI-powered communication bridge that enables seamless two-way translation between spoken language and sign language. Using speech recognition, motion capture, and AI animation, it converts:
 
-- Speech to Sign Language: Translates spoken words into real-time animated sign language gestures.
+- Speech to Sign Language: Translates spoken words into real-time, animated sign language gestures.
 
 - Sign to Speech/Text: Captures sign language movements and converts them into spoken words or text.
 
