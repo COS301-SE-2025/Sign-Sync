@@ -1,56 +1,67 @@
-
 # Apollo Projects - Sign Sync
 
 <div align="center">
   <img src="./assets/logo.png" alt="Sign Sync Logo" width="200">
 </div>
 
-**What It Does:**
+<div align="center">
+  <img src="https://img.shields.io/badge/Coverage-95%25-brightgreen" alt="Coverage">
+  <img src="https://img.shields.io/github/actions/workflow/status/COS301-SE-2025/Sign-Sync/main.yml?label=Build" alt="Build Status">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome">
+</div>
 
-Sign Sync is an innovative AI-powered communication bridge that enables seamless two-way translation between spoken language and sign language. Using speech recognition, motion capture, and AI animation, it converts:
+## Overview
 
-- Speech to Sign Language: Translates spoken words into real-time, animated sign language gestures.
+Sign Sync is an innovative AI-powered communication bridge that enables seamless two-way translation between spoken language and sign language. Using advanced speech recognition, motion capture, and AI animation technologies, we're breaking down communication barriers in real-time.
 
-- Sign to Speech/Text: Captures sign language movements and converts them into spoken words or text.
+### Core Functionality
 
-Built as a **web application**, it provides an intuitive, accessible platform for instant communication between deaf/hard-of-hearing individuals and hearing individuals.
+- **Speech to Sign Language**: Translates spoken words into real-time, animated sign language gestures
+- **Sign to Speech/Text**: Captures sign language movements and converts them into spoken words or text
+- **Web Application**: Provides an intuitive, accessible platform for instant communication
 
-**Who It’s For:**
+## Target Audience
 
-- Deaf & Hard-of-Hearing Community – Enables effortless communication without needing an interpreter.
+**Deaf & Hard-of-Hearing Community** – Enables effortless communication without needing an interpreter
 
-- Hearing Individuals – Helps those unfamiliar with sign language engage in inclusive conversations.
+**Hearing Individuals** – Helps those unfamiliar with sign language engage in inclusive conversations
 
-- Educational & Workplace Settings – Supports accessibility in schools, offices, and public services.
+**Educational & Workplace Settings** – Supports accessibility in schools, offices, and public services
 
-- Developers & Tech Enthusiasts – A cutting-edge project exploring AI, real-time animation, and human-computer interaction.
+**Developers & Tech Enthusiasts** – Cutting-edge project exploring AI, real-time animation, and human-computer interaction
 
-**Why It Matters:**
+## Why It Matters
 
-Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes inclusivity, independence, and seamless communication. By blending advanced tech with real-world impact, this project empowers users while offering developers a chance to work on meaningful, next-gen AI systems.
+Sign Sync isn't just a tool—it's a barrier-breaking solution that promotes inclusivity, independence, and seamless communication. By blending advanced technology with real-world impact, we're empowering users while pushing the boundaries of what's possible with AI systems.
 
-## Demos
+---
 
-||**Demo Slides**|**Demo Video**|**Demo SRS**|
-|-|-|-|-|
-|Demo 1| [Slides 1](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SignSync%20Demo1%20Pres.pdf) | [Video 1](https://drive.google.com/file/d/1HBEssni3iBMv5fkkdSIUH8-DIDpXS4gm/view) | [SRS v1](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SRS%20Demo%201%20(2).pdf) 
-|Demo 2| [Slides 2](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign%20Sync_%20Demo%202%20Slides.pdf) | [Video 2](https://drive.google.com/drive/folders/1INMoJEG3mvPEBpTpcbPcwoYKCdPumQZ8?usp=sharing) | [SRS v2](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign-Sync_%20Software%20Requirements%20Specification%20Document%20(1).pdf) 
-|Demo 3| [Slides 3](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Sign%20Sync_%20Demo%203%20Slides.pdf) | [Video 3](https://drive.google.com/drive/folders/10kwx0Bm9ss7vATdITNFWzkZnaPH7kIGk?usp=sharing) | [SRS v3](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf) 
-|Demo 4| [Slides 4]() | [Video 4]() | [SRS v4]() 
+## Project Demos
 
-## Documentation Links
+| Demo | Slides | Video | SRS Document |
+|------|--------|-------|-------------|
+| Demo 1 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SignSync%20Demo1%20Pres.pdf) | [Video](https://drive.google.com/file/d/1HBEssni3iBMv5fkkdSIUH8-DIDpXS4gm/view) | [SRS v1](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SRS%20Demo%201%20(2).pdf) |
+| Demo 2 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign%20Sync_%20Demo%202%20Slides.pdf) | [Video](https://drive.google.com/drive/folders/1INMoJEG3mvPEBpTpcbPcwoYKCdPumQZ8?usp=sharing) | [SRS v2](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign-Sync_%20Software%20Requirements%20Specification%20Document%20(1).pdf) |
+| Demo 3 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Sign%20Sync_%20Demo%203%20Slides.pdf) | [Video](https://drive.google.com/drive/folders/10kwx0Bm9ss7vATdITNFWzkZnaPH7kIGk?usp=sharing) | [SRS v3](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf) |
+| Demo 4 | [Slides]() | [Video]() | [SRS v4]() |
 
-|**Document**|**Description**|
-|-|-|
-|[SRS Document](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf)| Software Requirements Specifications |
-|[Architectural Requirements](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Architectural%20Requirements%20Document.pdf)| Architectural Requirements |
-|[User Manual](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20User%20Manual.pdf)| Guide for users on how to use the application |
-|[Technical Installation Manual](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Technical%20Installation%20Manual.pdf)| Instructions for setting up the applications |
-|[Testing Policy]()| Policies and procedures for testing |
-|[Coding Standards](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Coding%20Standards%20Document.pdf)| Guidelines for coding practices |
-|[GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)| A board showing the progress of the team |
+---
 
-## Team
+## Documentation
+
+| Document | Description | Link |
+|----------|-------------|------|
+| SRS Document | Software Requirements Specifications | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf) |
+| Architectural Requirements | System architecture specifications | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Architectural%20Requirements%20Document.pdf) |
+| User Manual | Guide for application usage | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20User%20Manual.pdf) |
+| Technical Installation Manual | Setup instructions | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Technical%20Installation%20Manual.pdf) |
+| Coding Standards | Development guidelines | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Coding%20Standards%20Document.pdf) |
+| GitHub Project Board | Team progress tracking | [View](https://github.com/COS301-SE-2025/Sign-Sync/projects) |
+
+---
+
+## Team Apollo
 
 <div align="center">
   <img src="./assets/team.png" alt="Team Photo" width="200">
@@ -64,35 +75,53 @@ Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes
 | Jamean Groenewald | Jamean is a final year BSc Information and Knowledge Systems student with a strong focus on frontend development. He has a passion for crafting intuitive and responsive user interfaces. His degree has provided a solid foundation in web development principles, and he enjoys working with modern frameworks and tools to bring ideas to life. Jamean has built several web interfaces that communicate seamlessly with RESTful APIs, emphasizing user experience and performance. He is an enthusiastic team player who thrives in collaborative settings, having worked on multiple university projects that required clear communication, shared problem-solving, and the integration of different technical components. For this project, Jamean is especially excited to contribute to the frontend architecture and API integration, ensuring the user-facing side of the application is both functional and engaging. | [LinkedIn](https://www.linkedin.com/in/jamean-groenewald-a334a5356/)
 | Stefan Müller | Stefan is a versatile third-year Computer Science student with a growing interest in frontend development, system integration, and AI. While he has experience in backend technologies. His coursework has equipped him with proficiency in JavaScript, C++, and Java. Recently, he has been exploring AI and machine learning. Stefan thrives in collaborative environments, having contributed to a university group project where he worked on both frontend and backend integration for a No-SQL Database. He enjoys bridging the gap between different system components, ensuring smooth data flow and functionality. For this project, he is particularly excited to work on frontend development, API integration, and potentially AI-driven features, bringing a well-rounded perspective to the team. | [LinkedIn](https://www.linkedin.com/in/stefan-m%C3%BCller-29b3b2296/)
 
-## Git Repository Structure
+---
 
-### Repository Type: Monorepo
-This project follows a **monorepo structure**, where all components are maintained in a single repository. The structure is as follows:
+## Repository Structure
+
+### Monorepo Architecture
+This project follows a monorepo structure where all components are maintained in a single repository for streamlined development and dependency management.
 
 ### Git Branching Strategy
-This repository follows a structured branching strategy:
-- `main` - The stable production-ready branch
-- `develop` - Integration branch for ongoing development work
-- `develop/frontend/` - Integration branch for frontend-specific features.
-- `develop/frontend/feature` - Short-lived branches for individual frontend features.
-- `develop/backend/` - Integration branch for backend-specific features.
-- `develop/backend/feature` - Short-lived branches for individual backend features.
-- `release/*` - Temporary branches for final testing before production.
-- `hotfix/*` - Emergency branches for critical production bug fixes.
 
-### Git Organization and Management
-- Changes are introduced through **feature branches** and merged into `main` via pull requests
-- Code reviews are performed before merging
-- Releases follow semantic versioning (`release/v1.0`, `release/v1.1`, etc.)
-- Branch naming follows a consistent pattern for easy identification (feature/, bugfix/, release/)
-- Temporary test branches like `Tracking_Test` are used for isolated testing
-- Branches are regularly updated to stay in sync with main, as shown by the "Behind/Ahead" metrics
+**Main Branches**
+- `main` - Stable production-ready code
+- `develop` - Integration branch for ongoing work
 
-### Code Quality Badges
+**Supporting Branches**
+- Feature branches: `feature/frontend/feature-name`, `feature/backend/feature-name`
+- Release branches: `release/v1.0`, `release/v1.1`
+- Hotfix branches: `hotfix/emergency-fix`
 
-| Category          | Badges |
-|-------------------|--------|
-| **Code Quality**  | ![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen) ![SonarCloud](https://img.shields.io/badge/SonarCloud-Passed-success) |
-| **Build**         | ![GitHub Actions](https://img.shields.io/github/actions/workflow/status/StefanDramaLlama/sign-sync/main.yml?label=Build) |
-| **Dependencies**  | ![Python](https://img.shields.io/badge/Python-3.10%2B-blue) |
-| **Community**     | ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen) ![GitHub Issues](https://img.shields.io/github/issues/StefanDramaLlama/sign-sync) |
+### Development Workflow
+- Code reviews are mandatory before merging to main
+- Semantic versioning for consistent release numbering
+- Automated testing and deployment pipelines
+- Regular branch synchronization with main
+
+---
+
+## Code Quality & Metrics
+
+| Category | Status |
+|----------|--------|
+| Test Coverage | 95% |
+| Build Status | Passing |
+| Code Quality | SonarCloud Passed |
+| Dependencies | Python 3.10+ |
+
+---
+
+## Getting Started
+
+Interested in contributing or learning more? Check out our documentation:
+
+- [Technical Installation Manual](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Technical%20Installation%20Manual.pdf) - Setup instructions
+- [Coding Standards](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Coding%20Standards%20Document.pdf) - Development guidelines
+- [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects) - Team progress tracking
+
+---
+
+<div align="center">
+  <strong>Made by Team Apollo - Bridging Communication Gaps Through Technology</strong>
+</div>
