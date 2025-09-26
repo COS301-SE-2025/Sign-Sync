@@ -107,7 +107,12 @@ export default function TranslatorCamera({ onPrediction }) {
             </button>
 
             <button onClick={undo} className={`${btnNeutral} h-[56px] shrink-0 px-4`} disabled={!gestureMode}>Undo</button>
-            
+            <button onClick={clear} className={`${btnNeutral} h-[56px] shrink-0 px-4`} disabled={!gestureMode}>Clear</button>
+          </div>
+        </div>
+      </div>
+
+      
     </div>
   );
 }
