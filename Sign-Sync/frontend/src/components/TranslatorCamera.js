@@ -112,7 +112,15 @@ export default function TranslatorCamera({ onPrediction }) {
         </div>
       </div>
 
-      
+      {/* ROW 2 — RIGHT: CONVERT BUTTON (aligned with sentence) */}
+      <div className="md:col-span-4 md:row-start-2 flex items-stretch">
+        <button
+          onClick={() => toEnglish(sentence)}
+          className="w-full rounded-2xl px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+        >
+          Convert to English
+        </button>
+      </div>
     </div>
   );
 }
