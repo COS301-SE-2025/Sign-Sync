@@ -98,111 +98,194 @@ class PractiseWordsPage extends React.Component
     const isLastWord = currentIndex === words.length - 1;
 
     return (
-      <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
-                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
+      <div
+        className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`}
+        style={{
+          background: isDarkMode
+            ? "linear-gradient(135deg, #080C1A, #172034)"
+            : "#f5f5f5",
+        }}
+      >
+        {/* Sidebar */}
         <div className="w-64 flex-shrink-0">
-            <SideNavbar />
+          <SideNavbar />
         </div>
-      
-        <div className="flex-1 h-screen overflow-y-auto relative">
-            
-            {/* Blur when not logged in */}
-            <div className={!this.state.user ? "blur-sm" : ""}>
-              <main className="flex flex-col flex-1 items-center w-full max-w-4xl mx-auto p-6 sm:p-8 md:p-12 space-y-8">
+
+        {/* Main content */}
+        <div
+          className={`flex-1 h-screen overflow-y-auto relative flex items-center justify-center ${
+            isDarkMode ? "text-white" : "text-black"
+          }`}
+        >
+          {/* Blur when not logged in */}
+          <div className={!this.state.user ? "blur-sm" : ""}>
+            <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div
+                className={`w-full p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}
+                style={{
+                  backgroundColor: isDarkMode ? "#1B2432" : "#f5f5f5",
+                  border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2",
+                }}
+              >
                 {!showCongratulations ? (
-                    <>
+                  <>
+                    {/* Header */}
                     <header className="text-center space-y-2">
-                        <h1 className="text-5xl font-extrabold text-white">Practise words</h1>
-                        <p className="text-3xl text-white">
-                            Please make the sign for: <span className="text-red-600 font-bold">{currentWord.toUpperCase()}</span>
-                        </p>
-                        </header>
+                      <h1 className="text-5xl font-extrabold text-white">
+                        Practise Words
+                      </h1>
+                      <p className="text-3xl text-white">
+                        Please make the sign for:{" "}
+                        <span className="text-yellow-400 font-bold">
+                          {currentWord.toUpperCase()}
+                        </span>
+                      </p>
+                    </header>
 
-                    <section className="flex justify-center w-full">
-                        <div className="w-auto rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
-                          <EducationTranslatorCamera
-                              onPrediction={(prediction) => this.handlePrediction(prediction)}
-                          />
+                    {/* Progress + Camera */}
+                    <section className="flex justify-center w-full gap-6 mt-6">
+                      {/* Left panel: Progress tracking */}
+                      <div
+                        className="w-96 rounded-lg border border-gray-300 dark:border-gray-700 shadow-lg p-4 flex flex-col"
+                        style={{
+                          background: isDarkMode ? "#1e293b" : "#f5f5f5",
+                          height: "520px",
+                        }}
+                      >
+                        <div className="space-y-3 overflow-y-auto flex-1">
+                          {words.map((word, index) => {
+                            const isCurrent = index === currentIndex;
+                            const isDone = index < currentIndex;
+
+                            return (
+                              <div
+                                key={index}
+                                className={`flex items-center justify-between px-3 py-1 rounded-md font-medium ${
+                                  isCurrent
+                                    ? "bg-[#1a436b] text-white"
+                                    : isDone
+                                    ? "text-green-600"
+                                    : "text-gray-800 dark:text-gray-200"
+                                }`}
+                              >
+                                <span className="text-2xl font-bold">{word}</span>
+
+                                {isCurrent && (
+                                  <button
+                                    onClick={this.handleSkip}
+                                    className="ml-2 text-sm bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-500"
+                                  >
+                                    Skip
+                                  </button>
+                                )}
+
+                                {isDone && (
+                                  <span className="ml-2 text-green-600 font-bold">
+                                    ✔
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                        </section>
 
-                    <section className="flex flex-col items-center space-y-4 w-full">
-                        {success && (
-                          <p className="text-green-500 font-semibold text-lg">✔ Well Done!</p>
-                        )}
-
-                        <nav className="flex gap-4 justify-center">
+                        {/* Nav buttons */}
+                        <div className="flex justify-between mt-4">
                           <button
-                              onClick={this.handlePrev}
-                              disabled={currentIndex === 0}
-                              className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+                            onClick={this.handlePrev}
+                            disabled={currentIndex === 0}
+                            className={`px-3 py-1 rounded-md transition ${
+                              currentIndex === 0
+                                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                            }`}
                           >
-                              Previous
+                            Previous word
                           </button>
 
-                          <button
-                              onClick={this.handleSkip}
-                              className="px-5 py-2 rounded-md bg-yellow-400 text-black hover:bg-yellow-500 transition"
-                          >
-                              Skip
-                          </button>
-
-                          {!isLastWord && (
-                              <button
-                                onClick={this.handleNext}
-                                disabled={!success}
-                                className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
-                              >
-                                Next
-                              </button>
+                          {isLastWord && success ? (
+                            <button
+                              onClick={this.handleFinish}
+                              className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
+                            >
+                              Finish
+                            </button>
+                          ) : (
+                            <button
+                              onClick={this.handleNext}
+                              disabled={!success || isLastWord}
+                              className={`px-4 py-2 rounded-md transition ${
+                                !success || isLastWord
+                                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                  : "bg-blue-600 text-white hover:bg-blue-700"
+                              }`}
+                            >
+                              Next word
+                            </button>
                           )}
+                        </div>
+                      </div>
 
-                          {isLastWord && success && (
-                              <button
-                                onClick={this.handleFinish}
-                                className="px-5 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
-                              >
-                                Finish
-                              </button>
-                          )}
-                        </nav>
+                      {/* Right panel: Camera */}
+                      <div className="flex-1 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 shadow-lg">
+                        <EducationTranslatorCamera
+                          onPrediction={(prediction) =>
+                            this.handlePrediction(prediction)
+                          }
+                        />
+                      </div>
                     </section>
-                    </>
+
+                    {/* Well Done Message */}
+                    {success && (
+                      <p className="text-green-500 font-semibold text-3xl mt-4 text-center">
+                        ✔ Well Done!
+                      </p>
+                    )}
+                  </>
                 ) : (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-                      <section className="flex flex-col items-center justify-center space-y-6 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg max-w-lg text-center">
-                        <h2 className="text-4xl font-bold text-green-600">
-                          🎉 Congratulations! You have signed all the words correctly! 🎉
-                        </h2>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+                    <section className="flex flex-col items-center justify-center space-y-6 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg max-w-lg text-center">
+                      <h2 className="text-4xl font-bold text-green-600">
+                        🎉 Congratulations! You have signed all the words correctly! 🎉
+                      </h2>
 
-                        <button
-                          onClick={this.handleReset}
-                          className="px-6 py-3 bg-indigo-600 text-white rounded-lg text-xl font-semibold hover:bg-indigo-700 transition-colors shadow-md"
-                        >
-                          Back
-                        </button>
-                      </section>
-                    </div>
+                      <button
+                        onClick={this.handleReset}
+                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg text-xl font-semibold hover:bg-indigo-700 transition-colors shadow-md"
+                      >
+                        Back
+                      </button>
+                    </section>
+                  </div>
                 )}
-              </main>
-            </div>
-
-            {/* Login required overlay */}
-            {!this.state.user && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className={`p-8 rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} z-10 max-w-md text-center`}>
-                  <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-                  <p className="mb-6">Please log in to practise the alphabet</p>
-                  <button
-                    onClick={() => window.location.href = '/login'}
-                    className={`px-6 py-2 rounded-lg ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white font-medium transition-colors`}
-                  >
-                    Go to Login
-                  </button>
-                </div>
               </div>
-            )}
+            </div>
+          </div>
+
+          {/* Login overlay */}
+          {!this.state.user && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className={`p-8 rounded-lg shadow-xl ${
+                  isDarkMode ? "bg-gray-800" : "bg-white"
+                } border ${isDarkMode ? "border-gray-700" : "border-gray-200"} z-10 max-w-md text-center`}
+              >
+                <h2 className="text-2xl font-bold mb-4">Login Required</h2>
+                <p className="mb-6">Please log in to practise the words</p>
+                <button
+                  onClick={() => (window.location.href = "/login")}
+                  className={`px-6 py-2 rounded-lg ${
+                    isDarkMode
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-blue-500 hover:bg-blue-600"
+                  } text-white font-medium transition-colors`}
+                >
+                  Go to Login
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
