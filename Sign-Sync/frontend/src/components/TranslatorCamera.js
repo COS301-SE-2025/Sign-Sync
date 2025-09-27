@@ -9,10 +9,12 @@ import SoundOnIcon from "../assets/SoundOn.png";
 import SoundOffIcon from "../assets/SoundOff.png";
 import gestureIcon from "../assets/Gestures.png";
 import letterIcon from "../assets/Letters.png";
+import { toast } from "react-toastify";
 
 export default function TranslatorCamera({ onPrediction }) {
   const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
   const [gestureMode, setGestureMode] = React.useState(true);
+  const [converting, setConverting] = useState(false);     
 
   const {
     videoRef, connected, status, paused,
@@ -115,14 +117,38 @@ export default function TranslatorCamera({ onPrediction }) {
       </div>
 
       {/* ROW 2 — RIGHT: CONVERT BUTTON (aligned with sentence) */}
-      <div className="md:col-span-4 md:row-start-2 flex items-stretch">
+      {/* <div className="md:col-span-4 md:row-start-2 flex items-stretch">
         <button
           onClick={() => toEnglish(sentence)}
           className="w-full rounded-2xl px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
         >
           Convert to English
         </button>
+      </div> */}
+      <div className="md:col-span-4 md:row-start-2 flex items-stretch">                 
+        <button                                                                          
+          onClick={async () => {                                                         
+            if (converting) return;                                                      
+            setConverting(true);                                                         
+            const res = await toEnglish(sentence);                                       
+            if (!res?.ok) {                                                              
+              if (res?.rateLimited) {                                                    
+                toast.error(res.message || "Rate limited. Please try again later.");     
+              } else if (res?.message) {                                                 
+                toast.error(res.message);                                                
+              } else {                                                                    
+                toast.error("Translation failed.");                                      
+              }                                                                           
+            }                                                                             
+            setConverting(false);                                                        
+          }}                                                                              
+          disabled={converting}                                                           
+          className="w-full rounded-2xl px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold disabled:opacity-60 disabled:cursor-not-allowed" 
+        >                                                                                 
+          {converting ? "Converting…" : "Convert to English"}                             
+        </button>                                                                         
       </div>
+
     </div>
   );
 }
