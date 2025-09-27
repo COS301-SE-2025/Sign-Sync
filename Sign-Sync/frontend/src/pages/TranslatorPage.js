@@ -6,8 +6,7 @@ import Swap from "../assets/Swap-icon.png"
 import PreferenceManager from "../components/PreferenceManager";
 import TranslatorCamera from "../components/TranslatorCamera";
 
-class TranslatorPage extends React.Component
-{
+class TranslatorPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,46 +15,69 @@ class TranslatorPage extends React.Component
     }
 
     changeType = () => {
-        {this.state.type === "SignText" ? this.setState({type: "TextSign"}) : this.setState({type: "SignText"})}
+        { this.state.type === "SignText" ? this.setState({ type: "TextSign" }) : this.setState({ type: "SignText" }) }
     }
 
-    render()
-    {
+    render() {
         let translatorMode;
         let translatorType = this.state.type;
-        if(translatorType === "SignText"){
+        if (translatorType === "SignText") {
             translatorMode = <div>
-                <TranslatorCamera/>
+                <TranslatorCamera />
             </div>
-        }else{
+        } else {
             translatorMode = <div>
-                <TextToSign/>
+                <TextToSign />
             </div>
         }
 
         const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
         return (
-            // <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
-            <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
-                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
-                <SideNavbar/>
-                <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "text-white" : "text-black"} px-6 py-10`}>
-                {/* <div className={`flex-1 flex flex-col items-center justify-center overflow-y-auto ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"} px-6 py-10`}> */}
-                    {translatorMode}
-                    <div className={"flex mt-2"}>
-                        <button onClick={this.changeType} className={`p-2 font-bold w-20 ${translatorType === "SignText" ? "bg-[#801E20] text-[#FFFFFD]": "bg-[#FFFFFD] text-[#801E20]"}  border-gray-600 rounded`}>
-                            Sign
-                        </button>
-                        <button className="px-4" onClick={this.changeType}>
-                            <img src={Swap} alt={"Swap"} className="w-8 h-8"/>
-                        </button>
-                        <button onClick={this.changeType} className={`p-2 font-bold w-20 ${translatorType === "SignText" ? "bg-[#FFFFFD] text-[#801E20]" : "bg-[#801E20] text-[#FFFFFD]"} border-gray-600 rounded`}>
-                            Speech
-                        </button>
+            <div
+                className={`min-h-screen flex ${isDarkMode ? "text-white" : "text-black"}`}
+                style={{
+                    background: isDarkMode
+                        ? "linear-gradient(135deg, #0A0F1E, #172034)"
+                        : "#f5f5f8",
+                }}
+            >
+                <SideNavbar />
+
+                <main className="flex-1 w-full flex">
+                    <div className="max-w-6xl mx-auto px-6 py-10 w-full my-auto flex flex-col gap-6">
+                        <header className="mb-6">
+                            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                                {translatorType === "SignText" ? "Translator" : "Avatar"}
+                            </h1>
+                        </header>
+
+                        {/* {translatorType === "SignText" ? <TranslatorCamera /> : <TextToSign />} */}
+                        {translatorMode}
+
+                        {/* BUTTONS AT BOTTOM */}
+                        <div className="flex justify-center gap-4">
+                            <button
+                                onClick={this.changeType}
+                                className={`px-6 py-3 font-bold rounded-xl transition
+            ${translatorType === "SignText"
+                                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                                        : "bg-indigo-600 hover:bg-indigo-700 text-white"}`}
+                            >
+                                Translator
+                            </button>
+                            <button
+                                onClick={this.changeType}
+                                className={`px-6 py-3 font-bold rounded-xl transition
+            ${translatorType === "SignText"
+                                        ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                        : "bg-blue-600 hover:bg-blue-700 text-white"}`}
+                            >
+                                Avatar
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </main>
             </div>
         )
     }

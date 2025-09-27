@@ -102,27 +102,22 @@ class RegistrationPage extends React.Component
         const { email, password, confirmPassword, errors } = this.state;
 
         return (
-            <div
-                className="flex items-center justify-center min-h-screen p-4"
-                style={{
-                background:
-                    "linear-gradient(135deg, #102a46, #1c4a7c, #d32f2f)",
-                }}
-            >
+            <div className="flex items-center justify-center min-h-screen p-4" style={{ background: "linear-gradient(135deg, #080C1A, #172034)"}} >
                 <form
                     onSubmit={this.handleSubmit}
-                    className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-6"
+                    className="w-full max-w-2xl rounded-2xl shadow-2xl p-8 space-y-6" style={{ background: "#1B2432"}}
                 >
-                    <h2 className="text-2xl font-extrabold text-center text-gray-900">
-                        Register
+                    <h2 className="text-2xl font-extrabold text-center text-white">
+                        Create an account
                     </h2>
 
-                    <div className="flex flex-col">
-                        <label
-                            htmlFor="email"
-                            className="text-gray-700 font-medium mb-2"
-                        >
-                            Email
+                    <p className="text-center text-white">
+                        Please provide the following information
+                    </p>
+    
+                    <div className="flex flex-col w-full mt-4">
+                        <label htmlFor="email" className="text-white font-medium mb-2">
+                            Email <span className="text-red-500">*</span>
                         </label>
 
                         <input
@@ -133,8 +128,8 @@ class RegistrationPage extends React.Component
                             onChange={this.handleInputChange}
                             placeholder="Enter your email"
                             className={`px-4 py-3 rounded-lg border ${
-                                errors.email ? "border-red-500" : "border-gray-300"
-                            } focus:outline-none focus:ring-2 focus:ring-red-600`}
+                                errors.email ? "border-red-500" : "border-white"
+                            } focus:outline-none focus:ring-2 focus:ring-indigo-600`}
                         />
 
                         {errors.email && (
@@ -143,78 +138,71 @@ class RegistrationPage extends React.Component
 
                     </div>
 
-                    <div className="flex flex-col">
-                        <label
-                            htmlFor="password"
-                            className="text-gray-700 font-medium mb-2"
-                        >
-                            Password
-                        </label>
-                        
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={password}
-                            onChange={this.handleInputChange}
-                            placeholder="Enter your password"
-                            className={`px-4 py-3 rounded-lg border ${
-                                errors.password ? "border-red-500" : "border-gray-300"
-                            } focus:outline-none focus:ring-2 focus:ring-red-600`}
-                        />
+                    <div className="flex w-full gap-2">
+                        <div className="flex flex-col flex-1">
+                            <label htmlFor="password" className="text-white font-medium mb-2">
+                                Password <span className="text-red-500">*</span>
+                            </label>
+                            
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                value={password}
+                                onChange={this.handleInputChange}
+                                placeholder="Enter your password"
+                                className={`px-4 py-3 rounded-lg border ${
+                                    errors.password ? "border-red-500" : "border-gray-300"
+                                } focus:outline-none focus:ring-2 focus:ring-indigo-600`}
+                            />
 
-                        {errors.password && (
-                        <p className="text-red-500 mt-1 text-sm">{errors.password}</p>
-                        )}
+                            {errors.password && (
+                            <p className="text-red-500 mt-1 text-sm">{errors.password}</p>
+                            )}
 
+                        </div>
+
+                        <div className="flex flex-col flex-1">
+                            <label htmlFor="confirmPassword" className="text-white font-medium mb-2">
+                                Confirm Password <span className="text-red-500">*</span>
+                            </label>
+                            
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                value={confirmPassword}
+                                onChange={this.handleInputChange}
+                                placeholder="Confirm your password"
+                                className={`px-4 py-3 rounded-lg border ${
+                                    errors.confirmPassword
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                } focus:outline-none focus:ring-2 focus:ring-indigo-600`}
+                            />
+                            
+                            {errors.confirmPassword && (
+                            <p className="text-red-500 mt-1 text-sm">
+                                {errors.confirmPassword}
+                            </p>
+                            )}
+
+                        </div>
                     </div>
-
-                    <div className="flex flex-col">
-                        <label
-                            htmlFor="confirmPassword"
-                            className="text-gray-700 font-medium mb-2"
-                        >
-                            Confirm Password
-                        </label>
-                        
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            value={confirmPassword}
-                            onChange={this.handleInputChange}
-                            placeholder="Confirm your password"
-                            className={`px-4 py-3 rounded-lg border ${
-                                errors.confirmPassword
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } focus:outline-none focus:ring-2 focus:ring-red-600`}
-                        />
-                        
-                        {errors.confirmPassword && (
-                        <p className="text-red-500 mt-1 text-sm">
-                            {errors.confirmPassword}
-                        </p>
-                        )}
-
-                    </div>
+                    
 
                     <button
                         type="submit"
-                        className="w-full py-3 rounded-lg font-bold text-white transition-colors"
-                        style={{
-                        background:
-                            "linear-gradient(to right, #102a46, #1c4a7c, #d32f2f)",
-                        }}
+                        className="w-full py-3 rounded-lg font-bold text-white transition-colors bg-blue-600 hover:bg-blue-700 mt-4"
                     >
                         Register
                     </button>
 
-                    <p className="text-center text-gray-700">
+                    <p className="text-center text-white">
                         Already have an account?{" "}
                         <Link
                             to="/login"
-                            className="text-red-600 font-semibold hover:underline"
+                            className="text-blue-600 font-semibold hover:underline"
                         >
                             Sign In
                         </Link>

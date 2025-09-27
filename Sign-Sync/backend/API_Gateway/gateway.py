@@ -161,6 +161,8 @@ async def rate_limiter(request: Request, call_next):
     requests.append(now)
     rate_limits[client_ip] = requests
 
+    print(f"IP={client_ip}, total={len(requests)}, times={requests}")
+
     if len(requests) > MAX_REQUESTS:
         return JSONResponse(
             {"detail": "Too many requests"},

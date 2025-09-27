@@ -91,30 +91,36 @@ class LearnAlphabetPage extends React.Component
         const isLastLetter = currentIndex === alphabet.length - 1;
 
         return (
-            // <div className={`flex h-screen ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
-            <div className={`flex h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
-                                                                                                    ? "linear-gradient(135deg, #0a1a2f 0%, #14365c 60%, #5c1b1b 100%)"
-                                                                                                    : 'linear-gradient(135deg, #102a46 0%, #1c4a7c 60%, #d32f2f 100%)'}}>
-                <div className="w-64 flex-shrink-0">
+            <div className={`flex min-h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
+                    ? "linear-gradient(135deg, #080C1A, #172034)"
+                    : '#f5f5f5'}}>
+            <div className="w-64 flex-shrink-0">
                     <SideNavbar />
                 </div>
 
-                <div className="flex-1 h-screen overflow-y-auto relative">
+                <div className="flex-1 justify-center flex items-center relative">
                     
                     {/* Blur when not logged in */}
-                    <div className={!this.state.user ? "blur-sm" : ""}>           
-                        <main className="flex flex-col items-center w-full p-6 sm:p-8 md:p-12 space-y-12">
+                    <div className={!this.state.user ? "blur-sm" : ""}>
+                        <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div
+                                className={`w-full p-4 sm:p-6 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}
+                                style={{
+                                    backgroundColor: isDarkMode ? "#1B2432" : "#f5f5f5",
+                                    border: isDarkMode ? "1px solid #2A3445" : "1px solid #D8CFC2",
+                                }}
+                            >
                             {!showCongratulations ? (
                                 <>
-                                    <header className="text-center space-y-2">
-                                        <h1 className="text-5xl font-extrabold text-white">Learn the Alphabet</h1>
-                                        <p className="text-3xl text-white">
+                                    <header className="text-center space-y-2 py-5">
+                                        <h1 className="text-5xl font-extrabold">Learn the Alphabet</h1>
+                                        <p className="text-3xl">
                                             Current letter:{" "}
-                                            <span className="text-red-600 font-bold">{currentLetter.toUpperCase()}</span>
+                                            <span className="text-yellow-400 font-bold">{currentLetter.toUpperCase()}</span>
                                         </p>
                                     </header>
 
-                                    <section className="w-full flex justify-center items-center space-x-6">
+                                    <section className="flex-row flex justify-center items-start space-x-6">
                                         
                                         {/* avatar side */}
                                         <div className="flex-none border-r border-gray-400 pr-10">
@@ -122,37 +128,37 @@ class LearnAlphabetPage extends React.Component
                                         </div>
 
                                         {/* camera side */}
-                                        <div className="flex-none" style={{ width: '500px' }}>
+                                        <div className="flex-none w-[500px] flex flex-col items-center space-y-4">
                                             <Camera
                                                 defaultGestureMode={false}
                                                 gestureModeFixed={true}
                                                 onPrediction={this.handlePrediction}
                                                 width={500}
-                                                height={400}
+                                                height={300}
                                             />
+                                            <div className="flex flex-row items-center space-x-3">
+                                                <button
+                                                    onClick={this.handlePrev}
+                                                    disabled={currentIndex === 0}
+                                                    className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+                                                >
+                                                    Previous
+                                                </button>
+
+                                                <button
+                                                    onClick={isLastLetter ? this.handleFinish : this.handleNext}
+                                                    disabled={!success}
+                                                    className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
+                                                >
+                                                    {isLastLetter ? "Finish" : "Next"}
+                                                </button>
+
+                                                {success && (
+                                                    <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
+                                                )}
+                                            </div>
                                         </div>
-                                    </section>
 
-                                    <section className="flex flex-col items-center space-y-4">
-                                        {success && (
-                                            <p className="text-green-500 font-semibold text-2xl">✔ Well Done!</p>
-                                        )}
-
-                                        <button
-                                            onClick={this.handlePrev}
-                                            disabled={currentIndex === 0}
-                                            className={`px-5 py-2 rounded-md transition ${currentIndex === 0 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
-                                        >
-                                            Previous
-                                        </button>
-
-                                        <button
-                                            onClick={isLastLetter ? this.handleFinish : this.handleNext}
-                                            disabled={!success}
-                                            className={`px-5 py-2 rounded-md transition ${success ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
-                                        >
-                                            {isLastLetter ? "Finish" : "Next"}
-                                        </button>
                                     </section>
                                 </>
                             ) : (
@@ -171,7 +177,8 @@ class LearnAlphabetPage extends React.Component
                                     </section>
                                 </div>
                             )}
-                        </main>
+                            </div>
+                        </div>
                     </div>
 
                      {/* Login required overlay */}
