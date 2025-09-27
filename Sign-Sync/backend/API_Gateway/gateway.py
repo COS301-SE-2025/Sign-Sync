@@ -164,11 +164,27 @@ async def rate_limiter(request: Request, call_next):
     print(f"IP={client_ip}, total={len(requests)}, times={requests}")
 
     if len(requests) > MAX_REQUESTS:
+        # return JSONResponse(
+        #     {"detail": "Too many requests"},
+        #     status_code=429,
+        #     headers={"Retry-After": str(WINDOW),
+        #              "Access-Control-Allow-Origin": CORS_ORIGINS}
+        # )
+
+        # raise HTTPException(
+        #     status_code = status.HTTP_429_TOO_MANY_REQUESTS,
+        #     detail = "Too many requests"
+        # )
+
         return JSONResponse(
             {"detail": "Too many requests"},
             status_code=429,
-            headers={"Retry-After": str(WINDOW),
-                     "Access-Control-Allow-Origin": CORS_ORIGINS}
+            headers={
+                "Retry-After": str(WINDOW),
+                "Access-Control-Allow-Origin": CORS_ORIGINS[0],
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+            }
         )
     
     response = await call_next(request)
