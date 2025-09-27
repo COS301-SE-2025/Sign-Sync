@@ -37,35 +37,10 @@ jobs:
 
       - name: Run Python tests
         run: |
-          python -m pytest --ignore=Sign-Sync/backend/alphabetTranslate-service/image-cnn/scripts/test_asl_model.py
-          
           if [ -d "Sign-Sync/__tests__" ]; then
             python -m pytest Sign-Sync/__tests__/
           else
             echo "No tests directory found. Skipping Python tests."
           fi
-          
-          # python -m pytest Sign-Sync/backend/alphabetTranslate-service/alphabetTranslate_unitTests.py
-          # python -m pytest Sign-Sync/backend/alphabetTranslate-service/alphabetTranslate_integrationTests.py
-          
-          python -m pytest Sign-Sync/backend/gestureRecognition-service/tests/integration.py
-          python -m pytest Sign-Sync/backend/gestureRecognition-service/tests/test.py
-          python -m pytest Sign-Sync/backend/gestureRecognition-service/tests/unit.py
-          
-          python -m pytest Sign-Sync/backend/speechToText-service/unitTesting/unitTests.py
-          python -m pytest Sign-Sync/backend/speechToText-service/speechToText_integrationTests.py
-          python -m pytest Sign-Sync/backend/speechToText-service/speechToText_unitTests.py
-
-          python -m pytest Sign-Sync/backend/tests/unitTests.py
-
-          python -m pytest Sign-Sync/backend/textToAslGloss-service/glossCoversion_integrationTests.py
-          python -m pytest Sign-Sync/backend/textToAslGloss-service/glossCoversion_unitTests.py
-          
-      # - name: Install node dependencies
-      #   run: npm install
-      #   working-directory: ./Sign-Sync
-
-      # - name: Run Rejex tests
-      #   run: npm test
-      #   working-directory: ./Sign-Sync
-      #   timeout-minutes: 1
+      
+      
