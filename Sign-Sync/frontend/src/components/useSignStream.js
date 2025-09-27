@@ -5,11 +5,11 @@ import { FilesetResolver, PoseLandmarker, HandLandmarker } from "@mediapipe/task
 import pose_task from "../assets/pose_landmarker_full.task";
 import hand_task from "../assets/hand_landmarker.task";
 
-const WORDS_API_BASE   = "http://localhost:8007/api/stt";
+const WORDS_API_BASE = "http://localhost:8007/api/stt";
 const LETTERS_API_BASE = "http://localhost:8007/api/alphabet";
 const GRAMMAR_API_BASE = "http://localhost:8007/api/word";
 
-const SEND_INTERVAL_MS    = 80;
+const SEND_INTERVAL_MS = 80;
 const LETTERS_INTERVAL_MS = 500;
 
 const collapseConsecutive = (text) => {
@@ -69,20 +69,51 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     else { speakText(text); }
   }, [sentence, speakText]);
 
-  const toEnglish = useCallback(async (text) => {
-    if (!text) return "";
-    try {
-      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        setSentence(data.translation || sentence);
-      }
-    } catch {/* ignore */}
-  }, [sentence]);
+  // const toEnglish = useCallback(async (text) => {
+  //   if (!text) return "";
+  //   try {
+  //     const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ text }),
+  //     });
+  //     if (resp.ok) {
+  //       const data = await resp.json();
+  //       setSentence(data.translation || sentence);
+  //     }
+  //   } catch {/* ignore */}
+  // }, [sentence]);
+
+  const toEnglish = useCallback(async (text) => {                                //**********
+    if (!text) return { ok: false, message: "Empty text" };                      //**********
+    try {                                                                         //**********
+      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {                 //**********
+        method: "POST",                                                           //**********
+        headers: { "Content-Type": "application/json" },                          //**********
+        body: JSON.stringify({ text }),                                           //**********
+      });                                                                         //**********
+      if (resp.ok) {                                                              //**********
+        const data = await resp.json();                                           //**********
+        const translation = data.translation || sentence;                         //**********
+        setSentence(translation);                                                 //**********
+        return { ok: true, translation };                                         //**********
+      }                                                                            //**********
+      // --- Non-200s: handle 429 + safe JSON parse --------------------------     //**********
+      let msg = "";                                                                //**********
+      try { msg = (await resp.json())?.message || ""; } catch { }                   //**********
+      if (resp.status === 429) {                                                   //**********
+        const ra = resp.headers.get("Retry-After");                                //**********
+        const secs = ra && /^\d+$/.test(ra) ? parseInt(ra, 10) : 30;               //**********
+        return {
+          ok: false, rateLimited: true, retryAfter: secs,                   //**********
+          message: msg || `Too many requests. Try again in ${secs}s.`
+        };    //**********
+      }                                                                            //**********
+      return { ok: false, message: msg || "Grammar translation failed." };         //**********
+    } catch {                                                                      //**********
+      return { ok: false, message: "Network error during grammar translation." };  //**********
+    }                                                                              //**********
+  }, [sentence]);                                                                  //**********
 
   // -------- words mode engine --------
   const tickSendWords = useCallback(() => {
@@ -138,9 +169,9 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     const ws = new WebSocket(`ws://localhost:8007/api/stt/v1/stream/${meta.session_id}`);
     wsRef.current = ws;
 
-    ws.onopen   = () => { setConnected(true); setStatus("Idle"); };
-    ws.onclose  = () => { setConnected(false); setStatus("Idle"); };
-    ws.onerror  = () => { try { ws.close(); } catch {} };
+    ws.onopen = () => { setConnected(true); setStatus("Idle"); };
+    ws.onclose = () => { setConnected(false); setStatus("Idle"); };
+    ws.onerror = () => { try { ws.close(); } catch { } };
 
     ws.onmessage = (ev) => {
       try {
@@ -166,7 +197,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
           setSentence(cleaned);
           lastCommittedRef.current = lastWord(cleaned);
         }
-      } catch {/* ignore */}
+      } catch {/* ignore */ }
     };
 
     setPaused(false);
@@ -178,7 +209,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     setPaused(false);
 
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      try { wsRef.current.close(); } catch {}
+      try { wsRef.current.close(); } catch { }
     }
     if (sessionIdRef.current) {
       try {
@@ -187,7 +218,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ session_id: sessionIdRef.current }),
         });
-      } catch {/* ignore */}
+      } catch {/* ignore */ }
       sessionIdRef.current = null;
     }
     setConnected(false);
@@ -198,7 +229,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     if (loopTimerRef.current) { clearInterval(loopTimerRef.current); loopTimerRef.current = null; }
     setPaused(true); setStatus("Paused");
   }, []);
-  
+
   const resume = useCallback(() => {
     if (!paused) return;
     loopTimerRef.current = setInterval(tickSendWords, SEND_INTERVAL_MS);
@@ -209,7 +240,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
     const ws = wsRef.current;
     if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: "undo" }));
   }, []);
-  
+
   const clear = useCallback(() => {
     lastCommittedRef.current = "";
     const ws = wsRef.current;
@@ -241,7 +272,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
       setHeadline(pred);
       setTopK([]); setStable(true);
       onPrediction && onPrediction(pred, []);
-    } catch {/* ignore */}
+    } catch {/* ignore */ }
   }, [onPrediction]);
 
   const startLetters = useCallback(() => {
@@ -287,7 +318,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
       if (!videoRef.current) return;
       videoRef.current.srcObject = stream;
       videoRef.current.style.transform = "scaleX(-1)";
-      await videoRef.current.play().catch(() => {});
+      await videoRef.current.play().catch(() => { });
       await init();
 
       if (autoStart) {
@@ -300,7 +331,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
 
     return () => {
       stopLetters();
-      stopWordsSession().catch(() => {});
+      stopWordsSession().catch(() => { });
       if (poseRef.current) { poseRef.current.close(); poseRef.current = null; }
       if (handRef.current) { handRef.current.close(); handRef.current = null; }
       if (videoRef.current && stream) {
@@ -321,7 +352,7 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
 
     // controls
     start: mode === "words" ? startWordsSession : startLetters,
-    stop:  mode === "words" ? stopWordsSession  : stopLetters,
+    stop: mode === "words" ? stopWordsSession : stopLetters,
     pause, resume,
     undo, clear,
     toEnglish, toggleSpeak,
