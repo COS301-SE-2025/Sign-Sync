@@ -1,7 +1,7 @@
 import React from "react";
 import SideNavbar from "../components/sideNavbar";
 import Camera from "../components/Camera";
-import TextToSign from "../components/textToSign";
+import LearnAvatar from "../components/LearnAvatar";
 import PreferenceManager from "../components/PreferenceManager";
 
 class LearnAlphabetPage extends React.Component 
@@ -124,7 +124,7 @@ class LearnAlphabetPage extends React.Component
                                         
                                         {/* avatar side */}
                                         <div className="flex-none border-r border-gray-400 pr-10">
-                                            <TextToSign key={currentLetter} sentence={currentLetter} compact />
+                                            <LearnAvatar key={currentLetter} sentence={currentLetter} compact />
                                         </div>
 
                                         {/* camera side */}
