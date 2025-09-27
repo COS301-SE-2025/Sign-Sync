@@ -93,6 +93,7 @@ function Avatar({ signs, emotion = "Neutral" }) {
                         });
                     });
                 }
+
                 if (animationIndex[0] !== null) {
                     animationIndex[0].fadeOut(0.5).stop();
                     mixer.clipAction(actions["Idle"].getClip());
@@ -216,7 +217,7 @@ export default function AvatarViewport({ input, emotion = "Neutral", trigger, he
                         const sign = await response.json();
                         if (Array.isArray(sign.response)) {
                             signs.push(...sign.response);
-                        } else {
+                        } else if (sign.response) {
                             signs.push(sign.response);
                         }
                     }
@@ -237,7 +238,6 @@ export default function AvatarViewport({ input, emotion = "Neutral", trigger, he
                         } else {                                                     
                             toast.error(msg || "Translation failed.");                 
                         }                                                            
-
                     }
                 } catch (error) {
                     console.error("Error during Translation:", error);
