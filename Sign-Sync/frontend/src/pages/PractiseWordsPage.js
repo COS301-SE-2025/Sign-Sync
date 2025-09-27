@@ -13,9 +13,7 @@ class PractiseWordsPage extends React.Component
     this.initialState = {
       currentIndex: 0,
       words: [
-        "goodbye", "hello", "no", "thank", "yes", "go", "know", "live", "movie", "i",
-        "school", "we", "you", "tomorrow", "tonight", "watch", "your", "friend", "family", "want",
-        "have", "need", "come", "see", "like", "work", "eat", "drink", "help", "learn"
+       "go", "need", "want","yo‍u", "friend", "come", "eat", "drink", "help", "learn", "tomorrow", "thank you", "movie",
       ],
       success: false,
       completedWords: new Set(),

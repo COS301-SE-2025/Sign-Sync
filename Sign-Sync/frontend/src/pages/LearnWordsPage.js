@@ -2,7 +2,7 @@ import React from "react";
 import SideNavbar from "../components/sideNavbar";
 import Camera from "../components/Camera";
 import EducationTranslatorCamera from "../components/EducationTranslator";
-import TextToSign from "../components/textToSign";
+import LearnAvatar from "../components/LearnAvatar";
 import PreferenceManager from "../components/PreferenceManager";
 
 class LearnWordsPage extends React.Component 
@@ -14,9 +14,7 @@ class LearnWordsPage extends React.Component
         this.initialState = {
             currentIndex: 0,
             words: [
-            "i", "go", "no", "we", "yo‍u", "eat", "see", "yes", "come", "have",
-            "help", "know", "like", "live", "need", "want", "work", "your", "drink", "learn",
-            "thank", "watch", "hello", "movie", "friend", "family", "school", "tonight", "goodbye", "tomorrow"
+                "go", "need", "want","yo‍u", "friend", "come", "eat", "drink", "help", "learn", "tomorrow", "thank you", "movie",
             ],
             success: false,
             completedWords: new Set(),
@@ -128,7 +126,7 @@ class LearnWordsPage extends React.Component
 
                                         {/* avatar side */}
                                         <div className="flex-none border-r border-gray-400 pr-10">
-                                            <TextToSign key={currentWord} sentence={currentWord} compact />
+                                            <LearnAvatar key={currentWord} sentence={currentWord} compact />
                                         </div>
 
                                         {/* camera side */}
