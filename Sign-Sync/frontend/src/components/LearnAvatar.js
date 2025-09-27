@@ -17,7 +17,8 @@ class TextToSign extends React.Component
             sentence:"",
             textToBeSent:"",
             emotionToBeSent:"",
-            mic : false
+            mic : false,
+            isTranslating: false 
         };
     }
 
