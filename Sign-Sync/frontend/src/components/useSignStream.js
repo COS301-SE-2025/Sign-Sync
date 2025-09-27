@@ -84,36 +84,36 @@ export function useSignStream({ mode = "words", onPrediction, autoStart = true, 
   //   } catch {/* ignore */}
   // }, [sentence]);
 
-  const toEnglish = useCallback(async (text) => {                                //**********
-    if (!text) return { ok: false, message: "Empty text" };                      //**********
-    try {                                                                         //**********
-      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {                 //**********
-        method: "POST",                                                           //**********
-        headers: { "Content-Type": "application/json" },                          //**********
-        body: JSON.stringify({ text }),                                           //**********
-      });                                                                         //**********
-      if (resp.ok) {                                                              //**********
-        const data = await resp.json();                                           //**********
-        const translation = data.translation || sentence;                         //**********
-        setSentence(translation);                                                 //**********
-        return { ok: true, translation };                                         //**********
-      }                                                                            //**********
-      // --- Non-200s: handle 429 + safe JSON parse --------------------------     //**********
-      let msg = "";                                                                //**********
-      try { msg = (await resp.json())?.message || ""; } catch { }                   //**********
-      if (resp.status === 429) {                                                   //**********
-        const ra = resp.headers.get("Retry-After");                                //**********
-        const secs = ra && /^\d+$/.test(ra) ? parseInt(ra, 10) : 30;               //**********
+  const toEnglish = useCallback(async (text) => {                                
+    if (!text) return { ok: false, message: "Empty text" };                      
+    try {                                                                         
+      const resp = await fetch(`${GRAMMAR_API_BASE}/translate`, {                 
+        method: "POST",                                                           
+        headers: { "Content-Type": "application/json" },                          
+        body: JSON.stringify({ text }),                                           
+      });                                                                         
+      if (resp.ok) {                                                              
+        const data = await resp.json();                                           
+        const translation = data.translation || sentence;                         
+        setSentence(translation);                                                 
+        return { ok: true, translation };                                         
+      }                                                                            
+      // --- Non-200s: handle 429 + safe JSON parse --------------------------     
+      let msg = "";                                                                
+      try { msg = (await resp.json())?.message || ""; } catch { }                   
+      if (resp.status === 429) {                                                   
+        const ra = resp.headers.get("Retry-After");                                
+        const secs = ra && /^\d+$/.test(ra) ? parseInt(ra, 10) : 30;               
         return {
-          ok: false, rateLimited: true, retryAfter: secs,                   //**********
+          ok: false, rateLimited: true, retryAfter: secs,                   
           message: msg || `Too many requests. Try again in ${secs}s.`
-        };    //**********
-      }                                                                            //**********
-      return { ok: false, message: msg || "Grammar translation failed." };         //**********
-    } catch {                                                                      //**********
-      return { ok: false, message: "Network error during grammar translation." };  //**********
-    }                                                                              //**********
-  }, [sentence]);                                                                  //**********
+        };    
+      }                                                                            
+      return { ok: false, message: msg || "Grammar translation failed." };         
+    } catch {                                                                      
+      return { ok: false, message: "Network error during grammar translation." };  
+    }                                                                              
+  }, [sentence]);                                                                  
 
   // -------- words mode engine --------
   const tickSendWords = useCallback(() => {

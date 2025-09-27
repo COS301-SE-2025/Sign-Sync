@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 export default function TranslatorCamera({ onPrediction }) {
   const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
   const [gestureMode, setGestureMode] = React.useState(true);
-  const [converting, setConverting] = useState(false);     //**********
+  const [converting, setConverting] = useState(false);     
 
   const {
     videoRef, connected, status, paused,
