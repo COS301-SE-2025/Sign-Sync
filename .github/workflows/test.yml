@@ -12,6 +12,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mongo:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -24,87 +35,82 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1 libglib2.0-0
+          sudo apt-get install -y libgl1 libglib2.0-0 netcat iproute2
 
-      - name: Install Python dependencies
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies, start services, and run tests
+        env:
+          MONGODB_URI: "mongodb://mongo:27017"
+          MONGODB_DB_NAME: "testdb"
+          PORT: 3000
         run: |
+          # ---------------- Python setup ----------------
           python -m pip install --upgrade pip
           if [ -f "requirements.txt" ]; then
             pip install -r requirements.txt
-          else
-            echo "No requirements.txt file found. Skipping dependency installation."
           fi
+          pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.6.0/en_core_web_sm-3.6.0-py3-none-any.whl
 
-      # - name: Run Python tests
-      #   run: |
-      #     if [ -d "Sign-Sync/__tests__" ]; then
-      #       python -m pytest Sign-Sync/__tests__/
-      #     else
-      #       echo "No tests directory found. Skipping Python tests."
-      #     fi
+          # ---------------- Backend services ----------------
+          cd Sign-Sync/backend/alphabetTranslate-service
+          uvicorn translator_api:app --host 0.0.0.0 --port 8000 --reload &
+          cd -
 
-      # WJ added this
-      - name: Start backend services
-        run: |
-           nohup uvicorn Sign-Sync/backend/alphabetTranslate-service/translator_api:app --port 8000 --reload &
-           nohup uvicorn Sign-Sync/backend/speechToText-service/API:app --port 8003 --reload &
-           nohup uvicorn Sign-Sync/backend/textToASLGloss-service/textConversion_api:app --port 8002 --reload &
-           nohup uvicorn Sign-Sync/backend/gestureRecognition-service/API:app --port 8008 --reload &
-           nohup uvicorn Sign-Sync/backend/signToText-service/signToText_API:app --host 0.0.0.0 --port 8006 --reload &
-           nohup uvicorn Sign-Sync/backend/wordPrediction-service/API:app --port 8005 --reload &
-           nohup uvicorn Sign-Sync/backend/API_Gateway/gateway:app --port 8007 --reload &
-           sleep 40
+          cd Sign-Sync/backend/speechToText-service
+          uvicorn API:app --host 0.0.0.0 --port 8003 --reload &
+          cd -
 
-      - name: NFR Tests
-        run: |
-         pytest -s -v ./NFR_Testing
+          cd Sign-Sync/backend/textToAslGloss-service
+          uvicorn textConversion_api:app --host 0.0.0.0 --port 8002 --reload &
+          cd -
 
-      # what we actually want for the testing
-      #- name: Integration Tests
-      #  run: |
-      #    pytest -s -v ./Sign-Sync/backend
+          cd Sign-Sync/backend/gestureRecognition-service
+          uvicorn API:app --host 0.0.0.0 --port 8008 --reload &
+          cd -
 
-      #unit tests not using pytest I know of
-      - name: Unit tests
-        run: |
-         python Sign-Sync/backend/wordPrediction-service/unit/test_corrector.py
-         python Sign-Sync/backend/wordPrediction-service/unit/test_node.py
-         python Sign-Sync/backend/wordPrediction-service/unit/test_trie.py
-      
-      # - name: Install dependencies for NFR tests
-      #   run: |
-      #     sudo apt-get install -y openjdk-11-jdk wget
-          
-      #     # Install JMeter with correct directory handling
-      #     JMETER_VERSION="5.6.2"
-      #     JMETER_URL="https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"
-          
-      #     echo "Downloading JMeter from: $JMETER_URL"
-      #     wget $JMETER_URL
-          
-      #     # Create directory first, then extract
-      #     sudo mkdir -p /opt/jmeter
-      #     tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
-          
-      #     # Move contents to /opt/jmeter
-      #     sudo mv apache-jmeter-${JMETER_VERSION}/* /opt/jmeter/
-      #     sudo chmod +x /opt/jmeter/bin/*.sh
-          
-      #     # Add to PATH
-      #     echo "/opt/jmeter/bin" >> $GITHUB_PATH
-          
-      #     # Verify installation
-      #     /opt/jmeter/bin/jmeter --version
+          cd Sign-Sync/backend/signToText-service
+          uvicorn signToText_API:app --host 0.0.0.0 --port 8006 --reload &
+          cd -
 
-      # - name: Run NFR tests
-      #   run: |
-      #     # Check if the JMX file exists
-      #     if [ -f "NFR_Testing/Performance1.jmx" ]; then
-      #       echo "Running JMeter test: NFR_Testing/Performance1.jmx"
-      #       jmeter -n -t "NFR_Testing/Performance1.jmx" -l "NFR_Testing/results.jtl" -e -o "NFR_Testing/report"
-      #     else
-      #       echo "JMX file not found. Looking for JMX files..."
-      #       find . -name "*.jmx" | head -5
-      #       echo "Available files in NFR_Testing directory:"
-      #       ls -la NFR_Testing/ 2>/dev/null || echo "NFR_Testing directory not found"
-      #     fi
+          cd Sign-Sync/backend/wordPrediction-service
+          uvicorn API:app --host 0.0.0.0 --port 8005 --reload &
+          cd -
+
+          cd Sign-Sync/backend/API_Gateway
+          uvicorn gateway:app --host 0.0.0.0 --port 8007 --reload &
+          cd -
+
+          # ---------------- Frontend + Express server ----------------
+          cd Sign-Sync/frontend
+          npm install
+          npm run build
+          cd -
+
+          cd Sign-Sync/backend
+          npm install
+          npm run build
+          node dist/server.js &
+          cd -
+
+          # ---------------- Wait for services ----------------
+          for port in 3000 8000 8002 8003 8005 8006 8007 8008; do
+            echo "Waiting for port $port..."
+            until nc -z localhost $port; do
+              sleep 5
+              echo "Still waiting for $port..."
+            done
+            echo "Port $port is up!"
+          done
+
+          # ---------------- Run tests ----------------
+          pytest -s -v ./NFR_Testing
+          python Sign-Sync/backend/wordPrediction-service/unit/test_corrector.py
+          python Sign-Sync/backend/wordPrediction-service/unit/test_node.py
+          python Sign-Sync/backend/wordPrediction-service/unit/test_trie.py
