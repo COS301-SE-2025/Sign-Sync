@@ -96,11 +96,12 @@ class LearnWordsPage extends React.Component
             <div className={`flex min-h-screen ${isDarkMode ? "text-white" : "text-black"}`} style={{ background: isDarkMode
                     ? "linear-gradient(135deg, #080C1A, #172034)"
                     : '#f5f5f5'}}>
-                <div className="w-64 flex-shrink-0">
+                
+                <div className="w-64 flex-shrink-0 h-screen">
                     <SideNavbar />
                 </div>
 
-                <div className="flex-1 justify-center flex items-center relative">
+                <div className="flex-1 relative h-screen overflow-y-auto justify-center flex items-center">
 
                     {/* Blur when not logged in */}
                     <div className={!this.state.user ? "blur-sm" : ""}>
