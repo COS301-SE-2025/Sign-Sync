@@ -2,7 +2,7 @@ import React from "react";
 import Submit from "../assets/SubmitArrow.png";
 import MicOn from "../assets/MicOn.png";
 import MicOff from "../assets/MuteOff.png";
-import hourGlass from "../assets/HourGlass.png";
+import hourGlass from "../assets/Hourglass.png";
 import SpeechToTextBox from "../components/SpeechToTextBox";
 import AvatarViewport from "../components/AvatarViewport";
 import { toast } from "react-toastify";
