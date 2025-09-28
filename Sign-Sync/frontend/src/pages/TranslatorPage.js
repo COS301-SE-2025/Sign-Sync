@@ -42,9 +42,12 @@ class TranslatorPage extends React.Component {
                         : "#f5f5f8",
                 }}
             >
-                <SideNavbar />
+                {/* Sidebar stays fixed, not scrollable */}
+                <div className="flex-shrink-0 h-screen">
+                    <SideNavbar />
+                </div>
 
-                <main className="flex-1 w-full flex">
+                <main className="flex-1 w-full flex h-screen overflow-y-auto">
                     <div className="max-w-6xl mx-auto px-6 py-10 w-full my-auto flex flex-col gap-6">
                         <header className="mb-6">
                             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
