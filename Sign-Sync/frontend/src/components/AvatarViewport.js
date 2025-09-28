@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import preferenceManager from "./PreferenceManager";
 
 
-function Avatar({ signs, emotion = "Neutral" }) {
+function Avatar({ onPlayingChange, signs, emotion = "Neutral" }) {
     const avatarReference = useRef();
     const { scene, animations, materials } = useGLTF(TranslatorAvatar);
     const { actions, mixer } = useAnimations(animations, avatarReference);
@@ -53,10 +53,11 @@ function Avatar({ signs, emotion = "Neutral" }) {
             try {
                 if (seq.length === 0) {                                   
                     actions["Idle"]?.reset()?.play();                       
-                    setTranslatedWord("");                                  
+                    setTranslatedWord("");
+                    onPlayingChange?.(false);
                     return;                                                 
-                }                                                         
-
+                }
+                onPlayingChange?.(true);
                 // for (let i = 0; i < signs.length; i++) {
                 //     const animation = actions[signs[i]];
                 for (let i = 0; i < seq.length; i++) {                    
@@ -103,10 +104,12 @@ function Avatar({ signs, emotion = "Neutral" }) {
                     materials[avatarName + "-Face"].map.offset.x = emotions[emotionsRef.current][0];
                     materials[avatarName + "-Face"].map.offset.y = emotions[emotionsRef.current][1];
                     materials[avatarName + "-Face"].map.needsUpdate = true;
+                    onPlayingChange?.(false);
                 }
             } catch (error) {
                 if (error.message !== 'Animation stopped - Rerun') {
                     console.error("Animation error other than rerun:", error);
+                    onPlayingChange?.(false);
                 }
             } finally {
                 if (animationController.current === controller) {
@@ -127,6 +130,7 @@ function Avatar({ signs, emotion = "Neutral" }) {
             if (animationController.current === controller) {
                 animationController.current = null;
             }
+            onPlayingChange?.(false);
         };
     // }, [signs, actions, mixer]);
     }, [seq, actions, mixer]);                                        
@@ -187,7 +191,7 @@ function Avatar({ signs, emotion = "Neutral" }) {
     </>;
 }
 
-export default function AvatarViewport({ input, emotion = "Neutral", trigger, height, width }) {
+export default function AvatarViewport({ playing,input, emotion = "Neutral", trigger, height, width }) {
     const [signs, setSigns] = useState([]);
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
 
@@ -257,7 +261,7 @@ export default function AvatarViewport({ input, emotion = "Neutral", trigger, he
         <div style={{ height: `${height}px`, width: `${width}px`, maxWidth: '100%', margin: '0 auto', background: isDarkMode ? '#1B2432' : '#e5e7eb', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {/* <Canvas orthographic camera={{position: [0,0,4.5], zoom: 200}} style={{ height: height, width: width, background: isDarkMode ? '#36454f' : '#e5e7eb'}}> */}
             <Canvas orthographic camera={{ position: [0, 0, 4.5], zoom: 200 }} style={{ height: '100%', width: '100%', display: 'block' }}>
-                <Avatar signs={signs} emotion={emotion} />
+                <Avatar signs={signs} emotion={emotion} onPlayingChange={playing}/>
                 <directionalLight color="white" position={[5, 10, 7.5]} intensity={1} />
                 <ambientLight color="white" intensity={0.75} />
             </Canvas>
