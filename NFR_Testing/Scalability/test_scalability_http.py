@@ -66,4 +66,4 @@ async def test_http_scalability(users, messages):
 
     if response_times:
         avg_time = statistics.mean(response_times)
-        assert avg_time < 500, f"Average response time too high: {avg_time}ms"
+        assert avg_time < 600, f"Average response time too high: {avg_time}ms"

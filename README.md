@@ -25,14 +25,32 @@ Built as a **web application**, it provides an intuitive, accessible platform fo
 
 Sign Sync isn’t just a tool—it’s a barrier-breaking solution that promotes inclusivity, independence, and seamless communication. By blending advanced tech with real-world impact, this project empowers users while offering developers a chance to work on meaningful, next-gen AI systems.
 
-## Links
+## Demos
 
-- [Functional Requirements (SRS)]()
+||**Demo Slides**|**Demo Video**|**Demo SRS**|
+|-|-|-|-|
+|Demo 1| [Slides 1](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SignSync%20Demo1%20Pres.pdf) | [Video 1](https://drive.google.com/file/d/1HBEssni3iBMv5fkkdSIUH8-DIDpXS4gm/view) | [SRS v1](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SRS%20Demo%201%20(2).pdf) 
+|Demo 2| [Slides 2](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign%20Sync_%20Demo%202%20Slides.pdf) | [Video 2](https://drive.google.com/drive/folders/1INMoJEG3mvPEBpTpcbPcwoYKCdPumQZ8?usp=sharing) | [SRS v2](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign-Sync_%20Software%20Requirements%20Specification%20Document%20(1).pdf) 
+|Demo 3| [Slides 3](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Sign%20Sync_%20Demo%203%20Slides.pdf) | [Video 3](https://drive.google.com/drive/folders/10kwx0Bm9ss7vATdITNFWzkZnaPH7kIGk?usp=sharing) | [SRS v3](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf) 
+|Demo 4| [Slides 4]() | [Video 4]() | [SRS v4]() 
+
+## Documentation Links
+
+|**Document**|**Description**|
+|-|-|
+|[SRS Document](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf)| Software Requirements Specifications |
+|[Architectural Requirements](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Architectural%20Requirements%20Document.pdf)| Architectural Requirements |
+|[User Manual](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20User%20Manual.pdf)| Guide for users on how to use the application |
+|[Technical Installation Manual](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Technical%20Installation%20Manual.pdf)| Instructions for setting up the applications |
+|[Testing Policy]()| Policies and procedures for testing |
+|[Coding Standards](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Coding%20Standards%20Document.pdf)| Guidelines for coding practices |
+|[Advertisement Video]()| Advertisement for Sign Sync |
+
 - [GitHub Project Board](https://github.com/COS301-SE-2025/Sign-Sync/projects)
 
 ## Team
 
-|**Name**|**Discription**|**LinkedIn**|
+|**Name**|**Description**|**LinkedIn**|
 |--------|---------------|----------|
 | Michael Stone | Michael is an enthusiastic final-year BSc Information and Knowledge Systems student. With a strong foundation in both Computer Science and Informatics, he possesses a well-rounded skill set and a deep interest in full-stack development. His versatility enables him to contribute effectively to frontend, backend, and system integration projects. He has built several web applications and APIs, and has experience integrating them with backend systems. He enjoys working individually and alongside others, sharing ideas, and contributing to team success. Even when faced with unfamiliar challenges, Michael is committed to finding effective solutions through persistence, research, and a willingness to learn. | [LinkedIn](https://www.linkedin.com/in/michael-stone-7209b3216/)
 | Matthew Gravette | Matthew is a final year BSc Computer Science student, he has completed many projects, big and small. He has extensive experience in both C++ and Java. Matthew has a deep interest in full stack web development, having built a website for auctions that could handle multiple concurrent bidders and a progressive web app for sound engineers. He strives to bring all these skills to help the team with the development of this project. He has worked in many teams of various sizes and has played both a managing role and a supporting role. He is experienced in all standard web development languages and , He is also proficient in data science and does 3rd year statistics and is well versed in database creation and management. | [LinkedIn](https://www.linkedin.com/in/matthew-gravette-0a32402ab/)
@@ -50,11 +68,9 @@ This repository follows a structured branching strategy:
 - `main` - The stable production-ready branch
 - `develop` - Integration branch for ongoing development work
 - `develop/frontend/` - Integration branch for frontend-specific features.
-- `develop/frontend/feature/*` - Short-lived branches for individual frontend features.
+- `develop/frontend/feature` - Short-lived branches for individual frontend features.
 - `develop/backend/` - Integration branch for backend-specific features.
-- `develop/backend/feature/*` - Short-lived branches for individual backend features.
-- `develop/ai/` - Integration branch for AI/ML-specific features.
-- `develop/ai/feature/*` - Short-lived branches for individual AI features.
+- `develop/backend/feature` - Short-lived branches for individual backend features.
 - `release/*` - Temporary branches for final testing before production.
 - `hotfix/*` - Emergency branches for critical production bug fixes.
 

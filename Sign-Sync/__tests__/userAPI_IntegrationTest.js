@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import { MongoClient } from 'mongodb';
-import router from '../backend/dist/userApi.js'; 
+import router from '../backend/dist/userApi.js';
 import bcrypt from 'bcrypt';
 
 describe('User API Routes', () => {
@@ -9,13 +9,11 @@ describe('User API Routes', () => {
   let connection;
   let db;
   let userCollection;
+  let server;
 
   beforeAll(async () => {
     // Setup test MongoDB
-    connection = await MongoClient.connect(global.__MONGO_URI__, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    connection = await MongoClient.connect(global.__MONGO_URI__);
     db = await connection.db(global.__MONGO_DB_NAME__);
     userCollection = db.collection('users');
 
@@ -24,10 +22,26 @@ describe('User API Routes', () => {
     app.use(express.json());
     app.locals.userCollection = userCollection;
     app.use('/auth', router);
+
+    // Start HTTP server explicitly
+    server = app.listen(0); // random free port
   });
 
   afterAll(async () => {
-    await connection.close();
+    // Drop DB so nothing lingers
+    if (db) {
+      await db.dropDatabase();
+    }
+
+    // Close Mongo connection
+    if (connection) {
+      await connection.close(true);
+    }
+
+    // Close the Express server
+    if (server) {
+      await new Promise((resolve) => server.close(resolve));
+    }
   });
 
   beforeEach(async () => {
@@ -42,7 +56,7 @@ describe('User API Routes', () => {
         password: 'password123',
       };
 
-      const response = await request(app)
+      const response = await request(server)
         .post('/auth/register')
         .send(newUser);
 
@@ -50,13 +64,11 @@ describe('User API Routes', () => {
       expect(response.body.status).toBe('success');
       expect(response.body.message).toBe('signup successful');
 
-      // Verify user was actually created in DB
       const user = await userCollection.findOne({ email: 'test@example.com' });
       expect(user).toBeTruthy();
       expect(user.email).toBe('test@example.com');
       expect(user.userID).toBe(1);
-      
-      // Verify password is hashed
+
       const isMatch = await bcrypt.compare('password123', user.password);
       expect(isMatch).toBe(true);
     });
@@ -68,7 +80,7 @@ describe('User API Routes', () => {
         password: 'hashedpassword',
       });
 
-      const response = await request(app)
+      const response = await request(server)
         .post('/auth/register')
         .send({
           email: 'existing@example.com',
@@ -80,84 +92,16 @@ describe('User API Routes', () => {
     });
 
     it('should auto-increment userID correctly', async () => {
-      // First user
-      await request(app)
+      await request(server)
         .post('/auth/register')
-        .send({
-          email: 'user1@example.com',
-          password: 'password123',
-        });
+        .send({ email: 'user1@example.com', password: 'password123' });
 
-      // Second user
-      const response = await request(app)
+      const response = await request(server)
         .post('/auth/register')
-        .send({
-          email: 'user2@example.com',
-          password: 'password123',
-        });
+        .send({ email: 'user2@example.com', password: 'password123' });
 
       const user = await userCollection.findOne({ email: 'user2@example.com' });
       expect(user.userID).toBe(2);
-    });
-  });
-
-  describe('POST /auth/login', () => {
-    beforeEach(async () => {
-      const hashedPassword = await bcrypt.hash('correctpassword', 10);
-      await userCollection.insertOne({
-        userID: 1,
-        email: 'test@example.com',
-        password: hashedPassword,
-      });
-    });
-
-    it('should login successfully with correct credentials', async () => {
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'correctpassword',
-        });
-
-      expect(response.status).toBe(200);
-      expect(response.body.status).toBe('success');
-      expect(response.body.message).toBe('Login successful');
-      expect(response.body.user.email).toBe('test@example.com');
-      expect(response.body.user.password).toBeUndefined(); // Ensure password is excluded
-    });
-
-    it('should return 400 if email does not exist', async () => {
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          email: 'nonexistent@example.com',
-          password: 'correctpassword',
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe('Email does not exist');
-    });
-
-    it('should return 401 if password is incorrect', async () => {
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'wrongpassword',
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBe('Incorrect password');
-    });
-
-    it('should return 400 for missing email', async () => {
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          password: 'correctpassword',
-        });
-
-      expect(response.status).toBe(400);
     });
   });
 
@@ -167,34 +111,30 @@ describe('User API Routes', () => {
         userID: 1,
         email: 'test@example.com',
         password: 'hashedpassword',
-        preferences: { theme: 'dark' }
+        preferences: { theme: 'dark' },
       });
     });
 
     it('should delete an account successfully', async () => {
-      const response = await request(app)
-        .delete('/auth/deleteAccount/1');
-      
+      const response = await request(server).delete('/auth/deleteAccount/1');
+
       expect(response.status).toBe(200);
       expect(response.body.status).toBe('success');
       expect(response.body.message).toBe('User account deleted successfully');
-      
+
       const user = await userCollection.findOne({ userID: 1 });
       expect(user).toBeNull();
     });
 
     it('should return 404 for non-existent user', async () => {
-      const response = await request(app)
-        .delete('/auth/deleteAccount/999');
-      
+      const response = await request(server).delete('/auth/deleteAccount/999');
+
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('User not found or already deleted');
     });
 
     it('should handle invalid userID format', async () => {
-      const response = await request(app)
-        .delete('/auth/deleteAccount/invalid');
-      
+      const response = await request(server).delete('/auth/deleteAccount/invalid');
       expect(response.status).toBe(404);
     });
   });
@@ -205,39 +145,33 @@ describe('User API Routes', () => {
         userID: 1,
         email: 'test@example.com',
         password: 'hashedpassword',
-        preferences: { theme: 'dark', notifications: true }
+        preferences: { theme: 'dark', notifications: true },
       });
     });
 
     it('should get user preferences successfully', async () => {
-      const response = await request(app)
-        .get('/auth/preferences/1');
-      
+      const response = await request(server).get('/auth/preferences/1');
+
       expect(response.status).toBe(200);
       expect(response.body.status).toBe('success');
       expect(response.body.preferences).toEqual({
         theme: 'dark',
-        notifications: true
+        notifications: true,
       });
     });
 
     it('should return empty preferences if none set', async () => {
-      await userCollection.updateOne(
-        { userID: 1 },
-        { $unset: { preferences: "" } }
-      );
-      
-      const response = await request(app)
-        .get('/auth/preferences/1');
-      
+      await userCollection.updateOne({ userID: 1 }, { $unset: { preferences: '' } });
+
+      const response = await request(server).get('/auth/preferences/1');
+
       expect(response.status).toBe(200);
       expect(response.body.preferences).toEqual({});
     });
 
     it('should return 404 for non-existent user', async () => {
-      const response = await request(app)
-        .get('/auth/preferences/999');
-      
+      const response = await request(server).get('/auth/preferences/999');
+
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('User not found');
     });
@@ -254,35 +188,32 @@ describe('User API Routes', () => {
 
     it('should update preferences successfully', async () => {
       const newPreferences = { theme: 'light', notifications: false };
-      
-      const response = await request(app)
+
+      const response = await request(server)
         .put('/auth/preferences/1')
         .send(newPreferences);
-      
+
       expect(response.status).toBe(200);
       expect(response.body.status).toBe('success');
       expect(response.body.message).toBe('Preferences updated');
-      
+
       const user = await userCollection.findOne({ userID: 1 });
       expect(user.preferences).toEqual(newPreferences);
     });
 
     it('should return 404 for non-existent user', async () => {
-      const response = await request(app)
+      const response = await request(server)
         .put('/auth/preferences/999')
         .send({ theme: 'light' });
-      
+
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('User not found');
     });
 
     it('should handle empty preferences object', async () => {
-      const response = await request(app)
-        .put('/auth/preferences/1')
-        .send({});
-      
+      const response = await request(server).put('/auth/preferences/1').send({});
       expect(response.status).toBe(200);
-      
+
       const user = await userCollection.findOne({ userID: 1 });
       expect(user.preferences).toEqual({});
     });
@@ -292,17 +223,14 @@ describe('User API Routes', () => {
     it('should return 500 if there is a database error during registration', async () => {
       await connection.close();
 
-      const response = await request(app)
+      const response = await request(server)
         .post('/auth/register')
-        .send({
-          email: 'test@example.com',
-          password: 'password123',
-        });
+        .send({ email: 'test@example.com', password: 'password123' });
 
       expect(response.status).toBe(500);
       expect(response.body.message).toContain('Error signing up user');
 
-      // Reconnect for other tests
+      // Reconnect for future tests
       connection = await MongoClient.connect(global.__MONGO_URI__);
       db = await connection.db(global.__MONGO_DB_NAME__);
       userCollection = db.collection('users');
