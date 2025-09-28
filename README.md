@@ -37,7 +37,7 @@ Sign Sync isn't just a tool—it's a barrier-breaking solution that promotes inc
 | Demo 1 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SignSync%20Demo1%20Pres.pdf) | [Video](https://drive.google.com/file/d/1HBEssni3iBMv5fkkdSIUH8-DIDpXS4gm/view) | [SRS v1](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%201/SRS%20Demo%201%20(2).pdf) |
 | Demo 2 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign%20Sync_%20Demo%202%20Slides.pdf) | [Video](https://drive.google.com/drive/folders/1INMoJEG3mvPEBpTpcbPcwoYKCdPumQZ8?usp=sharing) | [SRS v2](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%202/Sign-Sync_%20Software%20Requirements%20Specification%20Document%20(1).pdf) |
 | Demo 3 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Sign%20Sync_%20Demo%203%20Slides.pdf) | [Video](https://drive.google.com/drive/folders/10kwx0Bm9ss7vATdITNFWzkZnaPH7kIGk?usp=sharing) | [SRS v3](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf) |
-| Demo 4 | [Slides]() | [Video]() | [SRS v4]() |
+| Demo 4 | [Slides](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Sign%20Sync_%20Demo%204%20Slides.pdf) | [Video](https://drive.google.com/drive/folders/1XfReXigraRAn5tnWcGfXtRz0WqHCX1Kw?usp=drive_link) | [SRS v4](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20Software%20Requirements%20Specification%20Document.pdf) |
 
 ---
 
@@ -45,12 +45,12 @@ Sign Sync isn't just a tool—it's a barrier-breaking solution that promotes inc
 
 | Document | Description | Link |
 |----------|-------------|------|
-| SRS Document | Software Requirements Specifications | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Software%20Requirements%20Specification%20Document.pdf) |
-| Architectural Requirements | System architecture specifications | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Architectural%20Requirements%20Document.pdf) |
-| User Manual | Guide for application usage | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20-%20User%20Manual.pdf) |
-| Technical Installation Manual | Setup instructions | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%203/Apollo%20Projects%20-%20Technical%20Installation%20Manual.pdf) |
-| Coding Standards | Development guidelines | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20-%20Coding%20Standards%20Document.pdf) |
-| Testing Policy | Outline of how testing was done | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20-%20Testing%20Policy.pdf) |
+| SRS Document | Software Requirements Specifications | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20Software%20Requirements%20Specification%20Document.pdf) |
+| Architectural Requirements | System architecture specifications | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20Architectural%20Requirements%20Document.pdf) |
+| User Manual | Guide for application usage | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20User%20Manual.pdf) |
+| Technical Installation Manual | Setup instructions | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20Technical%20Installation%20Manual.pdf) |
+| Coding Standards | Development guidelines | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20Coding%20Standards%20Document.pdf) |
+| Testing Policy | Outline of how testing was done | [View](https://github.com/COS301-SE-2025/Sign-Sync/blob/main/Documentation/Demo%204/Apollo%20Projects%20(Sign-Sync)%20-%20Testing%20Policy.pdf) |
 | GitHub Project Board | Team progress tracking | [View](https://github.com/COS301-SE-2025/Sign-Sync/projects) |
 
 ---
