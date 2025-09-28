@@ -31,7 +31,7 @@ app.get('*', (req, res) => {
 
 // Start server immediately
 app.listen(port, () => {
-  console.log(`✅ Server running at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
 
 // Connect to MongoDB asynchronously (won’t block server start)
@@ -39,13 +39,13 @@ app.listen(port, () => {
   try {
     const client = new MongoClient(url);
     await client.connect();
-    console.log('✅ Connected to MongoDB');
+    console.log('Connected to MongoDB');
 
     const db = client.db(dbName);
     app.locals.userCollection = db.collection('Users');
     app.locals.signCollection = db.collection('Signs');
   } catch (err) {
-    console.error('⚠️ MongoDB connection failed (server still running):', err.message);
+    console.error('MongoDB connection failed (server still running):', err.message);
   }
 })();
 
