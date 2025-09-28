@@ -22,7 +22,7 @@ jobs:
         working-directory: ./Sign-Sync
 
       - name: Build frontend
-        run: npm start
+        run: npm run build
         working-directory: ./Sign-Sync
 
       # Backend setup
