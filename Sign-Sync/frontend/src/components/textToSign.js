@@ -85,7 +85,6 @@ class TextToSign extends React.Component {
                     textToBeSent: res?.gloss || "",                
                     emotionToBeSent: res?.emotion || "Neutral",    
                     timestamp: Date.now(),
-                    animationPlaying: true,
                 });
 
             }
@@ -160,7 +159,7 @@ class TextToSign extends React.Component {
                                 width={avatarWidth}
                                 height={avatarHeight}
                                 playing={(value) => {
-                                    this.state.isPlaying = value;
+                                    this.setState({ animationPlaying: value });
                                 }}
                             />
                         </div>
