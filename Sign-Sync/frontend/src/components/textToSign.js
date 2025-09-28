@@ -2,6 +2,7 @@ import React from "react";
 import Submit from "../assets/SubmitArrow.png";
 import MicOn from "../assets/MicOn.png";
 import MicOff from "../assets/MuteOff.png";
+import hourGlass from "../assets/HourGlass.png";
 import SpeechToTextBox from "../components/SpeechToTextBox";
 import AvatarViewport from "../components/AvatarViewport";
 import { toast } from "react-toastify";
@@ -186,7 +187,7 @@ class TextToSign extends React.Component {
                             className="p-3.5 border-2 border-black"
                             style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}
                         >
-                            <img src={Submit} className="w-8 h-8" alt="Submit" />
+                            <img src={this.state.animationPlaying? hourGlass: Submit} className="w-8 h-8" alt="Submit" />
                         </button>
                     </div>
                 </div>
