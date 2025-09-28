@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 
 class LoginPage extends React.Component 
 {
+    countdownTimer = null;
+
     constructor(props)
     {
         super(props);
@@ -11,9 +13,45 @@ class LoginPage extends React.Component
         this.state = {
             email: '',
             password: '',
-            errors: {}
+            errors: {},
+            isSubmitting: false,
+            lockoutUntil: null,
+            remainingSecs: 0 
         };
     }
+
+    componentWillUnmount() {                 
+        if (this.countdownTimer) {           
+            clearInterval(this.countdownTimer); 
+        }                                     
+    }                                         
+
+    // Start a client-side lockout countdown          
+    startLockout = (secs) => {                         
+        const lockoutUntil = Date.now() + secs * 1000; 
+        if (this.countdownTimer) clearInterval(this.countdownTimer); 
+        this.setState({ lockoutUntil, remainingSecs: secs });        
+        this.countdownTimer = setInterval(() => {     
+            const remaining = Math.max(0, Math.ceil((lockoutUntil - Date.now()) / 1000)); 
+            if (remaining <= 0) {                     
+                clearInterval(this.countdownTimer);  
+                this.countdownTimer = null;           
+                this.setState({ lockoutUntil: null, remainingSecs: 0 }); 
+            } else {                                   
+                this.setState({ remainingSecs: remaining }); 
+            }                                         
+        }, 1000);                                    
+    };
+
+    // Safely parse JSON (handles empty/non-JSON bodies) 
+    safelyParseJson = async (response) => {           
+        try {                                         
+            const text = await response.text();       
+            return text ? JSON.parse(text) : {};      
+        } catch {                                     
+            return {};                               
+        }                                             
+    };    
 
     validateForm = () => 
     {
@@ -53,9 +91,23 @@ class LoginPage extends React.Component
     {
         e.preventDefault();
 
-        if(!this.validateForm()) return;
+        const { isSubmitting, lockoutUntil } = this.state; 
+
+        // Respect any current lockout (from a prior 429)  
+        if (lockoutUntil && Date.now() < lockoutUntil) {   
+            toast.info("Please wait for the cooldown to finish before trying again."); 
+            return;                                       
+        }                                                  
+
+        if(!this.validateForm() || isSubmitting) return;   
 
         const { email, password } = this.state;
+
+        this.setState({ isSubmitting: true }); 
+
+        // if(!this.validateForm()) return;
+
+        // const { email, password } = this.state;
 
         try
         {
@@ -77,11 +129,34 @@ class LoginPage extends React.Component
             }
             else
             {
-                const errorData = await response.json();
+                // const errorData = await response.json();
 
-                toast.error(`Login failed: ${errorData.message}`);
+                // toast.error(`Login failed: ${errorData.message}`);
 
-                console.error("Login error:", errorData);
+                // console.error("Login error:", errorData);
+
+                const errorData = await this.safelyParseJson(response); 
+                const msg = errorData.message || "Login failed.";        
+
+                if (response.status === 429) {                           
+                    const retryAfterHeader = response.headers.get("Retry-After"); 
+                    const retryAfterSecs = retryAfterHeader && /^\d+$/.test(retryAfterHeader)  
+                        ? parseInt(retryAfterHeader, 10)                                      
+                        : 60;                                                                 
+                    this.startLockout(retryAfterSecs);                                        
+                    toast.error(                                                               
+                        errorData.message ||                                                   
+                        `Too many login attempts. Please try again in ${retryAfterSecs} seconds.` 
+                    );                                                                        
+                } else if (response.status === 401) {                                         
+                    toast.error(errorData.message || "Incorrect email or password.");         
+                } else if (response.status >= 500) {                                          
+                    toast.error("Server error during Login. Please try again later.");        
+                } else {                                                                      
+                    toast.error(msg);                                                         
+                }                                                                             
+
+                console.error("Login error:", { status: response.status, ...errorData });
             }
         }
         catch(error)
@@ -91,27 +166,49 @@ class LoginPage extends React.Component
             toast.error("An error occurred during Login. Please try again.");
 
         }
+        finally {                                
+            this.setState({ isSubmitting: false }); 
+        } 
     };
 
     render() 
     {
-        const { email, password, errors } = this.state;
+        const { email, password, errors, isSubmitting, lockoutUntil, remainingSecs } = this.state; 
+        const isLockedOut = !!lockoutUntil && Date.now() < lockoutUntil; 
+        const disabled = isSubmitting || isLockedOut; 
 
-        return(
-            <div className="flex items-center justify-center min-h-screen p-4"
-                style={{ background: 'linear-gradient(135deg, #102a46, #1c4a7c, #d32f2f)' }}>
+        // const { email, password, errors } = this.state;
+
+        return (
+            <div 
+                className="flex items-center justify-center min-h-screen p-4" 
+                style={{ background: "linear-gradient(135deg, #080C1A, #172034)" }}
+            >
                 <form
                     onSubmit={this.handleSubmit}
-                    className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-6"
+                    className="w-full max-w-2xl rounded-2xl shadow-2xl p-8 space-y-6"
+                    style={{ background: "#1B2432" }}
                 >
-                    <h2 className="text-2xl font-extrabold text-center text-gray-900">
+                    <h2 className="text-2xl font-extrabold text-center text-white">
                         Login
                     </h2>
 
-                    <div className="flex flex-col">
-                        <label htmlFor="email" className="text-gray-700 font-medium mb-2">
-                            Email
+                    <p className="text-center text-white">
+                        Please provide the following information
+                    </p>
+
+                    {isLockedOut && ( 
+                        <div className="rounded-lg p-3 text-sm bg-red-900/40 border border-red-600 text-red-200"> {}
+                            Too many login attempts. Please wait <b>{remainingSecs}s</b> and try again. {}
+                        </div> 
+                    )}
+
+                    {/* Email */}
+                    <div className="flex flex-col w-full mt-4">
+                        <label htmlFor="email" className="text-white font-medium mb-2">
+                            Email <span className="text-red-500">*</span>
                         </label>
+
                         <input
                             type="text"
                             id="email"
@@ -119,19 +216,23 @@ class LoginPage extends React.Component
                             value={email}
                             onChange={this.handleInputChange}
                             placeholder="Enter your email"
+                            disabled={disabled} 
                             className={`px-4 py-3 rounded-lg border ${
-                                errors.email ? 'border-red-500' : 'border-gray-300'
-                            } focus:outline-none focus:ring-2 focus:ring-red-600`}
+                                errors.email ? "border-red-500" : "border-white"
+                            } focus:outline-none focus:ring-2 focus:ring-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed`} 
                         />
+
                         {errors.email && (
                             <p className="text-red-500 mt-1 text-sm">{errors.email}</p>
                         )}
                     </div>
 
-                    <div className="flex flex-col">
-                        <label htmlFor="password" className="text-gray-700 font-medium mb-2">
-                            Password
+                    {/* Password */}
+                    <div className="flex flex-col w-full mt-4">
+                        <label htmlFor="password" className="text-white font-medium mb-2">
+                            Password <span className="text-red-500">*</span>
                         </label>
+
                         <input
                             type="password"
                             id="password"
@@ -139,28 +240,31 @@ class LoginPage extends React.Component
                             value={password}
                             onChange={this.handleInputChange}
                             placeholder="Enter your password"
+                            disabled={disabled} 
                             className={`px-4 py-3 rounded-lg border ${
-                                errors.password ? 'border-red-500' : 'border-gray-300'
-                            } focus:outline-none focus:ring-2 focus:ring-red-600`}
+                                errors.password ? "border-red-500" : "border-gray-300"
+                            } focus:outline-none focus:ring-2 focus:ring-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed`} 
                         />
+
                         {errors.password && (
                             <p className="text-red-500 mt-1 text-sm">{errors.password}</p>
                         )}
                     </div>
 
+                    {/* Login button */}
                     <button
                         type="submit"
-                        className="w-full py-3 rounded-lg font-bold text-white transition-colors"
-                        style={{ background: 'linear-gradient(to right, #102a46, #1c4a7c, #d32f2f)' }}
+                        className="w-full py-3 rounded-lg font-bold text-white transition-colors bg-blue-600 hover:bg-blue-700 mt-4 disabled:opacity-60 disabled:cursor-not-allowed" 
                     >
                         Login
                     </button>
 
-                    <p className="text-center text-gray-700">
-                        Don’t have an account?{' '}
+                    {/* Link to register */}
+                    <p className="text-center text-white">
+                        Don’t have an account?{" "}
                         <Link
                             to="/register"
-                            className="text-red-600 font-semibold hover:underline"
+                            className="text-blue-600 font-semibold hover:underline"
                         >
                             Sign Up
                         </Link>
@@ -168,8 +272,7 @@ class LoginPage extends React.Component
                 </form>
             </div>
         );
-}
-
+    }
 
 }
 

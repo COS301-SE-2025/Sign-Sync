@@ -4,6 +4,7 @@ from pathlib import Path
 import asyncio
 import httpx
 import websockets
+import time
 
 from typing import Optional, Tuple, List
 from pydantic import BaseModel
@@ -12,8 +13,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
 CORS_ORIGINS = "http://localhost:3000"
+#CORS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
 WS_ORIGINS = "http://localhost:3000"
-DEFAULT_TIMEOUT = 15.0
+#WS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
+
+DEFAULT_TIMEOUT = 60.0
 
 SPEECH_URL   = "http://localhost:8003"
 ASL_URL      = "http://localhost:8002"
@@ -23,6 +27,28 @@ ALPHABET_URL = "http://localhost:8000"
 WORD_URL     = "http://localhost:8005"
 STT_URL = "http://localhost:8006"
 GESTURE_URL = "http://localhost:8008"
+
+#Docker-version:
+
+# SPEECH_URL   = "http://speech-to-text:8003"
+# ASL_URL      = "http://text-to-asl-gloss:8002"
+# TTS_URL      = "http://localhost:8001"
+# AUTH_URL     = "http://localhost:8004"
+# ALPHABET_URL = "http://alphabet-translate:8000"
+# WORD_URL     = "http://word-prediction:8005"
+# STT_URL = "http://sign-to-text:8006"
+# GESTURE_URL = "http://gesture-recognition:8008"
+
+#Azure-version:
+
+# SPEECH_URL   = "https://speechtotext-e4fkhwe7hwf6hgh4.southafricanorth-01.azurewebsites.net/"
+# ASL_URL      = "https://texttoaslgloss-h3buaxf6g0fqe6hk.southafricanorth-01.azurewebsites.net/"
+# TTS_URL      = "http://localhost:8001"
+# AUTH_URL     = "http://localhost:8004"
+# ALPHABET_URL = "https://alphabettranslate-cdarg5fyhraja3gu.southafricanorth-01.azurewebsites.net/"
+# WORD_URL     = "https://wordprediction-d6eke0emc6d5c6eq.southafricanorth-01.azurewebsites.net/"
+# STT_URL = "https://signtotext-dnh8gbcqegfve2h9.southafricanorth-01.azurewebsites.net/"
+# GESTURE_URL = "https://gestrurerecognition-fmg3grgxawaagzhe.southafricanorth-01.azurewebsites.net/"
 
 class Route(BaseModel):
     prefix: str                 
@@ -101,12 +127,68 @@ print([(r.prefix, r.backend) for r in routes])
 
 app = FastAPI()
 
+# Configure the CORS_ORIGINS at deployment
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+rate_limits = {}
+MAX_REQUESTS = 40
+WINDOW = 60
+
+@app.middleware("http")
+async def rate_limiter(request: Request, call_next):
+    if request.method == "OPTIONS":
+        return await call_next(request)
+    
+    path = request.url.path.rstrip("/")
+    print(path)
+    # this won't allow any other path to bypass the limiter
+    if path == "/api/alphabet/predict" or path == "/api/gesture/predict":
+        return await call_next(request)
+    
+    client_ip = request.client.host
+    now = time.time()
+
+    if client_ip not in rate_limits:
+        rate_limits[client_ip] = []
+
+    requests = [t for t in rate_limits[client_ip] if now - t < WINDOW]
+    requests.append(now)
+    rate_limits[client_ip] = requests
+
+    print(f"IP={client_ip}, total={len(requests)}, times={requests}")
+
+    if len(requests) > MAX_REQUESTS:
+        # return JSONResponse(
+        #     {"detail": "Too many requests"},
+        #     status_code=429,
+        #     headers={"Retry-After": str(WINDOW),
+        #              "Access-Control-Allow-Origin": CORS_ORIGINS}
+        # )
+
+        # raise HTTPException(
+        #     status_code = status.HTTP_429_TOO_MANY_REQUESTS,
+        #     detail = "Too many requests"
+        # )
+
+        return JSONResponse(
+            {"detail": "Too many requests"},
+            status_code=429,
+            headers={
+                "Retry-After": str(WINDOW),
+                "Access-Control-Allow-Origin": CORS_ORIGINS[0],
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+            }
+        )
+    
+    response = await call_next(request)
+    return response
 
 @app.get("/healthz")
 def healthz():
@@ -171,7 +253,7 @@ async def proxy(req: Request, route: Route, upstream_path: str) -> Response:
     )
 
 
-@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def gateway(full_path: str, req: Request) -> Response:
     print(full_path)
     route, upstream_path = match_route("/" + full_path)

@@ -12,6 +12,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mongo:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,33 +32,94 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1 libglib2.0-0
+          sudo apt-get install -y libgl1 libglib2.0-0 netcat-openbsd iproute2
 
-      - name: Install Python dependencies
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies, start services, and run tests
+        env:
+          MONGODB_URI: "mongodb://mongo:27017"
+          MONGODB_DB_NAME: "testdb"
+          PORT: 3000
         run: |
+          # ---------------- Python setup ----------------
           python -m pip install --upgrade pip
           if [ -f "requirements.txt" ]; then
             pip install -r requirements.txt
-          else
-            echo "No requirements.txt file found. Skipping dependency installation."
           fi
+          pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.6.0/en_core_web_sm-3.6.0-py3-none-any.whl
 
-      - name: Run Python tests
-        run: python -m pytest --ignore=Sign-Sync/backend/alphabetTranslate-service/image-cnn/scripts/test_asl_model.py
-          # if [ -f "Sign-Sync/__tests__" ]; then
-          #   pytest Sign-Sync/__tests__
-          # else
-          #   echo "No tests directory found. Skipping Python tests."
-          # fi
+          # ---------------- Backend services ----------------
+          cd Sign-Sync/backend/alphabetTranslate-service
+          uvicorn translator_api:app --host 0.0.0.0 --port 8000 --reload &
+          cd -
 
-      # - name: Install node dependencies
-      #   run: npm install
-      #   working-directory: ./Sign-Sync
+          cd Sign-Sync/backend/speechToText-service
+          uvicorn API:app --host 0.0.0.0 --port 8003 --reload &
+          cd -
 
-      # - name: Run Rejex tests
-      #   run: npm test
-      #   working-directory: ./Sign-Sync
-      #   timeout-minutes: 1
+          cd Sign-Sync/backend/textToAslGloss-service
+          uvicorn textConversion_api:app --host 0.0.0.0 --port 8002 --reload &
+          cd -
+
+          cd Sign-Sync/backend/gestureRecognition-service
+          uvicorn API:app --host 0.0.0.0 --port 8008 --reload &
+          cd -
+
+          cd Sign-Sync/backend/signToText-service
+          uvicorn signToText_API:app --host 0.0.0.0 --port 8006 --reload &
+          cd -
+
+          cd Sign-Sync/backend/wordPrediction-service
+          uvicorn API:app --host 0.0.0.0 --port 8005 --reload &
+          cd -
+
+          cd Sign-Sync/backend/API_Gateway
+          uvicorn gateway:app --host 0.0.0.0 --port 8007 --reload &
+          cd -
+
+          # ---------------- Frontend + Express server ----------------
+          cd Sign-Sync/frontend
+          npm install
+          npm run build
+          cd -
+
+          cd Sign-Sync/backend
+          npm install
+          npm run build
+          node dist/server.js &
+          cd -
+
+          # ---------------- Wait for services ----------------
+          for port in 3000 8000 8002 8003 8005 8006 8007 8008; do
+            echo "Waiting for port $port..."
+            until nc -z localhost $port; do
+              sleep 5
+              echo "Still waiting for $port..."
+            done
+            echo "Port $port is up!"
+          done
+
+          # ---------------- Run Python tests ----------------
+          pytest -s -v ./NFR_Testing
+          python Sign-Sync/backend/wordPrediction-service/unit/test_corrector.py
+          python Sign-Sync/backend/wordPrediction-service/unit/test_node.py
+          python Sign-Sync/backend/wordPrediction-service/unit/test_trie.py
+
+          pytest -s -v Sign-Sync/backend/textToAslGloss-service
+
+          pytest -s -v ./integration
