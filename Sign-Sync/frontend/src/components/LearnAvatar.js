@@ -6,6 +6,7 @@ import SpeechToTextBox from "../components/SpeechToTextBox";
 import LearnAvatarViewport from "../components/LearnAvatarViewPort";
 
 import PreferenceManager from "./PreferenceManager";
+import hourGlass from "../assets/Hourglass.png";
 
 class TextToSign extends React.Component
 {
@@ -18,7 +19,8 @@ class TextToSign extends React.Component
             textToBeSent:"",
             emotionToBeSent:"",
             mic : false,
-            isTranslating: false 
+            isTranslating: false,
+            animationPlaying : false
         };
     }
 
@@ -99,6 +101,9 @@ class TextToSign extends React.Component
                                 trigger={this.state.timestamp}
                                 width={avatarWidth}
                                 height={avatarHeight}
+                                playing={(value) => {
+                                    this.setState({ animationPlaying: value });
+                                }}
                             />
                         </div>
                     </div>
@@ -119,11 +124,12 @@ class TextToSign extends React.Component
                         {inputType}
 
                         <button
+                            disabled={this.state.animationPlaying}
                             onClick={this.sendText}
                             className="p-3.5 border-2 border-black"
                             style={{ background: isDarkMode ? '#353535ff' : '#e5e7eb', color: isDarkMode ? 'white' : 'black' }}
                         >
-                            <img src={Submit} className="w-8 h-8" alt="Submit" />
+                            <img src={this.state.animationPlaying? hourGlass: Submit} className="w-8 h-8" alt="Submit" />
                         </button>
                     </div>
                 </div>
