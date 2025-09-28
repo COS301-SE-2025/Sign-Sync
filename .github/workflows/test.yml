@@ -32,10 +32,15 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1 libglib2.0-0 netcat iproute2
+          sudo apt-get install -y libgl1 libglib2.0-0 netcat-openbsd iproute2
 
       - name: Cache Python packages
         uses: actions/cache@v3
