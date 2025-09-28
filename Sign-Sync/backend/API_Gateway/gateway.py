@@ -17,7 +17,7 @@ CORS_ORIGINS = "http://localhost:3000"
 WS_ORIGINS = "http://localhost:3000"
 #WS_ORIGINS = ["https://signsyncportal-a3gyaxb7dhdde4ef.southafricanorth-01.azurewebsites.net"]
 
-DEFAULT_TIMEOUT = 15.0
+DEFAULT_TIMEOUT = 60.0
 
 SPEECH_URL   = "http://localhost:8003"
 ASL_URL      = "http://localhost:8002"
