@@ -145,12 +145,12 @@ class SettingsPage extends React.Component {
         }}
       >
         {/* Left nav */}
-        <aside className="w-64 flex-shrink-0">
+        <aside className="w-64 flex-shrink-0 h-screen">
           <SideNavbar />
         </aside>
 
         {/* Right content (UI-Update layout) */}
-        <main className="flex-1 relative p-8 flex items-center justify-center">
+        <main className="flex-1 relative p-8 h-screen overflow-y-auto flex items-center justify-center">
           <div className="max-w-screen-xl w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div
               className={`w-full p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl shadow-md dark:shadow-lg transition-all duration-300`}
