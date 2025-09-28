@@ -116,3 +116,5 @@ jobs:
           python Sign-Sync/backend/wordPrediction-service/unit/test_trie.py
 
           pytest -s -v Sign-Sync/backend/textToAslGloss-service
+
+          pytest -s -v ./integration
