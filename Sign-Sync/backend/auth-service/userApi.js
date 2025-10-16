@@ -20,6 +20,13 @@ router.post('/register', async (req, res) => {
             speechVoice: 'George'
         };
 
+        const defaultAchievements = {
+            firstLetter: false,
+            firstWord: false,
+            allWords: false,
+            allLetters: false
+        };
+
         if (existingEmail) {
             return res.status(400).json({ message: 'Email already exists' });
         }
@@ -46,7 +53,7 @@ router.post('/register', async (req, res) => {
             userID: newUserID,
             email,
             password: hashedPassword,
-            achievements: [1],
+            achievements: defaultAchievements,
             preferences: defaultPreference,
         };
 
