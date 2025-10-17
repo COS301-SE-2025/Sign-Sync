@@ -16,14 +16,27 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 class AchievementsPage extends React.Component {
-  state = {
-    achievements: [],
-    user: JSON.parse(localStorage.getItem('user')),
-    error: null,
-    isLoading: true,
-    unlockedAchievements: [],
-    showUnlockedModal: false
-  };
+  // state = {
+  //   // achievements: [],
+  //   achievements: this.mapToLocalFormat([]),
+  //   user: JSON.parse(localStorage.getItem('user')),
+  //   error: null,
+  //   isLoading: true,
+  //   unlockedAchievements: [],
+  //   showUnlockedModal: false
+  // };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      achievements: this.mapToLocalFormat([]),
+      user: JSON.parse(localStorage.getItem('user')),
+      error: null,
+      isLoading: true,
+      unlockedAchievements: [],
+      showUnlockedModal: false
+    };
+  }
 
   mapToLocalFormat(completedAchievementIds = []) {
     const defaultAchievements = [
@@ -32,21 +45,21 @@ class AchievementsPage extends React.Component {
         name: "Welcome",
         description: "Login for the first time",
         image: WelcomeAchievment,
-        completed: completedAchievementIds.includes(1), 
+        completed: completedAchievementIds.includes(1),
         difficulty: "easy"
       },
       {
         id: 2,
         name: "First Letter",
-        description: "Successfully perform your first letter sign",
+        description: "Successfully learn your first letter sign",
         image: FirstAlphabetAchievment,
-        completed: completedAchievementIds.includes(2), 
+        completed: completedAchievementIds.includes(2),
         difficulty: "easy"
       },
       {
         id: 3,
         name: "First Word",
-        description: "Successfully perform your first word sign",
+        description: "Successfully learn your first word sign",
         image: FirstLetterAchievment,
         completed: completedAchievementIds.includes(3),
         difficulty: "easy"
@@ -62,7 +75,7 @@ class AchievementsPage extends React.Component {
       {
         id: 5,
         name: "Learned the Alphabet",
-        description: "Successfully perform all letter sign",
+        description: "Successfully learn all letter sign",
         image: LearnedTheAlphabetAchievment,
         completed: completedAchievementIds.includes(5),
         difficulty: "medium"
@@ -78,7 +91,7 @@ class AchievementsPage extends React.Component {
       {
         id: 7,
         name: "Learned the Dictionary",
-        description: "Successfully perform all word sign",
+        description: "Successfully learn all word sign",
         image: LearnedTheDictionaryAchievment,
         completed: completedAchievementIds.includes(7),
         difficulty: "hard"
@@ -119,9 +132,9 @@ class AchievementsPage extends React.Component {
 
     } catch (error) {
       console.error("Achievement load error:", error);
-      this.setState({ 
+      this.setState({
         isLoading: false,
-        error: error.message 
+        error: error.message
       });
     }
   }
@@ -151,10 +164,10 @@ class AchievementsPage extends React.Component {
       // 2. Check for new achievements
       const totalAchievements = this.mapToLocalFormat([]).length;
       let newAchievements = [];
-      
+
       try {
         newAchievements = await AchievementChecker.checkAchievements(
-          this.state.user.userID, 
+          this.state.user.userID,
           totalAchievements
         );
       } catch (checkError) {
@@ -172,10 +185,11 @@ class AchievementsPage extends React.Component {
 
       // 4. Get current achievements (even if checking failed)
       const currentAchievements = AchievementsManager.getAchievements();
-      
+
       // 5. Update state
       this.setState({
-        achievements: this.mapToLocalFormat(currentAchievements || []),
+        // achievements: this.mapToLocalFormat(currentAchievements || []),
+        achievements: this.mapToLocalFormat(Array.isArray(currentAchievements) ? currentAchievements : []),
         isLoading: false,
         unlockedAchievements: newAchievements
       });
@@ -187,16 +201,16 @@ class AchievementsPage extends React.Component {
 
     } catch (error) {
       console.error("Error in loadAchievements:", error);
-      this.setState({ 
+      this.setState({
         isLoading: false,
-        error: error.message 
+        error: error.message
       });
     }
   };
-  
+
   showAchievementNotification(newAchievementIds) {
     const { achievements } = this.state;
-    const unlocked = achievements.filter(a => 
+    const unlocked = achievements.filter(a =>
       newAchievementIds.includes(a.id)
     );
 
@@ -209,14 +223,15 @@ class AchievementsPage extends React.Component {
         <div>
           <h3 className="font-bold">Achievement Unlocked!</h3>
           <p>{achievement.name}</p>
-          <img 
-            src={achievement.image} 
+          <img
+            src={achievement.image}
             alt={achievement.name}
             className="w-12 h-12 mx-auto mt-2"
           />
-        </div>, 
+        </div>,
         {
-          position: toast.POSITION.TOP_RIGHT,
+          // position: toast.POSITION.TOP_RIGHT,
+          position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -239,8 +254,8 @@ class AchievementsPage extends React.Component {
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {unlocked.map(achievement => (
               <div key={achievement.id} className="flex items-center p-3 rounded-lg bg-opacity-20 bg-blue-500">
-                <img 
-                  src={achievement.image} 
+                <img
+                  src={achievement.image}
                   alt={achievement.name}
                   className="w-16 h-16 mr-4"
                 />
@@ -263,12 +278,36 @@ class AchievementsPage extends React.Component {
   }
 
   render() {
-    const { achievements, user, error, isLoading, showUnlockedModal } = this.state;
+    // const BASE_IDS = [1, 2, 3, 5, 7];
+    // const baseCompletedCount = achievements.filter(a => a.completed && BASE_IDS.includes(a.id)).length;
+    // const baseCompletionPercentage = BASE_IDS.length > 0
+    //   ? Math.round((baseCompletedCount / BASE_IDS.length) * 100)
+    //   : 0;
+
+
+    // const { achievements, user, error, isLoading, showUnlockedModal } = this.state;
+    // const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
+
+    // // Calculate completion percentage
+    // // const completedCount = achievements.filter(a => a.completed).length;
+    // const completedCount = achievements.filter(a => a && a.completed).length;
+    // const completionPercentage = achievements.length > 0 
+    //   ? Math.round((completedCount / achievements.length) * 100)
+    //   : 0;
+
+    const { achievements: achFromState, user, error, isLoading, showUnlockedModal } = this.state;
+    const achievements = Array.isArray(achFromState) ? achFromState : [];
     const isDarkMode = PreferenceManager.getPreferences().displayMode === "Dark Mode";
-    
-    // Calculate completion percentage
-    const completedCount = achievements.filter(a => a.completed).length;
-    const completionPercentage = achievements.length > 0 
+
+    // Base progress (for milestone logic parity)
+    const BASE_IDS = [1, 2, 3, 5, 7];
+    const baseCompletedCount = achievements.filter(a => a && a.completed && BASE_IDS.includes(a.id)).length;
+    const baseCompletionPercentage = BASE_IDS.length > 0
+      ? Math.round((baseCompletedCount / BASE_IDS.length) * 100)
+      : 0;
+
+    const completedCount = achievements.filter(a => a && a.completed).length;
+    const completionPercentage = achievements.length > 0
       ? Math.round((completedCount / achievements.length) * 100)
       : 0;
 
@@ -306,7 +345,7 @@ class AchievementsPage extends React.Component {
             <div className="text-center">
               <p className="text-red-500 mb-4">Error: {error}</p>
               <p className="mb-4">Showing cached achievements (may be outdated)</p>
-              <button 
+              <button
                 onClick={this.loadAchievements}
                 className={`px-4 py-2 rounded ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
               >
@@ -324,20 +363,20 @@ class AchievementsPage extends React.Component {
           <div>
             <SideNavbar />
           </div>
-          
+
           <div className="flex-1 p-6 overflow-y-auto relative">
             <div className="blur-sm">
               <h1 className="text-3xl font-bold mb-6">Achievements</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {this.mapToLocalFormat([]).map(achievement => (
-                  <div 
+                  <div
                     key={achievement.id}
                     className={`rounded-lg p-4 border transition-all ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
                   >
                     <div className="flex items-start gap-4">
                       <div className="relative">
-                        <img 
-                          src={achievement.image} 
+                        <img
+                          src={achievement.image}
                           alt={achievement.name}
                           className="w-16 h-16 object-cover rounded-lg grayscale"
                         />
@@ -345,11 +384,10 @@ class AchievementsPage extends React.Component {
                       <div className="flex-1">
                         <div className="flex justify-between items-start">
                           <h3 className="font-semibold text-lg">{achievement.name}</h3>
-                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            isDarkMode 
-                              ? darkModeDifficultyColors[achievement.difficulty] 
+                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${isDarkMode
+                              ? darkModeDifficultyColors[achievement.difficulty]
                               : difficultyColors[achievement.difficulty]
-                          }`}>
+                            }`}>
                             {achievement.difficulty.charAt(0).toUpperCase() + achievement.difficulty.slice(1)}
                           </span>
                         </div>
@@ -367,14 +405,14 @@ class AchievementsPage extends React.Component {
                   <span>0/{achievements.length} (0%)</span>
                 </div>
                 <div className={`w-full h-4 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}>
-                  <div 
+                  <div
                     className="h-full rounded-full bg-gradient-to-r from-blue-500 to-green-500"
                     style={{ width: '0%' }}
                   ></div>
                 </div>
               </div>
             </div>
-            
+
             <div className="absolute inset-0 flex items-center justify-center">
               <div className={`p-8 rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} z-10 max-w-md text-center`}>
                 <h2 className="text-2xl font-bold mb-4">Login Required</h2>
@@ -398,26 +436,24 @@ class AchievementsPage extends React.Component {
         <div>
           <SideNavbar />
         </div>
-        
+
         <div className="flex-1 p-6 overflow-y-auto">
           <h1 className="text-3xl font-bold mb-6">Achievements</h1>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {achievements.map(achievement => (
-              <div 
+              <div
                 key={achievement.id}
-                className={`rounded-lg p-4 border transition-all ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} ${
-                  !achievement.completed ? 'opacity-70' : ''
-                }`}
+                className={`rounded-lg p-4 border transition-all ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} ${!achievement.completed ? 'opacity-70' : ''
+                  }`}
               >
                 <div className="flex items-start gap-4">
                   <div className="relative">
-                    <img 
-                      src={achievement.image} 
+                    <img
+                      src={achievement.image}
                       alt={achievement.name}
-                      className={`w-16 h-16 object-cover rounded-lg ${
-                        !achievement.completed ? 'grayscale' : ''
-                      }`}
+                      className={`w-16 h-16 object-cover rounded-lg ${!achievement.completed ? 'grayscale' : ''
+                        }`}
                     />
                     {achievement.completed && (
                       <div className="absolute -top-2 -right-2 bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
@@ -430,11 +466,10 @@ class AchievementsPage extends React.Component {
                   <div className="flex-1">
                     <div className="flex justify-between items-start">
                       <h3 className="font-semibold text-lg">{achievement.name}</h3>
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        isDarkMode 
-                          ? darkModeDifficultyColors[achievement.difficulty] 
+                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${isDarkMode
+                          ? darkModeDifficultyColors[achievement.difficulty]
                           : difficultyColors[achievement.difficulty]
-                      }`}>
+                        }`}>
                         {achievement.difficulty.charAt(0).toUpperCase() + achievement.difficulty.slice(1)}
                       </span>
                     </div>
@@ -446,14 +481,14 @@ class AchievementsPage extends React.Component {
               </div>
             ))}
           </div>
-          
+
           <div className={`mt-8 p-4 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
             <div className="flex justify-between items-center mb-2">
               <h2 className="font-semibold">Your Progress</h2>
               <span>{completedCount}/{achievements.length} ({completionPercentage}%)</span>
             </div>
             <div className={`w-full h-4 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}>
-              <div 
+              <div
                 className="h-full rounded-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500"
                 style={{ width: `${completionPercentage}%` }}
               ></div>
