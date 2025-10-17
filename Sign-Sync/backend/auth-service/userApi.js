@@ -24,7 +24,12 @@ router.post('/register', async (req, res) => {
             firstLetter: false,
             firstWord: false,
             allWords: false,
-            allLetters: false
+            allLetters: false,
+            firstLogin: false,
+            bronze: false,
+            silver: false,
+            gold: false,
+            platinum: false
         };
 
         if (existingEmail) {
@@ -85,6 +90,11 @@ router.post('/login', loginRateLimiter, async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ message: 'Incorrect password' });
         }
+
+        await req.app.locals.userCollection.updateOne(
+            { email },
+            { $set: { 'achievements.firstLogin': true } }
+        );
 
         const { password: _, ...userWithoutPassword } = user; //exclude password from response
 
@@ -160,127 +170,146 @@ router.put('/preferences/:userID', async (req, res) => {
     }
 });
 
-/**
- * @swagger
- * tags:
- *   name: Achievements
- *   description: User achievements management
- */
 
-/**
- * @swagger
- * /achievements/{userID}:
- *   get:
- *     summary: Get user achievements
- *     description: Retrieve all achievements for a specific user
- *     tags: [Achievements]
- *     parameters:
- *       - in: path
- *         name: userID
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the user whose achievements to retrieve
- *     responses:
- *       200:
- *         description: A list of user achievements
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Achievement'
- *       404:
- *         description: User not found
- *       500:
- *         description: Server error
- */
+// put this near the top, replace BLANK and helpers
+const DEFAULTS = {
+    firstLogin: false,
+    firstLetter: false,
+    firstWord: false,
+    bronze: false,
+    allLetters: false,
+    silver: false,
+    allWords: false,
+    gold: false,
+    platinum: false,
+};
+
+function booleansToIds(b = {}) {
+    const map = {
+        firstLogin: 1,
+        firstLetter: 2,
+        firstWord: 3,
+        bronze: 4,
+        allLetters: 5,
+        silver: 6,
+        allWords: 7,
+        gold: 8,
+        platinum: 9,
+    };
+    return Object.keys(map).filter(k => !!b[k]).map(k => map[k]);
+}
+
+function idsToBooleans(ids = []) {
+    return {
+        firstLogin: ids.includes(1),
+        firstLetter: ids.includes(2),
+        firstWord: ids.includes(3),
+        bronze: ids.includes(4),
+        allLetters: ids.includes(5),
+        silver: ids.includes(6),
+        allWords: ids.includes(7),
+        gold: ids.includes(8),
+        platinum: ids.includes(9),
+    };
+}
+
+// Accept wrapped/unwrapped shapes and always return a full boolean object
+function normalizeBooleans(anyShape = {}) {
+    const data = (anyShape && typeof anyShape === 'object' && 'achievements' in anyShape)
+        ? anyShape.achievements
+        : anyShape;
+
+    if (Array.isArray(data)) return { ...DEFAULTS, ...idsToBooleans(data) };
+    return { ...DEFAULTS, ...(data || {}) };
+}
+
+
+
+// const BLANK = { firstLetter:false, firstWord:false, allLetters:false, allWords:false };
+
+// function booleansToIds(b = {}) {
+//   const map = {
+//     firstLogin: 1,
+//     firstLetter: 2,
+//     firstWord: 3,
+//     bronze: 4,
+//     allLetters: 5,
+//     silver: 6,
+//     allWords: 7,
+//     gold: 8,
+//     platinum: 9,
+//   };
+//   return Object.keys(map).filter(k => !!b[k]).map(k => map[k]);
+// }
+
+// function idsToBooleans(ids = []) {
+//   return {
+//     firstLogin: ids.includes(1),
+//     firstLetter: ids.includes(2),
+//     firstWord: ids.includes(3),
+//     bronze: ids.includes(4),
+//     allLetters: ids.includes(5),
+//     silver: ids.includes(6),
+//     allWords: ids.includes(7),
+//     gold: ids.includes(8),
+//     platinum: ids.includes(9),
+//   };
+// }
+
+// function normalizeBooleans(b = {}) {
+//   return { ...BLANK, ...b };
+// }
+
+// ---------------- GET /achievements/:userID ----------------
 router.get('/achievements/:userID', async (req, res) => {
-    const { userID } = req.params;
-
+    const userID = parseInt(req.params.userID, 10);
     try {
-        const user = await req.app.locals.userCollection.findOne({
-            userID: parseInt(userID)
-        });
+        const user = await req.app.locals.userCollection.findOne(
+            { userID },
+            { projection: { achievements: 1, _id: 0 } }
+        );
+        if (!user) return res.status(404).json({ message: 'User not found' });
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Set Content-Type before sending response
+        const booleans = normalizeBooleans(user.achievements);
         res.set('Content-Type', 'application/json');
-        res.status(200).json(user.achievements || []);
+        return res.status(200).json(booleans);
     } catch (error) {
-        res.status(500).json({
-            message: 'Error getting achievements',
-            error: error.message
-        });
+        return res.status(500).json({ message: 'Error getting achievements', error: error.message });
     }
 });
 
-/**
- * @swagger
- * /achievements/{userID}:
- *   put:
- *     summary: Update user achievements
- *     description: Update or add achievements for a specific user
- *     tags: [Achievements]
- *     parameters:
- *       - in: path
- *         name: userID
- *         schema:
- *           type: string
- *         required: true
- *         description: The ID of the user whose achievements to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AchievementUpdate'
- *     responses:
- *       200:
- *         description: Achievements updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Achievement'
- *       400:
- *         description: Invalid input
- *       404:
- *         description: User not found
- *       500:
- *         description: Server error
- */
-router.put('/achievements/:userID', async (req, res) => {
-    const { userID } = req.params;
-    const { newAchievements } = req.body;
 
+// ---------------- PUT /achievements/:userID ----------------
+router.put('/achievements/:userID', async (req, res) => {
+    const userID = parseInt(req.params.userID, 10);
     try {
-        // Update in database
-        const result = await req.app.locals.userCollection.updateOne(
-            { userID: parseInt(userID) },
-            { $set: { achievements: newAchievements } }  // Correct field name
+        // Load current so we can merge (prevents wiping missing keys)
+        const currentUser = await req.app.locals.userCollection.findOne(
+            { userID },
+            { projection: { achievements: 1, _id: 0 } }
+        );
+        if (!currentUser) return res.status(404).json({ message: 'User not found' });
+
+        // Accept either { newAchievements:[ids] } OR a boolean object (optionally wrapped)
+        const incoming = Array.isArray(req.body?.newAchievements)
+            ? idsToBooleans(req.body.newAchievements)
+            : normalizeBooleans(req.body);
+
+        const merged = { ...DEFAULTS, ...(currentUser.achievements || {}), ...incoming };
+
+        await req.app.locals.userCollection.updateOne(
+            { userID },
+            { $set: { achievements: merged } }
         );
 
-        if (result.matchedCount === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Return success response
         res.set('Content-Type', 'application/json');
-        res.status(200).json({
-            status: 'success',
-            message: 'Achievements updated successfully',
-            achievements
-        });
+        return res.status(200).json(merged); // return booleans as source of truth
     } catch (error) {
-        res.status(500).json({
-            message: 'Error updating achievements',
-            error: error.message
-        });
+        return res.status(500).json({ message: 'Error updating achievements', error: error.message });
     }
 });
+
+
 
 
 export default router;

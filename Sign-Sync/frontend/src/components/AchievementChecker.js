@@ -1,113 +1,55 @@
 import AchievementsManager from "../components/AchievementsManager";
 
-export default class AchievementChecker {
-  static async checkAchievements(userID, totalAchievements) {
+// Base = the 5 “source-of-truth” achievements
+const BASE_IDS = [1, 2, 3, 5, 7]; // firstLogin, firstLetter, firstWord, allLetters, allWords
 
-    let newAchievements = [];
+export default class AchievementChecker {
+  static async checkAchievements(userID) {
+    let newlyUnlocked = [];
 
     try {
       if (!AchievementsManager.userID) {
         await AchievementsManager.initialize();
       }
 
-      // Get current achievements through manager
-      const currentAchievements = AchievementsManager.getAchievements();
+      // Start from whatever the manager currently thinks is unlocked
+      const current = new Set(AchievementsManager.getAchievements() || []);
 
-      // Welcome Achievement (should be handled during login)
-      // if (!currentAchievements.includes(1)) {
-      //   newAchievements.push(1);
-      // }
+      // Read the latest booleans we cached from the server
+      const b = AchievementsManager.rawBooleans || {};
 
-      // First Alphabet Achievement
-      if (!currentAchievements.includes(2)) {
-        const hasFirstAlphabet = await this.checkFirstAlphabet(userID);
-        if (hasFirstAlphabet) newAchievements.push(2);
+      // Map booleans -> IDs (include firstLogin now)
+      if (b.firstLogin)  current.add(1);
+      if (b.firstLetter) current.add(2);
+      if (b.firstWord)   current.add(3);
+      if (b.allLetters)  current.add(5);
+      if (b.allWords)    current.add(7);
+
+      // Compute milestones from BASE only
+      const baseUnlocked = BASE_IDS.filter(id => current.has(id)).length;
+      const pct = Math.round((baseUnlocked / BASE_IDS.length) * 100);
+      if (pct >= 25)  current.add(4);  // bronze
+      if (pct >= 50)  current.add(6);  // silver
+      if (pct >= 75)  current.add(8);  // gold
+      if (pct >= 100) current.add(9);  // platinum
+
+      // Persist if anything new was added
+      const before = AchievementsManager.getAchievements() || [];
+      const after  = Array.from(current);
+      const diff   = after.filter(id => !before.includes(id));
+
+      if (diff.length > 0) {
+        // This will convert IDs -> booleans and store in Mongo,
+        // then read back and normalize again.
+        const ok = await AchievementsManager.updateAchievements(after);
+        if (!ok) console.error("Failed to persist new achievements");
+        newlyUnlocked = diff;
       }
 
-      // First Letter Achievement
-      if (!currentAchievements.includes(3)) {
-        const hasFirstLetter = await this.checkFirstLetter(userID);
-        if (hasFirstLetter) newAchievements.push(3);
-      }
-
-      // Bronze Achievement (25% completion)
-      if (!currentAchievements.includes(4)) {
-        const completion = this.calculateCompletion(currentAchievements.length, totalAchievements);
-        if (completion >= 25) newAchievements.push(4);
-      }
-
-      // Learned The Alphabet Achievement
-      if (!currentAchievements.includes(5)) {
-        const knowsAlphabet = await this.checkAlphabetComplete(userID);
-        if (knowsAlphabet) newAchievements.push(5);
-      }
-
-      // Silver Achievement (50% completion)
-      if (!currentAchievements.includes(6)) {
-        const completion = this.calculateCompletion(currentAchievements.length, totalAchievements);
-        if (completion >= 50) newAchievements.push(6);
-      }
-
-      // Learned The Dictionary Achievement
-      if (!currentAchievements.includes(7)) {
-        const knowsDictionary = await this.checkDictionaryComplete(userID);
-        if (knowsDictionary) newAchievements.push(7);
-      }
-
-      // Gold Achievement (75% completion)
-      if (!currentAchievements.includes(8)) {
-        const completion = this.calculateCompletion(currentAchievements.length, totalAchievements);
-        if (completion >= 75) newAchievements.push(8);
-      }
-
-      // Platinum Achievement (100% completion)
-      if (!currentAchievements.includes(9)) {
-        const completion = this.calculateCompletion(currentAchievements.length, totalAchievements);
-        if (completion >= 100) newAchievements.push(9);
-      }
-
-      // Update if new achievements found
-      if (newAchievements.length > 0) {
-        // Use manager to update instead of direct API call
-        const success = await AchievementsManager.updateAchievements(
-          [...currentAchievements, ...newAchievements]
-        );
-        
-        if (!success) {
-          console.error("Failed to persist new achievements");
-        }
-      }
-
-      return newAchievements;
-    } catch (error) {
-      console.error('Achievement check failed:', error);
+      return newlyUnlocked;
+    } catch (err) {
+      console.error("Achievement check failed:", err);
       return [];
     }
-  }
-
-  static calculateCompletion(completedCount, totalCount) {
-    if (totalCount <= 0) return 0;
-    return Math.round((completedCount / totalCount) * 100);
-  }
-
-  // Placeholder methods - implement based on your actual checks
-  static async checkFirstAlphabet(userID) {
-    // Implement actual check
-    return false;
-  }
-
-  static async checkFirstLetter(userID) {
-    // Implement actual check
-    return false;
-  }
-
-  static async checkAlphabetComplete(userID) {
-    // Implement actual check
-    return false;
-  }
-
-  static async checkDictionaryComplete(userID) {
-    // Implement actual check
-    return false;
   }
 }

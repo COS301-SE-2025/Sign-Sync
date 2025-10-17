@@ -3,6 +3,8 @@ import SideNavbar from "../components/sideNavbar";
 import Camera from "../components/Camera";
 import LearnAvatar from "../components/LearnAvatar";
 import PreferenceManager from "../components/PreferenceManager";
+import AchievementsManager from "../components/AchievementsManager";
+import AchievementChecker from "../components/AchievementChecker";
 
 class LearnAlphabetPage extends React.Component 
 {
@@ -33,7 +35,39 @@ class LearnAlphabetPage extends React.Component
             return;
         }
 
+        // this.setState({ user });
+
         this.setState({ user });
+        // make sure achievements are loaded for this user
+        try { await AchievementsManager.initialize(); } catch {}
+    }
+
+    //*******************************
+    awardLetterAchievements = async (completedCount) => {
+        const { user, alphabet } = this.state;
+        if (!user) return;
+        try {
+            // Always ensure manager is ready
+            if (!AchievementsManager.userID) {
+                await AchievementsManager.initialize();
+            }
+
+            const current = AchievementsManager.getAchievements() || [];
+            const toAdd = [];
+
+            // First Letter (ID 2)
+            if (completedCount >= 1 && !current.includes(2)) toAdd.push(2);
+            // All Letters (ID 5)
+            if (completedCount >= alphabet.length && !current.includes(5)) toAdd.push(5);
+
+            if (toAdd.length) {
+                await AchievementsManager.addAchievements(toAdd);
+                // also compute Bronze/Silver/Gold/Platinum based on base set
+                await AchievementChecker.checkAchievements(user.userID);
+            }
+        } catch (e) {
+            console.error("Failed to award letter achievements:", e);
+        }
     }
 
     handleNext = () => 
@@ -71,6 +105,8 @@ class LearnAlphabetPage extends React.Component
                     success: true,
                     completedLetters: newCompleted,
                 };
+            }, () => {
+                this.awardLetterAchievements(this.state.completedLetters.size);
             });
         }
     };

@@ -4,6 +4,8 @@ import Camera from "../components/Camera";
 import EducationTranslatorCamera from "../components/EducationTranslator";
 import LearnAvatar from "../components/LearnAvatar";
 import PreferenceManager from "../components/PreferenceManager";
+import AchievementsManager from "../components/AchievementsManager";
+import AchievementChecker from "../components/AchievementChecker";
 
 class LearnWordsPage extends React.Component 
 {
@@ -14,7 +16,7 @@ class LearnWordsPage extends React.Component
         this.initialState = {
             currentIndex: 0,
             words: [
-                "go", "need", "want","yo‍u", "friend", "come", "eat", "drink", "help", "learn", "tomorrow", "thank you", "movie",
+                "go", "need", "want","you", "friend", "come", "eat", "drink", "help", "learn", "tomorrow", "thank you", "movie",
             ],
             success: false,
             completedWords: new Set(),
@@ -36,7 +38,32 @@ class LearnWordsPage extends React.Component
         }
 
         this.setState({ user });
+        try { await AchievementsManager.initialize(); } catch {}
     }
+
+    awardWordAchievements = async (completedCount) => {
+        const { user, words } = this.state;
+        if (!user) return;
+        try {
+            if (!AchievementsManager.userID) {
+                await AchievementsManager.initialize();
+            }
+            const current = AchievementsManager.getAchievements() || [];
+            const toAdd = [];
+
+            // First Word (ID 3)
+            if (completedCount >= 1 && !current.includes(3)) toAdd.push(3);
+            // All Words (ID 7) — for this page, "all words shown"
+            if (completedCount >= words.length && !current.includes(7)) toAdd.push(7);
+
+            if (toAdd.length) {
+                await AchievementsManager.addAchievements(toAdd);
+                await AchievementChecker.checkAchievements(user.userID);
+            }
+        } catch (e) {
+            console.error("Failed to award word achievements:", e);
+        }
+    }    
 
     handleNext = () => 
     {
@@ -73,6 +100,8 @@ class LearnWordsPage extends React.Component
                     success: true,
                     completedWords: newCompleted,
                 };
+            }, () => {
+                this.awardWordAchievements(this.state.completedWords.size);
             });
         }
     };
